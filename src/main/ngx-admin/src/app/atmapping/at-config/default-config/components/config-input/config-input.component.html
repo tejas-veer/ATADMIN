@@ -1,0 +1,95 @@
+<nb-card *ngIf="!(hide||featureMapping)">
+    <nb-card-footer class="bg-danger">
+        <div class="text-center">
+            <span style="color: white;font-size: 1.2em">Auto Template is <strong>not enabled</strong> for the selected entity.
+                    <button class="btn btn-success btn-tn" (click)="open(content)">Enable</button>
+            </span>
+            <br>
+            <br>
+            <img style="width: 20em" *ngIf="featureMappingModalMeta.alertMeme"
+                 [src]="featureMappingModalMeta.alertMeme"/>
+            <br>
+            <small *ngIf="featureMappingModalMeta.alertMemeCaption">{{featureMappingModalMeta.alertMemeCaption}}</small>
+        </div>
+    </nb-card-footer>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Enable Auto Template for Entity</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <label>
+                        <span>{{featureMappingModalMeta.label}}</span>
+                        <select class="form-control-sm" *ngIf='featureMappingModalMeta.type == "select"'
+                                [(ngModel)]="featureMappingInput">
+                            <option *ngFor="let op of featureMappingModalMeta.data" [value]="op.value">{{op.text}}
+                            </option>
+                        </select>
+                        <input class="form-control-sm" *ngIf='featureMappingModalMeta.type == "text-input"'
+                               [(ngModel)]="featureMappingInput"/>
+                        <mat-slide-toggle *ngIf="featureMappingModalMeta.type === 'checkbox'"
+                                          color="accent"
+                                          disabled="false"
+                                          style="margin-top: 1em"
+                                          (change)="featureMappingInput = $event.checked">
+                            {{featureMappingModalMeta.label}}
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <img style="width: 20em" *ngIf="featureMappingModalMeta.modalMeme"
+                         [src]="featureMappingModalMeta.modalMeme"/>
+                    <br>
+                    <small *ngIf="featureMappingModalMeta.modalMemeCaption">
+                        {{featureMappingModalMeta.modalMemeCaption}}
+                    </small>
+                </div>
+            </div>
+            <ngx-loader *ngIf="modalLoader"></ngx-loader>
+        </div>
+        <div class="modal-footer" *ngIf="!modalLoader">
+            <button type="button" class="btn btn-success" (click)="updateAndEnable()">Save</button>
+        </div>
+    </ng-template>
+
+</nb-card>
+
+<nb-card *ngIf="!hide">
+    <nb-card-header>
+        Add/Update Config
+    </nb-card-header>
+    <nb-card-footer>
+        <div class="row">
+            <div class="col-sm-3">
+                <select class="form-control" [(ngModel)]="selectedMeta"
+                        (change)="inputChange($event)">
+                    <option *ngFor="let item of meta" [ngValue]="item">{{item.attributes.alias}}</option>
+                </select>
+            </div>
+            <div class="col-sm-7" *ngIf="selectedMeta">
+                <div class="form-group">
+
+                    <mat-slide-toggle *ngIf="selectedMeta.attributes.type === 'checkbox'"
+                                      color="accent"
+                                      disabled="false"
+                                      style="margin-top: 1em"
+                                      (change)="updateValue = $event.checked"
+                    >
+                        {{selectedMeta.attributes.description}}
+                    </mat-slide-toggle>
+                    <input *ngIf="selectedMeta.attributes.type !== 'checkbox'" class="form-control"
+                           [type]="selectedMeta.attributes.type" [placeholder]="selectedMeta.attributes.description"
+                           [(ngModel)]="updateValue"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button [disabled]="isDisable" class="btn btn-success" (click)="update(selectedMeta,updateValue)">Add</button>
+            </div>
+        </div>
+    </nb-card-footer>
+</nb-card>

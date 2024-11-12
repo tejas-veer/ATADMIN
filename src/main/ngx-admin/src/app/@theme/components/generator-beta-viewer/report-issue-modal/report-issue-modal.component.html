@@ -1,0 +1,24 @@
+<ng-template #reportIssueModalContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Let's talk about it</h4>
+    </div>
+    <div class="modal-body">
+      <label>
+        <span>Type of Issue</span>
+        <select class="form-control" #reportOptions>
+          <option>These are not the templates I selected</option>
+          <option>My header/Ad Choices link is not set properly</option>
+          <option>Any other</option>
+        </select>
+      </label>
+  
+      <label>
+        <span>Brief Description</span>
+        <textarea class="form-control" placeholder="Say Something..." #reportDescription>
+              </textarea>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" (click)="reportIssue(reportOptions.value,reportDescription.value)">Okay</button>
+    </div>
+  </ng-template>

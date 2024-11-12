@@ -1,0 +1,215 @@
+<p-sidebar
+  [style]="{
+    background: 'white',
+    width: '48rem',
+    top: '60px',
+    padding: '10px',
+    'border-left': '1px solid lightgray'
+  }"
+  [(visible)]="showSidePanel"
+  position="right"
+  [baseZIndex]="999"
+>
+  <div class="custom-sidebar-header">
+    <span>Request Details</span>
+    <div class="sidebar-header-icon-grp">
+      <mat-icon matRipple (click)="refreshRequestDetails()">refresh</mat-icon>
+      <mat-icon (click)="closeSidePanelEvent()">close</mat-icon>
+    </div>
+  </div>
+  <div class="custom-sidebar-body">
+    <div class="request-id-input-container">
+      <label class="request-id-input">
+        <span>Request Id</span>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Request Id"
+            [(ngModel)]="requestIdInput"
+          />
+        </div>
+      </label>
+      <div class="request-id-input-button-grp">
+        <button
+          class="request-id-input-btn"
+          (click)="
+            viewAssetFromRequestId(requestIdInput)
+          "
+        >
+          View
+        </button>
+        <button
+          matTooltip="Two separate files will be downloaded if generation fails for certain keywords or prompts."
+          class="request-id-input-btn request-save-btn"
+          (click)="
+            downloadCsvFromRequestIdInput(requestIdInput)
+          "
+        >
+          <span *ngIf="!loader.downloadLoader">Save</span>
+          <span *ngIf="loader.downloadLoader">
+            <mat-spinner [diameter]="18" [style.stroke]="white"></mat-spinner>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="loader.refreshLoader || loader.initialLoader == 0"
+      class="sidebar-body-blank-div"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+    <div
+      *ngIf="
+        requestDetailsList.length <= 0 &&
+        !loader.refreshLoader &&
+        loader.initialLoader != 0
+      "
+      class="sidebar-body-blank-div"
+    >
+      <span> Nothing to show </span>
+    </div>
+
+    <div *ngIf="requestDetailsList.length > 0 && !loader.refreshLoader">
+      <div class="requests-table-container">
+        <table class="requests-table">
+          <colgroup>
+            <col class="request-id-col" />
+            <col class="progress-col" />
+            <col class="action-col" />
+            <col class="download-col" />
+            <col class="share-col" />
+            <col class="cancel-col" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Request ID</th>
+              <th>Progress</th>
+              <th>Type</th>
+              <th>Action</th>
+              <th>Save</th>
+              <th>Share</th>
+              <th>Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="request-table-row"
+              *ngFor="let request of requestDetailsList"
+            >
+              <td>{{ request.requestId }}</td>
+              <td class="progress-data">
+                <span class="progress-percentage-span">{{
+                  calculateProgressPercentageText(request)
+                }}</span>
+                <ngb-progressbar
+                  [value]="calculateProgressPercentageValue(request)"
+                  [striped]="isRequestProcessing(request)"
+                  [animated]="isRequestProcessing(request)"
+                  [ngStyle]="{
+                    'background-color':
+                      request.isActive === -1 ? '#ff0000' : '',
+                    'border-radius': '50px'
+                  }"
+                ></ngb-progressbar>
+              </td>
+              <td>{{ request.requestType }}</td>
+              <td>
+                <ng-container
+                  *ngIf="
+                    (request.requestType == 'STABLE_DIFFUSION' ||
+                    request.requestType == 'TITLE_GENERATION') &&
+                    request.isActive == 0
+                  "
+                >
+                  <button
+                    matRipple
+                    (click)="
+                      viewAssetFromRequestId(
+                        request.requestId
+                      )
+                    "
+                  >
+                    View
+                  </button>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    request.requestType == 'ASSET_MAPPING' &&
+                    request.isActive == 0
+                  "
+                >
+                  Completed
+                </ng-container>
+                <ng-container *ngIf="request.isActive == 1">
+                  Processing
+                </ng-container>
+                <ng-container *ngIf="request.isActive == -1">
+                  Cancelled
+                </ng-container>
+              </td>
+              <td>
+                <div
+                [class.disabled-icon]="
+                    request.isActive == 1 ||
+                    request.isActive == -1
+                  "
+                  class="mat-icon-cell-div"
+                >
+                  <mat-icon
+                    *ngIf="!request.downloadLoader"
+                    (click)="csvDownloadFromRequestId(request)"
+                    >get_app</mat-icon
+                  >
+                  <mat-spinner
+                    *ngIf="request.downloadLoader"
+                    [diameter]="25"
+                  ></mat-spinner>
+                </div>
+              </td>
+              <td>
+                <mat-icon
+                  [class.disabled-icon]="
+                    request.isActive == 1 ||
+                    request.isActive == -1
+                  "
+                  (click)="
+                    generateAndCopySidebarRequestDetailsUrl(request.requestId)
+                  "
+                  >share</mat-icon
+                >
+              </td>
+              <td>
+                <div
+                  [class.disabled-icon]="
+                    request.isActive == 0 ||
+                    request.isActive == -1 ||
+                    request.requestType == 'ASSET_MAPPING'
+                  "
+                  class="mat-icon-cell-div"
+                >
+                  <mat-icon
+                    *ngIf="!request.suspendLoader"
+                    (click)="suspendRequest(request)"
+                    >cancel</mat-icon
+                  >
+                  <mat-spinner
+                    *ngIf="request.suspendLoader"
+                    [diameter]="25"
+                  ></mat-spinner>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <mat-paginator
+      [length]="totalPaginationItems"
+      [pageSize]="pageSize"
+      aria-label="Select page"
+      (page)="onPageChange($event)"
+    ></mat-paginator>
+  </div>
+</p-sidebar>

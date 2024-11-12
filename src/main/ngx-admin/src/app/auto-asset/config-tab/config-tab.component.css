@@ -1,0 +1,283 @@
+.input-container .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-container label {
+  margin-right: 10px;
+  flex: 1;
+}
+
+.input-container ng-select {
+  width: 100%;
+}
+
+.disabled-button {
+  background-color: #40dc7e1a !important;
+  color: grey !important;
+  pointer-events: none;
+}
+
+button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+button > span > mat-icon {
+  margin-left: 5px;
+}
+
+ng-select {
+  margin-right: 10px;
+  border: none;
+}
+
+::ng-deep .ng-select-container {
+  min-height: 50px !important;
+  outline: none;
+}
+
+::ng-deep .ng-select.ng-select-disabled > .ng-select-container {
+  background-color: #40dc7e1a !important;
+}
+
+.input-container ::ng-deep .ng-select-container {
+  flex: 1;
+}
+
+.input-container ng-select {
+  flex: 1;
+}
+
+.form-group {
+  margin: 0px;
+}
+
+.form-control[readonly] {
+  background-color: #40dc7e1a;
+}
+
+.entity-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent;
+  padding: 5px;
+  border-bottom: 1px solid #dadfe6;
+}
+
+.entity-header > span {
+  font-size: 20px;
+  font-weight: bold !important;
+  color: #40dc7e !important;
+  margin: 0 !important;
+  padding: 5px;
+}
+
+.property-name {
+  width: 25%;
+}
+
+.property-level,
+.property-value {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-icon {
+  width: 30px;
+}
+
+.edited-icon {
+  color: #40dc7e;
+}
+
+.delete-icon {
+  color: #ee4b2b;
+  cursor: pointer;
+}
+
+.property-details {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.property-value input {
+  height: 50px;
+}
+
+.property-level {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 6px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.property-level ng-select {
+  width: 35% !important;
+}
+
+.level-container {
+  border: 1px solid #dadfe6;
+  border-radius: 5px;
+  margin-bottom: 3rem;
+  background-color: transparent;
+}
+
+.add-property-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #40dc7e;
+  font-size: 18px;
+  font-weight: bolder;
+  /* border: 1px solid lightgray; */
+  padding: 8px;
+  border-bottom: none;
+  border-radius: 0 0 5px 5px;
+}
+
+.add-property-row .text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: #40dc7e91;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-thumb {
+  background-color: #40dc7e;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-disabled.mat-disabled
+  .mat-slide-toggle-bar {
+  background-color: #40dc7e91;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-disabled.mat-disabled
+  .mat-slide-toggle-thumb {
+  background-color: #40dc7e;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.disabled {
+  color: lightgray;
+  /* opacity: 0.9; */
+  cursor: not-allowed !important;
+}
+
+.edited_value {
+  border: 2px solid #40dc7e;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 16px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: large;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+}
+
+.custom-table tr {
+  font-weight: 600;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.edited-row {
+  background-color: #40dc7e91 !important;
+}
+
+.added-row {
+  background-color: #fdff0033 !important;
+}
+
+.disabled-action {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.entity-name-col {
+  width: 20%;
+}
+
+.entity-value-col {
+  width: 20%;
+}
+
+.site-name-col {
+  width: 40%;
+}
+
+.value-col {
+  width: 10%;
+}
+
+.is-active-col {
+  width: 10%;
+}
+
+.config-header-btn-grp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.collapse-btn {
+  color: #40dc7e;
+  float: right;
+  background-color: white;
+  border: 1px solid #40dc7e;
+  padding: 0;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

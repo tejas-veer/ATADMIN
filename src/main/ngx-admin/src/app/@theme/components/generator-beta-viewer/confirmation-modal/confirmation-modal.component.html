@@ -1,0 +1,31 @@
+<ng-template #content let-dismiss="dismiss" let-close="close">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Templates to Insert</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center">
+            <div class="text-center" *ngIf="!hasTemplates()">
+                <h4> No Templates Selected </h4>
+            </div>
+            <div class="text-center" *ngFor="let template of templates" style="display:inline-block">
+                <button class='btn btn-hero-danger' *ngIf="template.selected" (click)="template.selected=false"><i
+                        class="fa fa-times" ngbTooltip="Click to Remove"></i> {{template.framework.frameworkId}} | {{template.frameworkLevelRank}}
+                </button>
+                <loader-iframe *ngIf="template.selected"
+                               [frameurl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <ngx-loader *ngIf="loader"></ngx-loader>
+    </div>
+    <div class="modal-footer" *ngIf="!loader">
+        <button  type="button" class="btn btn-hero-success" (click)="save()" *ngIf="hasTemplates()">Insert Templates</button>
+    </div>
+</ng-template>
+
+<floating-button color="accent" icon="save" message="Save" (click)="open(content)" *ngIf="hasTemplates()">Insert Templates</floating-button>
+
+<hr>

@@ -1,0 +1,36 @@
+<nb-card>
+    <nb-card-body>
+        <div class="container-fluid">
+            <nb-tabset >
+                <nb-tab  tabTitle="Manual">
+                     <manual-mapping #manualMappingInput
+                                    [supply]="supply"
+                                    [supplyId]="supplyValue"
+                                    [demand]="demand"
+                                    [demandId]="demandValue"
+                                    [sizeList]="sizeList"
+                                    [entriesViewer]="manualEntriesViewer">
+                    </manual-mapping>
+                    <hr>
+                   <ngx-mapping-entries-viewer [supply]="supply" [supplyValue]="supplyValue" [sizeList]="sizeList"
+                                            [demand]="demand" [demandValue]="demandValue"
+                                            mappingType="MANUAL" #manualEntriesViewer></ngx-mapping-entries-viewer>
+                </nb-tab>
+                <nb-tab tabTitle="Seasonal">
+                     <ngx-seasonal-mapping #seasonalMappingInput
+                                      [sizeList]="sizeList"
+                                      [supply]="supply"
+                                      [supplyId]="supplyValue"
+                                      [demand]="demand"
+                                      [demandId]="demandValue"
+                                      [entriesViewer]="seasonalEntriesViewer">
+                    </ngx-seasonal-mapping>
+                    <hr>
+                    <ngx-mapping-entries-viewer [supply]="supply" [supplyValue]="supplyValue" [sizeList]="sizeList"
+                                            [demand]="demand" [demandValue]="demandValue"
+                                            mappingType="SEASONAL" #seasonalEntriesViewer></ngx-mapping-entries-viewer> 
+                </nb-tab>
+            </nb-tabset>
+        </div>
+    </nb-card-body>
+</nb-card>

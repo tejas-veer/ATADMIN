@@ -1,0 +1,14 @@
+input[type="checkbox"] {
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked {
+  accent-color: #40dc7e;
+}
+
+div {
+  height: 100%;
+  width: 100%;
+  background: var(--ui-green);
+}

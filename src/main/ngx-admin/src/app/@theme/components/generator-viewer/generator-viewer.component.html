@@ -1,0 +1,156 @@
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Templates to be inserted</h4>
+    </div>
+    <div class="modal-body">
+        <h6 *ngIf="selectedTemplates.length == 0">Nothing has been selected</h6>
+        <div *ngFor="let framework of selectedTemplates" class="text-center">
+            <h5>{{framework.key}}</h5>
+            <div *ngFor="let template of framework.value" style="display: inline-block;margin:0.2em">
+                <loader-iframe [frameurl]="getTemplatePreviewUrl(template,entity.size)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+            <br>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button *ngIf="!insertBusy && selectedTemplates.length > 0" (click)="insertTemplates()" class="btn btn-success">
+            Insert
+        </button>
+    </div>
+    <ngx-loader *ngIf="insertBusy"></ngx-loader>
+</ng-template>
+
+<ng-template #insertConfirmation let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">White List Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h5>The selected Templates have been created. <span class="text text-warning">Templates will not be served on this entity unless whitelisted</span>
+        </h5>
+        <div class="text-center">
+            <p>{{template}}</p>
+            <creative-viewer style="display:inline-block" *ngFor="let template of whiteListTemplatesList"
+                             [creative]="template" [size]="size"></creative-viewer>
+        </div>
+        <ngx-loader *ngIf="whiteListUpdateLoader"></ngx-loader>
+    </div>
+    <div class="modal-footer" *ngIf="!whiteListUpdateLoader">
+        <button class="btn btn-sm btn-danger"  style="width: 12em" (click)="reportIssueModal(reportIssueModalContent)">Report Error</button>
+        <button class="btn btn-sm btn-warning" placement="top" style="width: 12em"
+                ngbTooltip="These templates can be white listed later from the reporting interface"
+                (click)="whiteListLater()">WhiteList Later
+        </button>
+        <button class="btn btn-sm btn-success" style="width: 12em" (click)="sendWhiteListUpdate()">Whitelist</button>
+    </div>
+</ng-template>
+
+<ng-template #reportIssueModalContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Let's talk about it</h4>
+    </div>
+    <div class="modal-body">
+        <label>
+            <span>Type of Issue</span>
+            <select class="form-control" #reportOptions>
+                <option>These are not the templates I selected</option>
+                <option>My header/Ad Choices link is not set properly</option>
+                <option>Any other</option>
+            </select>
+        </label>
+
+        <label>
+            <span>Brief Description</span>
+            <textarea class="form-control" placeholder="Say Something..." #reportDescription>
+            </textarea>
+        </label>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" (click)="reportIssue(reportOptions.value,reportDescription.value)">Okay</button>
+    </div>
+</ng-template>
+<div style="position:relative;overflow: auto">
+    <floating-button message="Insert Templates on Entity" color="primary" icon="cloud" (click)="confirmInsert(content)"
+                     *ngIf="templateData.length > 0"></floating-button>
+    <div *ngFor="let url of urls">
+        <a [href]="url" target="_blank">{{url}}</a>
+        <hr>
+    </div>
+    <div class="text-center" *ngIf="showSuggested">
+        <h3>Suggested Templates</h3>
+        <div *ngFor="let template of flatTemplateData" style="display: inline-block">
+            <div *ngIf="template.insertionStatus == 2" style="display: inline-block;margin:1em">
+                <div style="margin-bottom: 0.5em;cursor:pointer">
+                    <button *ngIf="templateStatus[template.uniqueTemplateHash] === true" style="display: inline-block;"
+                            (click)="disable(template.uniqueTemplateHash)"
+                            class="btn btn-success btn-sm" placement="top" ngbTooltip="Click to deselect">
+                        <i class="fa fa-toggle-on" aria-hidden="true"> </i>&nbsp;&nbsp;&nbsp;
+                        {{template.framework}} #{{template.frameworkLevelRank}}
+                    </button>
+                    <button *ngIf="templateStatus[template.uniqueTemplateHash] === false" style="display: inline-block"
+                            (click)="enable(template.uniqueTemplateHash)"
+                            class="btn btn-danger btn-sm" placement="top" ngbTooltip="Click to insert">
+                        <i class="fa fa-toggle-off" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;
+                        {{template.framework}} #{{template.frameworkLevelRank}}
+                    </button>
+                    <report-issue templateId="None" [frameworkId]="template.framework" [size]="entity.size"
+                                  [renderUrl]="getTemplatePreviewUrlText(template,entity.size)" small="true"
+                                  style="display: inline-block"></report-issue>
+                </div>
+                <loader-iframe [frameurl]="getTemplatePreviewUrl(template,entity.size)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <br>
+        <hr>
+    </div>
+    <div class="text-center" *ngIf="showInserted">
+        <h3>Inserted Templates</h3>
+        <div *ngFor="let template of flatTemplateData" style="display: inline-block">
+            <div *ngIf="template.insertionStatus == 1" style="display: inline-block;margin:1em">
+                <div style="margin-bottom: 0.5em">
+                </div>
+                <loader-iframe [frameurl]="getTemplatePreviewUrl(template,entity.size)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="text-center" *ngIf="showAdditional">
+        <h3>Additional Templates</h3>
+        <div *ngFor="let template of flatTemplateData" style="display: inline-block">
+            <div *ngIf="template.insertionStatus == 0" style="display: inline-block;margin:1em">
+                <div style="margin-bottom: 0.5em;cursor:pointer">
+                    <button *ngIf="templateStatus[template.uniqueTemplateHash] === true" style="display: inline-block;"
+                            (click)="disable(template.uniqueTemplateHash)"
+                            class="btn btn-success btn-sm" placement="top" ngbTooltip="Click to deselect"><i
+                            class="fa fa-toggle-on" aria-hidden="true"> </i>&nbsp;&nbsp;&nbsp;
+                        {{template.framework}} #{{template.frameworkLevelRank}}
+                    </button>
+                    <button *ngIf="templateStatus[template.uniqueTemplateHash] === false" style="display: inline-block"
+                            (click)="enable(template.uniqueTemplateHash)"
+                            class="btn btn-danger btn-sm" placement="top" ngbTooltip="Click to select"><i
+                            class="fa fa-toggle-off"
+                            aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;
+                        {{template.framework}} #{{template.frameworkLevelRank}}
+                    </button>
+                    <report-issue templateId="None" [frameworkId]="template.framework" [size]="entity.size"
+                                  [renderUrl]="getTemplatePreviewUrlText(template,entity.size)" small="true"
+                                  style="display: inline-block"></report-issue>
+                </div>
+                <loader-iframe [frameurl]="getTemplatePreviewUrl(template,entity.size)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div *ngIf="queueError || error" class="text-center">
+        <app-error-viewer [title]="errorHeader" [message]="errorText"></app-error-viewer>
+    </div>
+    <p *ngIf="loader && !queueError && !error">
+        <ngb-progressbar type="warning" [value]="progressStatus" [striped]="true" [animated]="true">
+            <i>{{progressText}}</i>
+        </ngb-progressbar>
+    </p>
+    <!--<ngx-loader *ngIf="loader && !queueError"></ngx-loader>-->
+</div>

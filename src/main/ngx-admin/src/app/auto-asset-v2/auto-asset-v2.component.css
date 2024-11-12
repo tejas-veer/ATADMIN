@@ -1,0 +1,1082 @@
+/* Official Theme Changes */
+.addShadow {
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    border-radius: 8px;
+}
+
+.kbbAssest ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items{
+    max-height: 140px !important;
+}
+.cardHeaderButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.toggleButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.toggleButton  mat-icon{
+    height: 25px;
+    width: 25px;
+    font-size: 25px;
+    display: flex;
+}
+.mainHeaderToggle span{
+    display: flex;
+    gap: 0px;
+    cursor: pointer;
+}
+.addAssestCardTitle{
+    cursor: pointer;
+}
+.toggleButtonIcon {
+    transition: transform 0.3s ease;
+}
+
+.toggleButtonIcon.rotate {
+    transform: rotate(180deg);
+}
+.cardHeaderButton ::ng-deep button{
+    border-radius: 60px !important;
+    padding: 0px 15px;
+
+    height: 40px;
+    font-size: 14px;
+
+}
+.config-asset-divider{
+    height: 30px;
+    margin: 0 5px !important;
+    width: 1px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+/* Input Css Changes */
+::ng-deep .ng-select-container {
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.kbbKeyword ::ng-deep .ng-select-container {
+    height: unset !important;
+    min-height: 60px;
+}
+
+::ng-deep.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+    top: 20px !important;
+}
+
+::ng-deep.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    top: 18px !important;
+}
+
+::ng-deep.ng-select .ng-select-container {
+    border-radius: 12px !important;
+    box-shadow: rgba(0, 0, 0, 20) 0px 1px 2px !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+}
+::ng-deep.ng-select.ng-select-opened.ng-select-bottom>.ng-select-container{
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+.mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+}
+
+.cardBottomContain {
+    display: flex;
+    justify-content: flex-end;
+}
+
+button {
+    background-color: #38B2AC !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(66, 153, 225, 0.2) !important;
+    border-radius: 8px !important;
+    display: flex;
+    line-height: 18px !important;
+    align-items: center;
+}
+
+button span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: unset;
+}
+
+/* Input Css Changes */
+::ng-deep .p-sidebar .p-sidebar-header {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    z-index: 1;
+}
+
+.configTitleCol {
+    background-color: #F3F2FE;
+}
+
+/* Toggle Button Styles */
+.image-assets-container::ng-deep .ng-select-single .ng-select-container,
+.asset-toggle::ng-deep .ng-select-single .ng-select-container {
+    height: 60px;
+    min-height: 60px;
+}
+
+.addAssetForm, .ctaAddInput {
+    height: 60px;
+    min-height: 60px;
+    border-radius: 12px;
+    color: #999 !important;
+}
+
+
+.addAssetForm::placeholder , .ctaAddInput::placeholder {
+    color: #999 !important;
+}
+
+textarea::placeholder {
+    color: #999 !important;
+}
+
+/* Image Assets Toggle Button */
+/* .image-assets-container::ng-deep .mat-slide-toggle-bar {
+    width: 26px !important;
+    height: 14px !important;
+}
+
+.image-assets-container::ng-deep .mat-slide-toggle-thumb-container {
+    width: 14px !important;
+    height: 14px !important;
+    top: 1px !important;
+    left: 1px !important;
+}
+
+.image-assets-container::ng-deep .mat-slide-toggle-thumb {
+    height: 12px !important;
+    width: 12px !important;
+    background: #fff;
+}
+
+.image-assets-container::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+    transform: translate3d(12px, 0, 0) !important;
+} */
+
+
+/* Title Assets Toggle Button */
+::ng-deep .mat-slide-toggle-bar {
+    width: 45px !important;
+    height: 21px !important;
+    border-radius: 12px !important;
+}
+
+::ng-deep .mat-slide-toggle-thumb-container {
+    width: 16px !important;
+    height: 16px !important;
+    top: 2.5px !important;
+    left: 3px !important;
+}
+
+::ng-deep .mat-slide-toggle-thumb {
+    height: 16px !important;
+    width: 16px !important;
+    background: #fff;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+    transform: translate3d(23px, 0, 0) !important;
+    top: 2.5px !important;
+}
+
+
+/* Container Styles */
+.top_input_container {
+    display: flex;
+    gap: 20px;
+    font-family: "Roboto", sans-serif !important;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.top_input_container button{
+    margin-top:10px ;
+}
+/* .input-container {
+    display: flex;
+    max-width: 85%;
+    width: 100%;
+    gap: 25px;
+} */
+.input-container {
+    display: flex;
+    max-width: 85%;
+    width: 100%;
+    gap: 25px;
+}
+.entityInputContainer{
+    max-width: 25%;
+}
+
+
+
+/* Input Field Styles */
+.top_input_container label span {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #2D3748;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
+/* Configuration Section Styles */
+
+
+.config-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+}
+
+.config-column {
+    width: 100%;
+    padding: 10px;
+}
+
+.config-column-title {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 600;
+    color: #2D3748;
+}
+
+.config-data {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.config-column-data ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.config-column-data li {
+    color: #646464;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.config-divider {
+    width: 2px;
+    height: 260px;
+    background-color: var(--divider-color);
+    display: block;
+}
+
+
+/* Image Asset Styles */
+.image-asset-wrapper {
+    background-color: #F3F2FE;
+    padding: 10px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+}
+
+.image-asset-card {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 10px;
+    /* max-width: 350px;
+    width: 100%; */
+    height: 140px;
+    margin: 5px;
+
+}
+
+.image-asset-card-left {
+    height: 120px;
+    min-width: 170px;
+    width: 170px;
+    border-radius: 8px;
+}
+
+.image-asset-card-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+}
+.image-asset-card-bottom{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.image-asset-card-left img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.image-asset-card-top h4 {
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.image-asset-set-id {
+    font-size: 12px;
+    line-height: 16px;
+    color: #646464;
+    margin: 0;
+}
+
+
+/* Title Asset Styles */
+
+.title-assets-container p {
+    margin: 0;
+    padding: 0;
+}
+
+.title-asset-wrapper {
+    background-color: #F3F2FE;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    display: grid;
+    grid-template-columns:repeat(auto-fit, minmax(550px, 1fr));
+}
+
+.title-asset-card {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 5px;
+    width: 100%;
+}
+
+.title-asset-divider {
+    height: 55px;
+    margin: 0 10px;
+    width: 2px;
+    background-color: #4299e1cb;
+    border-radius: 8px;
+}
+
+.title-asset-card-top h4 {
+    width: 100%;
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: 600;
+}
+
+
+/* CTA Assets Start */
+
+.cta-assets-container p {
+    margin: 0;
+    padding: 0;
+}
+
+.cta-asset-card-top h4 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.cta-asset-wrapper {
+    background-color: #F3F2FE;
+    padding: 10px;
+    border-radius: 8px;
+    display: grid;
+    gap: 20px;
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.cta-asset-card {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 5px;
+    /* max-width: 290px; */
+    width: 100%;
+}
+
+.cta-asset-divider {
+    height: 55px;
+    margin: 0 10px;
+    width: 2px;
+    background-color: #4299e1cb;
+    border-radius: 8px;
+}
+
+.cta-asset-card-top h4 {
+    width: 100%;
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: 600;
+}
+
+/* Additional CTA styles can be added here */
+/* Sidebar Css */
+::ng-deep .p-sidebar {
+    background-color: #fff !important;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    min-width: 660px;
+}
+
+.assetSidebarTitle {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 700;
+    padding-bottom: 20px;
+    padding: 20px 15px;
+}
+
+.assetSidebarForm {
+    padding: 0px 15px;
+}
+
+.addAssetCard {
+    background-color: #FAFAFA !important;
+    /* min-height: 250px !important; */
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px !important;
+    border-radius: 8px !important;
+
+}
+.ctaAddAssetCard{
+    min-height: unset !important;
+    padding-bottom: 20px;
+}
+
+.addAssestCardTitle {
+    font-size: 18px;
+    padding: 15px;
+    color: #000000bf;
+    font-weight: 600;
+}
+
+.assetSidebarContainer {
+    margin-bottom: 10px;
+}
+
+.assetInputFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+}
+::ng-deep.p-sidebar-content{
+    scroll-behavior: smooth;
+}
+::ng-deep.p-sidebar-content::-webkit-scrollbar-track, .viewImageAssetWrapper::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px transparent;
+    background-color: transparent;
+}
+
+::ng-deep.p-sidebar-content::-webkit-scrollbar, .viewImageAssetWrapper::-webkit-scrollbar
+{
+    width: 0px ;
+    background-color: transparent;
+}
+
+::ng-deep.p-sidebar-content::-webkit-scrollbar-thumb, .viewImageAssetWrapper::-webkit-scrollbar-thumb
+{
+    background-color: transparent;
+}
+
+::ng-deep .ng-dropdown-panel .scroll-host::-webkit-scrollbar-track,
+.p-dialog ::-webkit-scrollbar-track,
+::ng-deep .p-sidebar-content::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+::ng-deep .ng-dropdown-panel .scroll-host::-webkit-scrollbar,
+.p-dialog ::-webkit-scrollbar,
+::ng-deep .p-sidebar-content::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: transparent;
+}
+
+::ng-deep .ng-dropdown-panel .scroll-host::-webkit-scrollbar-thumb,
+.p-dialog ::-webkit-scrollbar-thumb,
+::ng-deep .p-sidebar-content::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background-color: #e0e0e0;
+}
+/* Generate Assest Section */
+.assetToggleSwitch {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.switchChip {
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 1px solid rgba(160, 174, 192, 0.2);
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.1), -1px 1px 10px rgba(0, 0, 0, 0.005);
+    border-radius: 25px;
+    padding: 5px 15px;
+    cursor: pointer;
+    animation: scale 1s linear;
+}
+
+.switchChip:hover {
+    transform: scale(1.02);
+}
+
+.switchChip.active {
+    background-color: #F6AD55;
+    color: #fff;
+}
+
+.createImageAssetForm {
+    margin-top: 10px;
+    position: relative;
+}
+
+.createImageAssetForm textarea.form-control {
+    min-height: 100px !important;
+    height: 100% !important;
+    border-radius: 12px;
+}
+
+.kbbAssest {
+    margin-top: 10px;
+}
+/* Preview Modal */
+::ng-deep .p-checkbox .p-checkbox-box{
+    /* border-radius: 20px; */
+    height: 30px;
+    width: 30px;
+}
+/* ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover{
+    border-color: #17B3A3;
+    background: #17B3A3;
+    color: #ffffff;
+}
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight{
+    border-color: #17B3A3;
+    background: #17B3A3;
+} */
+::ng-deep .p-checkbox{
+    height: 30px;
+    width: 30px;
+}
+.upload-file-container {
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #e3e6f0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-file-container h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+.viewAssestImageCard{
+    width: 100%;
+    position: relative;
+}
+.viewAssestImageCard img{
+    width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+.viewImageAssetWrapper{
+    display: grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.assestcheckbox{
+    position: absolute;
+    top: 0px;
+}
+.viewImageAssets{
+    position: relative;
+    cursor: pointer;
+}
+.cardActive .viewAssestImageCard{
+    border: 3px solid #17B3A3;
+    border-radius: 12px;
+    box-shadow: rgb(10 10 10 / 18%) 0px 0px 10px 3px;
+}
+.activeCheckIcon{
+    background: #17B3A3;
+    display: flex;
+    padding: 5px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 40px;
+    align-items: center;
+    justify-self: center;
+    color: #fff;
+    display: none;
+}
+.cardActive .activeCheckIcon{
+    display: flex;
+}
+/* View Title Assets Results */
+.viewTitleAssets{
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+.viewTitleCard{
+    display: flex;
+    align-items: flex-start;
+    background-color: #fff;
+    padding: 10px 5px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 1px 1px;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+.titleAssetContainer h4{
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: normal;
+}
+.activeTitleAsset.viewTitleCard{
+    border: 3px solid #17B3A3;
+    box-shadow: rgb(10 10 10 / 9%) 0px 0px 4px 2px;
+}
+.viewTitleCard .activeCheckIcon{
+    background: #17B3A3;
+    display: flex;
+    padding: 5px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 40px;
+    align-items: center;
+    justify-self: center;
+    color: #fff;
+    display: none;
+}
+.viewTitleCard .activeCheckIcon mat-icon{
+    font-size: 12px;
+    height: 12px;
+    width: 12px;
+}
+.activeTitleAsset .activeCheckIcon{
+    display: flex;
+}
+.ctaResultWrapper{
+    display: grid;
+    gap: 24px;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+}
+.ctaResultCard{
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 1px 1px;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+.ctaResultCardContainer h4{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 0px;
+}
+.ctaResultCard.activeCtaCard{
+    border: 3px solid #17B3A3;
+    box-shadow: rgb(10 10 10 / 9%) 0px 0px 4px 2px;
+}
+.ctaResultCard .activeCheckIcon{
+    background: #17B3A3;
+    display: flex;
+    padding: 2px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 40px;
+    align-items: center;
+    justify-self: center;
+    color: #fff;
+    display: none;
+}
+.ctaResultCard .activeCheckIcon mat-icon{
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.activeCtaCard .activeCheckIcon{
+    display: flex;
+}
+/* Divider Bar */
+::ng-deep .p-divider .p-divider-content{
+    background-color: #fff;
+    padding: 10px 5px;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 1px 1px;
+}
+.imageSelectLabel{
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.imageSelectInput{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 15px;
+    height: 60px;
+    border-radius: 12px;
+}
+.imageSelectInput[type="file"]::file-selector-button {
+    border: 2px solid #f6ae55d6;
+    border-radius: 4px;
+    background-color: #F6AD55;
+    transition: 1s;
+    color: #fff;
+    margin-right: 10px;
+}
+/* P Dailog */
+::ng-deep .p-dialog .p-dialog-header, ::ng-deep.p-dialog .p-dialog-content{
+    padding: 0px;
+}
+::ng-deep.p-dialog-content ::ng-deep .previewCard{
+    margin-bottom: 0px;
+}
+::ng-deep .p-dialog-header{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.previewCard .image-asset-wrapper{
+    grid-template-columns: repeat(auto-fit, minmax(370px, 525px));
+}
+.skeleton {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    animation: skeleton-loading 1.2s infinite ease-in-out;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: #f3f3f3;
+    }
+    100% {
+        background-color: #e0e0e0;
+    }
+}
+
+/* Placeholder for Image Asset Cards */
+.imageLoaderCard {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 10px;
+    height: 140px;
+    margin: 5px;
+}
+
+.image-placeholder {
+    height: 120px;
+    width: 170px;
+    border-radius: 8px;
+    background-color: #e0e0e0;
+}
+
+.text-placeholder {
+    width: 70%;
+    height: 18px;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+    margin-bottom: 8px;
+}
+
+.text-placeholder.short {
+    width: 50%;
+}
+
+.toggle-placeholder {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+}
+
+/* Placeholder for Title Asset Cards */
+.titleLoaderCard {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 5px;
+    width: 100%;
+}
+
+.title-asset-divider {
+    height: 55px;
+    margin: 0 10px;
+    width: 2px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+}
+.titleLoaderCard .title-asset-card-right {
+    width: 100%;
+}
+.ctaLoaderCard {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+    gap: 5px;
+    width: 100%;
+
+}
+.ctaPlaceholderLoader{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+.cta-asset-divider {
+    height: 55px;
+    margin: 0 10px;
+    width: 2px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+}
+.ctaLoaderCard .cta-asset-card-right{
+    width: 100%;
+}
+.imageAssetHeader{
+    display: flex;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.image-assets-container ::ng-deep mat-icon{
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+.loaderContainer{
+    height: 100%;
+    width: 800px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.config-loaderContainer{
+    width : 100%;
+}
+
+.loaderCircle {
+    width: 80px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #2fffe0;
+    --_m:
+            conic-gradient(#0000 10%,#000),
+            linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes l3 {to{transform: rotate(1turn)}}
+.loaderCircle::before{
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+}
+
+
+.edited-row {
+    background-color: #40dc7e91 !important;
+}
+
+.added-row {
+    background-color: #fdff0033 !important;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.entity-name-col {
+    width: 20%;
+}
+
+.entity-value-col {
+    width: 20%;
+}
+
+.site-name-col {
+    width: 40%;
+}
+
+.value-col {
+    width: 10%;
+}
+
+.is-active-col {
+    width: 10%;
+}
+
+.config-header-btn-grp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.collapse-btn {
+    color: #40dc7e;
+    float: right;
+    background-color: white;
+    border: 1px solid #40dc7e;
+    padding: 0;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.configInputs{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+.configContainer{
+    max-width: 100%;
+}
+.configSummaryCard{
+    padding: 10px;
+
+}
+.entity-header{
+    font-size: 18px;
+    /* width: 100%; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    font-weight: 700;
+    padding: 20px 5px ;
+    border-bottom: 1px solid #e5e5e5;
+}
+.level-container{
+    margin-bottom: 30px;
+    background-color: #FAFAFA ;
+
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px ;
+    border-radius: 12px;
+
+    padding: 0px 10px;
+
+}
+.configSummary{
+    background-color: #F3F2FE;
+}
+
+.upserted-data{
+    margin-top:20px;
+}
+
+.flex-row{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.flex-right{
+    justify-content:right;
+}
+
+.flex-center{
+    display : flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
+
+.waiting-message{
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.config-add-btn{
+    margin-top: 19px !important;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

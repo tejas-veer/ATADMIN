@@ -1,0 +1,36 @@
+ .row {
+     margin-top: 1em;
+ }
+
+ .row:first-child {
+     padding-top: 0.7em;
+ }
+
+ .button-collection button {
+     display: inline-block;
+ }
+
+ button{
+   margin-left:5px;
+ }
+
+
+ .btn-sm {
+   padding: 0.625rem 1.5rem;
+   font-size: .875rem;
+   line-height: 1.25;
+   border-radius: 0.375rem;
+   text-transform: uppercase;
+   letter-spacing: .4px;
+   font-weight: 500;
+   font-family: Exo;
+   border: 2px solid transparent;
+ }
+
+ .btn-success {
+   background-color: #40dc7e;
+ }
+
+ .btn-success:hover {
+   background-color: #5be190;
+ }

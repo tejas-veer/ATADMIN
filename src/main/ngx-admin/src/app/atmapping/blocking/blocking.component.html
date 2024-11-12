@@ -1,0 +1,21 @@
+<ngx-blocking-input #blockingInput title="Add New Blocking" [isDisable] = templateBlocking.disableBlockingButton ></ngx-blocking-input>
+
+<nb-card>
+  <nb-card-header>
+    Auto Template Blocking
+  </nb-card-header>
+  <nb-card-body>
+    <nb-tabset>
+      <nb-tab tabTitle="Template">
+        <ngx-blockingtable #templateBlocking type='Template'></ngx-blockingtable>
+      </nb-tab>
+      <nb-tab tabTitle="Framework">
+        <ngx-blockingtable #frameworkBlocking type='Framework'></ngx-blockingtable>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>
+
+<confirm-modal #deleteModal></confirm-modal>
+<floating-button *ngIf="!templateBlocking.disableBlockingButton" message="Delete selected Rules" color="warn" icon="delete forever"
+                 (click)="confirm()"></floating-button>

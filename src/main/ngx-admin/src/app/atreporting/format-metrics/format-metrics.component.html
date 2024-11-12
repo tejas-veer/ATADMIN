@@ -1,0 +1,38 @@
+<div class="row align-items-center">
+    <div class="col">
+        <h6 class="metrics-setting-heading">Show/Hide/Reorder Metrics</h6>
+    </div>
+    <div class="col">
+        <nb-checkbox
+                (change)="selectAllMetrics($event)"
+                status="success"
+                style="float: right;
+                font-style: italic;"
+                [(ngModel)]="selectAll"
+        >
+            Select All
+        </nb-checkbox>
+    </div>
+</div>
+
+<div class="example-list" cdkDropList (cdkDropListDropped)="onListDrop($event)">
+    <div class="example-box" (click)="toggleVisibility(metric)"  [cdkDragPreviewContainer]="'parent'" [cdkDragPreviewClass]="'add-padding-to-dragged'"
+         *ngFor="let metric of metricColumnVisibilityData; let i = index" cdkDrag
+         [style.z-index]="isDragging ? (i === draggedIndex ? draggedZIndex : 1) : 1"
+         (mousedown)="startDrag(i)" (mouseup)="endDrag()">
+        <span class="metrics-span" >
+            <mat-icon class="hover-icon">drag_indicator</mat-icon>
+            {{ metric.name }}
+        </span>
+        <nb-checkbox status="success"
+                     (change)="toggleVisibility(metric)"
+                     [(ngModel)]="metric.visible">
+        </nb-checkbox>
+    </div>
+</div>
+<button (click)="applyMetrics()" class="btn btn-lg btn-success share-button">
+    Apply
+</button>
+<button (click)="this.closeMetricsModal()" class="btn btn-lg btn-success close-button">
+    Close
+</button>

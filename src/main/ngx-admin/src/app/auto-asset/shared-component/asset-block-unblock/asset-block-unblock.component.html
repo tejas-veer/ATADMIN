@@ -1,0 +1,24 @@
+<div
+  #tooltip="matTooltip"
+  [matTooltip]="rowData.isActive ? 'Map' : 'UnMap'"
+  matTooltipPosition="above"
+></div>
+
+<div class="container" [class.disabled]="isDisabled()">
+  <label class="switch" [class.disabled]="isDisabled()">
+    <input
+      [class.disabled]="isDisabled()"
+      [disabled]="isDisabled()"
+      (click)="onToggle(); tooltip.show()"
+      type="checkbox"
+      [checked]="rowData.isActive"
+    />
+    <span class="slider round"></span>
+  </label>
+  <nb-icon
+    *ngIf="rowData.isToggled"
+    class="edit-status-icon"
+    icon="edit-outline"
+    pack="eva"
+  ></nb-icon>
+</div>

@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    Preview Assets : {{ previewData.length }}
+  </h4>
+  <button
+    matRipple
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="table-container">
+    <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div *ngIf="isMapping()" class="footer-text">
+    <ng-container *ngIf="!isReviewModalOpen()">
+      <div
+        class="entity-map-info"
+        *ngFor="let entityValue of getEntityValueKeys()"
+      >
+        <h5
+          *ngIf="entityValueMap[entityValue]?.limitExceed"
+          [innerHTML]="generateMessageForEntityValue(entityValue)"
+        ></h5>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isReviewModalOpen()">
+      <div
+        class="entity-map-info"
+        *ngFor="let entry of limitMappingForReviewArray"
+      >
+        <h5
+          *ngIf="entry.limitExceed"
+          [innerHTML]="generateMessageForReviewMapLimit(entry)"
+        ></h5>
+      </div>
+    </ng-container>
+  </div>
+  <button
+    matRipple
+    type="submit"
+    [class.disabled-button]="isSaveButtonDisable()"
+    class="btn btn-outline-dark"
+    (click)="saveChanges()"
+  >
+    Save Changes
+  </button>
+</div>

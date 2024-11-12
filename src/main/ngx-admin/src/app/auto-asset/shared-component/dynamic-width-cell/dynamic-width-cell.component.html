@@ -1,0 +1,5 @@
+<p [style.min-width]="width" style.text-align="justify" [innerHTML]="sanitizedContent">
+</p>
+<a *ngIf="fullContent.length > maxLength" href="javascript:void(0)" (click)="toggleContent()">
+  {{ isExpanded ? 'less' : 'more...' }}
+</a>

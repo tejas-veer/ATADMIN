@@ -1,0 +1,129 @@
+<nb-card>
+  <nb-card-header>
+    <span>View C2A Assets </span>
+
+    <div class="map-asset-header-btn-grp">
+      <button class="collapse-btn" (click)="toggleCollapse()">
+        <mat-icon
+          >{{ isCollapsed ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+        </mat-icon>
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body *ngIf="!isCollapsed">
+    <div class="container">
+      <div class="input-container">
+        <div class="row">
+          <label>
+            <span> Entity Name</span>
+            <ng-select
+              placeholder="Select Entity Level"
+              appendTo="body"
+              [items]="entityName.options"
+              dropdownPosition="bottom"
+              [clearable]="false"
+              (change)="resetDimensionData('EntityValue');"
+              [(ngModel)]="entityName.selectedValue"
+              required
+            >
+            </ng-select>
+          </label>
+
+          <label *ngIf="this.c2aAssetService.isAdditionAlInputRequired(dropDownService.getSelectedEntityNameValue(entityName))">
+            <span>
+              Domain
+            </span>
+            <ng-select
+              placeholder="Select Domain"
+              appendTo="body"
+              [items]="domain.options"
+              [addTag]="true"
+              addTagText="Press 'Enter' to add "
+              dropdownPosition="bottom"
+              (click)="getDropdownOptionSuggestion($event, 'Domain',entityNameMap['Domain'].dropDownValue)"
+              (input)="getDropdownOptionSuggestion($event, 'Domain',entityNameMap['Domain'].dropDownValue)"
+              [loading]="domain.showLoader"
+              loadingText="loading..."
+              [(ngModel)]="domain.selectedValue"
+            >
+            </ng-select>
+          </label>
+
+          <label>
+            <span [class.disabled]="isEntityValueDisabled()">
+              {{ entityNameMap[entityName.selectedValue].placeholder }}
+            </span>
+            <ng-select
+              placeholder="Select {{
+                entityNameMap[entityName.selectedValue].placeholder
+              }}"
+              [multiple]="false"
+              appendTo="body"
+              [items]="entityValue.options"
+              [addTag]="true"
+              addTagText="Press 'Enter' to add "
+              dropdownPosition="bottom"
+              (click)="getDropdownOptionSuggestion($event, 'EntityValue',entityNameMap[entityName.selectedValue].dropDownValue)"
+              (input)="getDropdownOptionSuggestion($event, 'EntityValue',entityNameMap[entityName.selectedValue].dropDownValue)"
+              [loading]="entityValue.showLoader"
+              loadingText="loading..."
+              notFoundText=""
+              [hideSelected]="true"
+              [disabled]="isEntityValueDisabled()"
+              [class.disabled]="isEntityValueDisabled()"
+              [(ngModel)]="entityValue.selectedValue"
+            >
+            </ng-select>
+          </label>
+
+          <button
+            class="button-grp"
+            matRipple
+            [class.disabled-button]="!isFetchButtonEnabled()"
+            (click)="fetchAsset()"
+          >
+            <span> Fetch Assets <mat-icon> call_received </mat-icon></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="loader-with-message">
+      <ngx-loader *ngIf="showLoader"></ngx-loader>
+      <span *ngIf="waitingMessage.length > 0 && showLoader">{{
+        waitingMessage
+      }}</span>
+    </div>
+    <div *ngIf="assetData.length">
+      <div class="header-row">
+        <div style="display: flex">
+          <h6 class="table-util-row total-assets">
+            Total assets : {{ assetData.length }}
+          </h6>
+          &nbsp;&nbsp; &nbsp;&nbsp;
+          <h6 class="table-util-row total-assets">
+            <span>Unmap all :</span>
+            <input
+              class="input"
+              type="checkbox"
+              (change)="toggleUnmapAll($event)"
+            />
+          </h6>
+        </div>
+        <button
+          matRipple
+          class="save-changes-btn"
+          [class.disabled-button]="!toggledRows.length"
+          (click)="previewModal()"
+        >
+          Preview & Save
+        </button>
+      </div>
+      <div class="table-container">
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="source"
+        ></ng2-smart-table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

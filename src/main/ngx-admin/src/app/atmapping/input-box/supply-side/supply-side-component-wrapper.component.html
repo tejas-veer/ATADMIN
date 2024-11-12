@@ -1,0 +1,13 @@
+<ng-container *ngIf="onSameColumn; else elseBlock">
+    <div class="row">
+        <supply-side-template #wrapper></supply-side-template>
+        <ng-content *ngTemplateOutlet="wrapper.childComponentTemplate"></ng-content>
+    </div>
+</ng-container>
+
+<ng-template #elseBlock>
+
+    <supply-side-template #wrapper></supply-side-template>
+    <ng-content *ngTemplateOutlet="wrapper.childComponentTemplate"></ng-content>
+
+</ng-template>

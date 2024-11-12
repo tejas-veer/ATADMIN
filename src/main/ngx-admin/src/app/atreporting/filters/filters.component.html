@@ -1,0 +1,41 @@
+<div class="filter-input">
+    <div class="chips-container">
+        <mat-chip-list>
+            <mat-chip *ngFor="let filter of existingFilters | keyvalue"
+                      (mouseenter)="onChipHover($event, filter.key)" (click)="openFiltersModal(filter.key)"
+                      (mouseleave)="closeOverlay()" [ngClass]="{ 'disabled-chip': isDisableFilterChipClick(filter.key) }">
+                <mat-icon matChipRemove *ngIf="!isDisableFilterChipClick(filter.key)" (click)="removeFilterChip(filter.key)">cancel</mat-icon>
+                {{ filter.key }}
+                <span class="value-icon" [style.background-color]="iconColors[filter.key]" [style.display]="getNumberOfValues(filter.key) === 0 ? 'none' : 'inline-block'">
+                    {{ getNumberOfValues(filter.key) }}
+                </span>
+            </mat-chip>
+            <button *ngIf="isShowAddFiltersButton" class="btn btn-sm btn-success add-filter-button"
+                    (click)="openFiltersModal(null)" matTooltip="Add Filters">
+                <nb-icon icon="plus-outline"></nb-icon>
+            </button>
+        </mat-chip-list>
+
+        <ng-container *ngIf="activeFilter">
+            <div class="overlay-box" #overlayBox [style.left.px]="filterOverlayLeftPosition" [style.top.px]="filterOverlayTopPosition">
+                <mat-list>
+                    <mat-list-item *ngFor="let value of formattedFilterForChipsHover">
+                        <div style="display: flex; align-items: baseline; flex-grow: 1;">
+                                                            <span class="filter-dropdown" [style.border-color]="getBorderColor(value.state)"
+                                                                  [ngSwitch]="value.state">
+                                                                <mat-icon style="color: #40dc7e;" *ngSwitchCase="'Equal'">EQ </mat-icon>
+                                                                <mat-icon style="color: red;" *ngSwitchCase="'Not Equal'">NE</mat-icon>
+                                                                <mat-icon style="color: #804674;" *ngSwitchCase="'Contains'">CO</mat-icon>
+                                                                <span *ngSwitchDefault>{{ value.state }}: </span>
+                                                            </span>
+                            <span>:</span>
+                            <span style="padding-left: 8px; word-break: break-all;">{{ value.value }}</span>
+                        </div>
+
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </ng-container>
+
+    </div>
+</div>

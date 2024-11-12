@@ -1,0 +1,246 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    {{ modalName == HOST_IMAGE_MODAL ? "Map Hosted Image" : "Map Local Image" }}
+  </h4>
+  <button
+    matRipple
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modal.dismiss()"
+  >
+    X
+  </button>
+</div>
+<div class="modal-body">
+  <nav
+    ngbNav
+    #nav="ngbNav"
+    [(activeId)]="activeTab"
+    class="nav-tabs"
+    [animation]="false"
+  >
+    <ng-container [ngbNavItem]="'image_upload'">
+      <a ngbNavLink>Image Upload</a>
+      <ng-template ngbNavContent>
+        <label>
+          <span> Entity </span>
+          <ng-select
+            class="custom-ng-select"
+            placeholder="Select Entity Level"
+            appendTo="ngb-modal-window"
+            [items]="entityName.options"
+            dropdownPosition="bottom"
+            [clearable]="false"
+            (change)="resetDimensionData('EntityValue')"
+            [(ngModel)]="entityName.selectedValue"
+            required
+          >
+          </ng-select>
+        </label>
+        <label>
+          <span> {{ getSelectedEntityNamePlaceholderValue() }} </span>
+          <ng-select
+            class="custom-ng-select"
+            placeholder="Select {{ getSelectedEntityNamePlaceholderValue() }}"
+            [multiple]="true"
+            appendTo="ngb-modal-window"
+            [items]="dimensionMap.get('EntityValue').options"
+            [addTag]="true"
+            [hideSelected]="true"
+            dropdownPosition="bottom"
+            (click)="getDropdownOptionSuggestion($event, 'EntityValue')"
+            (input)="getDropdownOptionSuggestion($event, 'EntityValue')"
+            [loading]="dimensionMap.get('EntityValue').showLoader"
+            loadingText="loading..."
+            notFoundText=""
+            [(ngModel)]="entityValue.selectedValue"
+            required
+          >
+          </ng-select>
+        </label>
+
+        <label
+          *ngIf="
+            imageAssetService.isSizeSelectVisible(getSelectedEntityNameValue())
+          "
+        >
+          <span> Asset Size </span>
+          <ng-select
+            class="custom-ng-select"
+            placeholder="Select size"
+            appendTo="ngb-modal-window"
+            [items]="entityAssetSize.options"
+            [addTag]="true"
+            dropdownPosition="bottom"
+            (click)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+            (input)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+            [loading]="entityAssetSize.showLoader"
+            loadingText="loading..."
+            [hideSelected]="true"
+            [(ngModel)]="entityAssetSize.selectedValue"
+            required
+          >
+          </ng-select>
+        </label>
+        <label>
+          <span> Image Source - [Set Id] </span>
+          <ng-select
+            class="custom-ng-select"
+            placeholder="Select Image Source"
+            appendTo="ngb-modal-window"
+            [items]="imageSource.options"
+            dropdownPosition="bottom"
+            [clearable]="false"
+            [(ngModel)]="imageSource.selectedValue"
+            required
+          >
+          </ng-select>
+        </label>
+
+        <label *ngIf="modalName == HOST_IMAGE_MODAL">
+          <span> Image URL </span>
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter image URL"
+            [(ngModel)]="imageUrl"
+            required
+          />
+
+          <div
+            *ngIf="imageUrl != null && imageUrl != ''"
+            class="url-img-container"
+          >
+            <label><span>Image Preview</span></label>
+            <img [src]="imageUrl" alt="image url preview" />
+          </div>
+        </label>
+
+        <label *ngIf="modalName == LOCAL_IMAGE_UPLOAD">
+          <span> Image Upload </span>
+          <div class="custom-file mb-3">
+            <input
+              type="file"
+              accept="image/*,.gif"
+              class="custom-file-input"
+              id="validatedCustomFile"
+              (change)="handleFileInput($event)"
+              multiple
+              required
+            />
+            <label class="custom-file-label" for="validatedCustomFile">
+              Choose Files...
+            </label>
+            <div class="invalid-feedback">Failed to load</div>
+          </div>
+        </label>
+
+        <div *ngIf="selectedFiles.length" class="img-list">
+          <label><span>Selected Images</span></label>
+          <div class="img-list-item" *ngFor="let file of selectedFiles">
+            <div class="img-container">
+              <img [src]="file.url" alt="" />
+            </div>
+            <span>{{ file.value.name }}</span>
+            <mat-icon (click)="deleteImage(file)">close</mat-icon>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+    <ng-container
+      [ngbNavItem]="'bulk_upload'"
+      *ngIf="modalName == HOST_IMAGE_MODAL"
+    >
+      <a ngbNavLink>Bulk Upload</a>
+      <ng-template ngbNavContent>
+        <label>
+          <span> CSV Upload </span>
+          <div class="custom-file mb-3">
+            <input
+              type="file"
+              accept=".csv"
+              class="custom-file-input"
+              id="validatedCustomFile"
+              (change)="handleCsvUpload($event)"
+              multiple
+              required
+            />
+            <label class="custom-file-label" for="validatedCustomFile">
+              {{ csvFile != null ? csvFile.name : "Choose file..." }}
+            </label>
+            <div class="invalid-feedback">Failed to load</div>
+          </div>
+        </label>
+        <div *ngIf="parsingMsg">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            [innerHTML]="parsingMsg"
+          ></div>
+        </div>
+        <div>
+          <div class="alert alert-success" role="alert">
+            <div>
+              <strong>Mandatory Fields :</strong>
+              entity_name, entity_value, asset_value, set_id
+            </div>
+
+            <div><strong> Max Row Limit :</strong> {{ MAX_CSV_ROW }}</div>
+          </div>
+        </div>
+        <div class="download-sample-div">
+          <div (click)="downloadHostedImageUploadDataCsv()">
+            <span class="download-sample-text">Sample CSV File</span
+            ><mat-icon>get_app</mat-icon>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </nav>
+
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+  <div>
+    <div class="footer-text">
+      <mat-icon>info</mat-icon>
+      <span
+        >The image will be hosted on CVision and actual image URL will be
+        different from input url</span
+      >
+    </div>
+    <div class="footer-text">
+      <mat-icon>info</mat-icon>
+      <span>Make sure Image has valid Copyrights</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    matRipple
+    [class.disabled-button]="!isMapBulkHostedImageButtonVisible()"
+    *ngIf="modalName == HOST_IMAGE_MODAL && activeTab == 'bulk_upload'"
+    (click)="mapBulkUrlImage()"
+  >
+    Bulk Map Images
+  </button>
+  <button
+    matRipple
+    *ngIf="modalName == HOST_IMAGE_MODAL && activeTab == 'image_upload'"
+    [class.disabled-button]="!isMapHostedImageButtonVisible()"
+    (click)="mapUrlImage()"
+    type="submit"
+  >
+    Map Images
+  </button>
+  <button
+    matRipple
+    *ngIf="modalName == LOCAL_IMAGE_UPLOAD && activeTab == 'image_upload'"
+    [class.disabled-button]="!isMapLocalImageButtonVisible()"
+    (click)="mapLocalImage()"
+    type="submit"
+  >
+    Map Images
+  </button>
+</div>

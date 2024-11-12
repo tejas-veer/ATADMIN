@@ -1,0 +1,4 @@
+<div *ngFor="let err of errorStack" class="alert alert-danger">
+    <a (click)="closeAlert(alert)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ err.title}}</strong> - <i>{{err.message}}</i>
+</div>

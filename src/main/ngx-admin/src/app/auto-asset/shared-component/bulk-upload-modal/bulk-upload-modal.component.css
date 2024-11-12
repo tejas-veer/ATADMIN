@@ -1,0 +1,60 @@
+.btn {
+  color: white;
+  background-color: #40dc7e;
+  text-transform: uppercase;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+  margin-left: 0.3rem;
+}
+
+.btn-close {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.disabled-button {
+  background-color: #40dc7e1a !important;
+  color: grey;
+  cursor: default;
+}
+
+button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+mat-icon {
+  margin-left: 0.5rem;
+}
+
+.custom-file-label {
+  overflow: hidden;
+}
+
+.download-sample-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #40dc7e;
+}
+
+.download-sample-div > div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #40dc7e;
+  cursor: pointer;
+}
+
+.download-sample-text {
+  text-decoration: underline;
+}
+

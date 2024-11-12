@@ -1,0 +1,144 @@
+<nb-card>
+    <nb-card-header>
+        <span>Auto Template Debug</span>
+    </nb-card-header>
+    <nb-card-footer>
+        <h4>Coming soon. Work in progress...</h4>
+<!--        <div>-->
+<!--            <div class="col-md-6" style="display: inline-block;margin-bottom: 20px">-->
+<!--                <input class="form-control"-->
+<!--                       placeholder="Enter URL"-->
+<!--                       [(ngModel)]="debugURL"-->
+<!--                />-->
+<!--            </div>-->
+<!--            <div style="display: inline-block;margin-right: 100px">-->
+
+<!--                <button class="btn btn-success"-->
+<!--                        style="display: inline-block;" (click)="redir()"-->
+<!--                        [disabled]="advancedoptions">Submit-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div style="display: inline-block">-->
+<!--                <button class="btn btn-primary btn-sm" (click)="showAdvancedOptions()" [disabled]="!templateDebugData">-->
+<!--                    Change Parameters-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+    </nb-card-footer>
+</nb-card>
+<nb-card *ngIf="advancedoptions">
+
+    <nb-card>
+        <nb-card-header>Primary Parameters<a class="btn btn-link" (click)="toggleMoreParams()">
+            <mat-icon>add_box</mat-icon>
+        </a></nb-card-header>
+        <nb-card-footer>
+
+            <div class="container-fluid" style="padding-top: 1em;margin-bottom: 1em" *ngIf="addMoreParams">
+                <div class="row mat-elevation-z8" style="padding-top: 1em;text-align: center;border: #D5D5D5">
+
+                    <div class="form-group form-inline col-sm-5">
+                        <label class="col-sm-2 control-label"><b>Parameter</b></label>
+                        <div class="col-sm-10 inputGroupContainer">
+                            <div class="input-group">
+                                <input class="form-control input-sm" type="text" #paramkey>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group form-inline col-sm-5">
+                        <label class="col-sm-2 control-label"><b>Value</b></label>
+                        <div class="col-sm-10 inputGroupContainer">
+                            <div class="input-group">
+                                <input class="form-control imput-sm" type="text" #paramvalue>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-inline col-sm-2">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                (click)="addparam(paramkey.value,paramvalue.value)">Add
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="form-group form-inline col-sm-6" *ngFor="let param of params_final">
+                    <label class="col-sm-2 control-label"><b>{{param.key}}</b></label>
+                    <div class="col-sm-10 inputGroupContainer">
+                        <div class="input-group">
+                            <input value={{param.value}}
+                                   class="form-control input-sm"
+                                   type="text"
+                                   [(ngModel)]="param.value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </nb-card-footer>
+    </nb-card>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <b>Advanced Parameters</b>
+            </mat-panel-title>
+
+        </mat-expansion-panel-header>
+        <div class="row">
+
+            <div class="form-group form-inline col-sm-6" *ngFor="let param of cacheThreshold">
+                <label class="col-sm-9 control-label"
+                       style="text-align: justify;font-size: 12px"><b>{{param.key}}</b></label>
+                <div class="col-sm-3 inputGroupContainer">
+                    <div class="input-group">
+                        <input placeholder="{{param.value}}"
+                               class="form-control"
+                               type="text"
+                               [(ngModel)]="param.value1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-expansion-panel>
+    <br>
+    <div class="wrapper">
+        <button class="btn btn-success"
+                style="display: inline-block; " (click)="redir()"
+
+        >Submit
+        </button>
+    </div>
+    <br>
+</nb-card>
+
+
+<ngx-loader *ngIf="showloader"></ngx-loader>
+<nb-card *ngIf="templateDebugData">
+    <nb-card-header class="row">
+        <div class="col-sm-8">Debug Data</div>
+    </nb-card-header>
+    <nb-card-body>
+        <debug-data-viewer *ngIf="templateDebugData" [data]="templateDebugData" [tsize]="tsize"></debug-data-viewer>
+        <div *ngIf="templateDebugData" class="col-sm-12 text-right">
+            <a [href]="debugURL" class="" target="_blank">
+                <i class="fa fa-line-chart" aria-hidden="true"></i>Raw</a>
+
+            <a [href]="testURL" class="" target="_blank">
+                <i class="fa fa-line-chart" aria-hidden="true"></i> Test</a>
+
+            <a [href]="rawURL" class="" target="_blank">
+                <i class="fa fa-line-chart" aria-hidden="true"></i> Debug</a>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+
+

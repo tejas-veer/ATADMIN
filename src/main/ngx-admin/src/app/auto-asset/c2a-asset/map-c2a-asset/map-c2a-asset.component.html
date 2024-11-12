@@ -1,0 +1,130 @@
+<nb-card>
+    <nb-card-header>
+        <span>Map C2A Assets</span>
+        <div class="map-asset-header-btn-grp">
+            <button
+                    *ngIf="!isCollapsed"
+                    style="margin-right: 10px"
+                    (click)="openBulkC2AMappingModal()"
+            >
+                <span>Bulk Mapping<mat-icon>attach_file</mat-icon></span>
+            </button>
+            <button class="collapse-btn" (click)="toggleCollapse()">
+                <mat-icon>{{
+                    isCollapsed ? "keyboard_arrow_down" : "keyboard_arrow_up"
+                    }}
+                </mat-icon>
+            </button>
+        </div>
+    </nb-card-header>
+    <nb-card-body *ngIf="!isCollapsed">
+        <div class="container">
+            <div class="input-container">
+                <div class="row">
+                    <label>
+                        <span> Entity Name</span>
+                        <ng-select
+                                placeholder="Select Entity Level"
+                                appendTo="body"
+                                [items]="entityName.options"
+                                dropdownPosition="bottom"
+                                [clearable]="false"
+                                (change)="resetDimensionData('EntityValue');"
+                                [(ngModel)]="entityName.selectedValue"
+                                required
+                        >
+                        </ng-select>
+                    </label>
+
+                    <label *ngIf="this.c2aAssetService.isAdditionAlInputRequired(dropDownService.getSelectedEntityNameValue(entityName))">
+                        <span>
+                          Domain
+                        </span>
+                        <ng-select
+                          placeholder="Select Domain"
+                          appendTo="body"
+                          [items]="domain.options"
+                          [addTag]="true"
+                          addTagText="Press 'Enter' to add "
+                          dropdownPosition="bottom"
+                          (click)="getDropdownOptionSuggestion($event, 'Domain', entityNameMap['Domain'].dropDownValue)"
+                          (input)="getDropdownOptionSuggestion($event, 'Domain',entityNameMap['Domain'].dropDownValue)"
+                          [loading]="domain.showLoader"
+                          loadingText="loading..."
+                          [(ngModel)]="domain.selectedValue"
+                        >
+                        </ng-select>
+                      </label>
+
+                    <label [class.disabled]="isEntityValueDisabled()">
+                        <span> {{ entityNameMap[entityName.selectedValue].placeholder }} </span>
+                        <ng-select
+                                placeholder="Select {{ entityNameMap[entityName.selectedValue].placeholder }}"
+                                [multiple]="false"
+                                appendTo="body"
+                                [items]="entityValue.options"
+                                [addTag]="true"
+                                addTagText="Press 'Enter' to add "
+                                [clearable]="false"
+                                dropdownPosition="bottom"
+                                (change)="resetCtaValues()"
+                                (click)="getDropdownOptionSuggestion($event, 'EntityValue' , entityNameMap[entityName.selectedValue].dropDownValue)"
+                                (input)="getDropdownOptionSuggestion($event, 'EntityValue' , entityNameMap[entityName.selectedValue].dropDownValue)"
+                                [loading]="entityValue.showLoader"
+                                loadingText="loading..."
+                                notFoundText=""
+                                [hideSelected]="true"
+                                [clearable]="true"
+                                [disabled]="isEntityValueDisabled()"
+                                [(ngModel)]="entityValue.selectedValue"
+                                required
+                        >
+                        </ng-select>
+                    </label>
+                </div>
+                <div class="row">
+                    <label id="c2a-input">
+                        <span> Enter C2A </span>
+
+                        <input
+                                type="text"
+                                placeholder="Enter C2A and Press Enter"
+                                class="form-control"
+                                (click)="showC2aToastIfDisabled()"
+                                (input)="handleC2aInput($event)"
+                                (keyup.enter)="addManualAsset()"
+                                [(ngModel)]="ctaValue.selectedValue"
+                                [readOnly]="!isAddC2aEnabled()"
+                        />
+                        <span *ngIf="utilService.isSet(c2aInput)">Press Enter to add '{{c2aInput}}'</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="loader-with-message">
+            <ngx-loader *ngIf="showLoader"></ngx-loader>
+            <span *ngIf="waitingMessage.length > 0 && showLoader">{{
+        waitingMessage
+      }}</span>
+        </div>
+        <div *ngIf="addedAssetData.length" class="table-container">
+            <div class="header-row">
+                <h6 class="table-util-row total-assets">
+                    Total assets : {{ addedAssetData.length }}
+                </h6>
+                <button
+                        matRipple
+                        class="preview-btn"
+                        [class.disabled-button]="!addedAssetData.length"
+                        (click)="previewModal()"
+                >
+                    Preview & Save
+                </button>
+            </div>
+            <ng2-smart-table
+                    [settings]="settings"
+                    [source]="source"
+            ></ng2-smart-table>
+        </div>
+    </nb-card-body>
+</nb-card>

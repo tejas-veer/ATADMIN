@@ -1,0 +1,23 @@
+<nb-card>
+    <nb-card-body class="calendar-container">
+        <div class="calendar">
+            <nb-calendar-range [(range)]="selectedRange" [boundingMonth]="true" [max]="maxDate"
+                               (rangeChange)="setDateRangeForCalendarInput($event)"></nb-calendar-range>
+        </div>
+        <div class="buttons">
+            <button nbButton size="small" (click)="setDateRangeForButtonInput(1)">Last 24 Hours</button>
+            <button nbButton size="small" (click)="setDateRangeForButtonInput(0)">Today</button>
+            <button nbButton size="small" (click)="setDateRangeForButtonInput(6)">Last 7 Days</button>
+            <button nbButton size="small" (click)="setDateRangeForButtonInput(14)">Last 15 Days</button>
+            <button nbButton size="small" (click)="setDateRangeForButtonInput(29)">Last 30 Days</button>
+
+            <button *ngIf="isBusinessUnitCM" class="btn btn-lg btn-success generateButton-cm" (click)="emitButtonClick()">
+                Generate Reports
+            </button>
+
+            <button *ngIf="!isBusinessUnitCM" class="btn btn-lg btn-success generateButton-max" (click)="emitButtonClick()">
+                Generate Reports
+            </button>
+        </div>
+    </nb-card-body>
+</nb-card>

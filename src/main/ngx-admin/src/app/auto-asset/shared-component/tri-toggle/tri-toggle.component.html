@@ -1,0 +1,8 @@
+<mat-button-toggle-group [(ngModel)]="selectedState">
+  <mat-button-toggle class="accept-btn" (click)="handleSelect('1')" value="1"
+    >Accept</mat-button-toggle
+  >
+  <mat-button-toggle class="reject-btn" (click)="handleSelect('0')" value="0"
+    >Reject</mat-button-toggle
+  >
+</mat-button-toggle-group>

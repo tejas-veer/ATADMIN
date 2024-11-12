@@ -1,0 +1,26 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./"
+  },
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "paths": {
+    "@angular/*": [
+      "../node_modules/@angular/*"
+    ],
+    "@nebular/*": [
+      "../node_modules/@nebular/*"
+    ]
+  },
+  "include": [
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

@@ -1,0 +1,36 @@
+<div class="header-container" [class.left]="position === 'normal'" [class.right]="position === 'inverse'">
+  <div class="logo-containter" [style.color]="themeColor">
+    <a (click)="toggleSidebar()" href="#" class="navigation" [style.color]="themeColor">
+      <i class="nb-menu"></i>
+    </a>
+    <div class="logo" (click)="goToHome()">Auto Template</div>
+  </div>
+  <ngx-theme-switcher></ngx-theme-switcher>
+</div>
+
+<nb-actions size="medium" class="header-container" [class.right]="position === 'normal'"  [style.color]="themeColor"
+  [class.left]="position === 'inverse'">
+
+  <nb-action *ngIf="super_user" [style.color]="themeColor">
+    <h2 class="text-danger" style="margin-top: 0.3em" placement="bottom" ngbTooltip="You have unrestricted Access"><i
+        class="fa fa-user-secret" aria-hidden="true"></i></h2>
+  </nb-action>
+  <nb-action>
+    <nb-user [color]="themeColor" class="userClass" [name]="user?.name" ></nb-user>
+  </nb-action>
+
+  <nb-action>
+    <ngx-datetime [colorr] = "themeColor"></ngx-datetime>
+  </nb-action>
+  <nb-action>
+
+    <h4 style="font-family: Exo;">
+      <select #bu_dropdown [style.background]="themeColor" class="bu_selector" (change)="updateBU(bu_dropdown.value)"
+        [(ngModel)]="dropDownBUSelected">
+        <option value="bu_cm">CM</option>
+        <option value="bu_max">MAX</option>
+      </select>
+    </h4>
+  </nb-action>
+
+</nb-actions>

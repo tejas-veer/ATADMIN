@@ -1,0 +1,118 @@
+<nb-card>
+    <nb-card-header>
+        <span>Auto Template Report</span>
+        <button *ngIf="allowCsvUpload" (click)="openModal()" class="btn btn-lg btn-success">
+            Upload Analytics Report
+        </button>
+        <modal-page #bulkModalPage [sector]="sector"></modal-page>
+    </nb-card-header>
+
+    <nb-card-footer>
+        <div>
+            <div *ngIf="allowCsvUpload">
+                <nb-card>
+                    <nb-card-body style="padding-top: 0; overflow: visible">
+                        <div class="reporting-filters-rows"
+                             style="width: 100%;padding: 10px 10px;">
+                            <div class="group-by" style="padding-top: 0.7rem;">
+                                <h4>Render by</h4>
+                                <div>
+                                    <ng-select nbInput status="success" placeholder="Select Dimensions"
+                                               [addTag]="true"
+                                               [items]="groupByOptions"
+                                               [multiple]="true"
+                                               appendTo="body"
+                                               dropdownPosition="bottom"
+                                               [(ngModel)]="groupBySelectedOption"
+                                               (change)="this.userAnalyticsService.trackEventOnGA(googleAnalyticsConfig.RI_INP_RENDER_BY)"
+                                    ></ng-select>
+                                </div>
+                            </div>
+                            <div class="filter-by">
+                                <h4>Filter by</h4>
+                                <ngx-filters [existingFilters]="existingFilters" (openFiltersModalEvent)="openFiltersModal($event)"
+                                (removeFiltersEvent)="removeFilterChip($event)" [isShowAddFiltersButton]="isShowAddFiltersButton()"></ngx-filters>
+                            </div>
+                            <div>
+                                <br>
+                                <div class="metrics">
+                                    <h4>Sort by</h4>
+                                    <nb-select nbInput status="success" [(ngModel)]="metricsOption"
+                                               (ngModelChange)="this.userAnalyticsService.trackEventOnGA(googleAnalyticsConfig.RI_INP_SORT_BY)"
+                                               placeholder="Choose a metric"
+                                               style="background-color: white;border: 0px solid white !important;padding-left: 0px;padding-right: 0px;padding-top: 0px;margin-top: 10px; width: 20rem">
+                                        <nb-option value="Valid Clicks">Valid Clicks</nb-option>
+                                        <nb-option value="Weighted Conversions">Weighted Conversions</nb-option>
+                                        <nb-option value="Media.net Internal RPM">Media.net Internal RPM</nb-option>
+                                        <nb-option value="Valid Impressions">Valid Impressions</nb-option>
+                                    </nb-select>
+                                </div>
+                                <div class="calendar" style="padding-top: 0.7rem;">
+                                    <h4>Choose time frame</h4>
+                                    <div>
+                                        <input type="text" (click)="showCalendar(true)" nbInput status="success"
+                                               [value]="formattedDateRangeForDisplay" readonly/>
+                                        <nb-card *ngIf="isShowCalendar" class="modal-card" (click)="closeModal($event)">
+                                            <div class="modal-content" (click)="preventClose($event)">
+                                                <div class="close-button" (click)="showCalendar(false)"><i
+                                                        class="fas fa-times"></i></div>
+                                                <ngx-date-range-selector
+                                                        (selectedRangeChange)="handleSelectedRangeChange($event)"
+                                                        (triggerParentEvent)="generateReports()"
+                                                        style="padding-top: 30px;"></ngx-date-range-selector>
+                                            </div>
+                                        </nb-card>
+                                    </div>
+                                    <div class="button-container">
+                                        <button class="btn btn-lg btn-success cancel-query-button" *ngIf="isShowTableLoader"
+                                                (click)="abortPreviousRequest()" matTooltip="Cancel query">
+                                            <nb-icon icon="close"></nb-icon>
+                                        </button>
+                                        <button class="btn btn-lg btn-success share-button" *ngIf="enableFormatMetricsButton"
+                                                (click)="openFormatMetricsModal()" matTooltip="Show/Hide/Reorder metrics">
+                                            <nb-icon icon="eye-off-outline"></nb-icon>
+                                        </button>
+                                        <button class="btn btn-lg btn-success share-button" [cdkCopyToClipboard]="sharableLink"
+                                                (click)="copyToClipboard()" matTooltip="Share URL" *ngIf="enableShareButton">
+                                            <nb-icon icon="share"></nb-icon>
+                                        </button>
+                                        <button class="btn btn-lg btn-success generateButton" (click)="generateReports();">
+                                            Generate reports
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <div class="loader-div" *ngIf="isShowTableLoader">
+                    <ngx-loader ></ngx-loader>
+                    <button class="btn btn-lg btn-success cancel-query-button" *ngIf="isShowTableLoader"
+                            (click)="abortPreviousRequest()" matTooltip="Cancel query">Cancel</button>
+                </div>
+                <div *ngIf="tableDataToBeRendered && !isShowTableLoader">
+                    <mat-form-field>
+                        <input matInput #search (keyup)="onSearch(search.value)">
+                        <mat-placeholder>
+                            <mat-icon>search</mat-icon>
+                            <i>Filter Contents</i>
+                        </mat-placeholder>
+                    </mat-form-field>
+                    <nb-select
+                             style="float: right;" [placeholder]="defaultRowPerPage.toString()" [(ngModel)]="defaultRowPerPage">
+                        <nb-option (click)="setPager()" value="10">10</nb-option>
+                        <nb-option (click)="setPager()" value="20">20</nb-option>
+                        <nb-option (click)="setPager()" value="50">50</nb-option>
+                        <nb-option (click)="setPager()" value="ALL">10000</nb-option>
+                    </nb-select>
+                    <div class="table-container">
+                        <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!allowCsvUpload">
+                <h6>Coming soon. Work in progress...</h6>
+            </div>
+        </div>
+    </nb-card-footer>
+</nb-card>

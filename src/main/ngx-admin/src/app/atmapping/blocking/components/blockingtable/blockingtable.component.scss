@@ -1,0 +1,61 @@
+.closee {
+  border: 2px solid white;
+  padding-bottom: 40px;
+  display: none;
+}
+
+.modal-title {
+  font-family: Exo;
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+.size-name {
+  font-family: Exo;
+  font-weight: 500;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #ff657f;
+  border-color: transparent;
+}
+
+.btn {
+  box-shadow: none;
+  padding: 0.625rem 1.5rem;
+  font-size: .875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+
+}
+
+.btn-default {
+  background-color: #F0F0F0;
+  border-color: transparent;
+}
+
+::ng-deep ng2-smart-table .ng2-smart-th .ng2-smart-sort-link {
+  font-family: Exo;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #2a2a2a;
+}
+
+.ng-tns-c91-1.mat-primary.mat-form-field-type-mat-input.mat-form-field-appearance-legacy{
+  width: 85%;
+}
+
+.mat-form-field.ng-tns-c91-2.mat-primary.mat-form-field-type-mat-input.mat-form-field-appearance-legacy {
+  width:85%;
+}

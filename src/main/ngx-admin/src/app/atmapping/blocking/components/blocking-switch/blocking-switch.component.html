@@ -1,0 +1,12 @@
+<div class="text-center">
+    <div *ngIf='value === "W"' style="cursor: pointer" placement="bottom" ngbTooltip="click to deselect"
+         (click)="toggle('B')">
+      <h2 class="ion ion-ios-trash text-danger"></h2>
+    </div>
+  
+    <div *ngIf='value === "B"' style="cursor: pointer" matTooltip="click to select" matTooltipPosition="below"
+         (click)="toggle('W')">
+      <h2 class="ion ion-ios-trash"></h2>
+    </div>
+  </div>
+  

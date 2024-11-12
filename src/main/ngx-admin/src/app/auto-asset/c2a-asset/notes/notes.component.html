@@ -1,0 +1,26 @@
+<nb-card>
+    <nb-card-header>
+      <span> Notes </span>
+      <div class="config-header-btn-grp">
+        <button class="collapse-btn" (click)="toggleNotesCollapse()">
+          <mat-icon
+            >{{ isNotesCollapsed ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+          </mat-icon>
+        </button>
+      </div>
+    </nb-card-header>
+    <nb-card-body *ngIf="!isNotesCollapsed">
+      <div class="notes-container">
+        <h6>Entities Priority Order :</h6>
+        <ol class="entity-list">
+          <li>Domain + Campaign ID</li>
+          <li>Domain + Advertiser ID</li>
+          <li>Domain</li>
+          <li>Ad Group ID</li>
+          <li>Campaign ID</li>
+          <li>Advertiser ID</li>
+          <li>Global</li>
+        </ol>
+      </div>
+    </nb-card-body>
+  </nb-card>

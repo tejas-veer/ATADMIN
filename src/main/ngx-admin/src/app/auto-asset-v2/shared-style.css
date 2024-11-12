@@ -1,0 +1,50 @@
+button {
+  color: white;
+  background-color: #40dc7e;
+  text-transform: uppercase;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+  margin-left: 0.3rem;
+  cursor: pointer;
+}
+
+nb-card-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid #ebeef2;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  color: #2a2a2a;
+  font-family: Exo;
+  font-size: 1.125rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+
+.loader-with-message {
+  text-align: center;
+  font-style: italic;
+  padding-bottom: 1rem;
+}
+
+::ng-deep .ng-select.ng-select-disabled > .ng-select-container {
+  background-color: #40dc7e1a !important;
+}
+
+.form-control[readonly] {
+  background-color: #40dc7e1a;
+}
+
+.disabled {
+  cursor: not-allowed !important;
+}
+
+.mg-b{
+  margin-bottom: 10px;
+}

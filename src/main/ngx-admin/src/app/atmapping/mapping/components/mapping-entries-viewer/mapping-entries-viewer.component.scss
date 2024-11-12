@@ -1,0 +1,118 @@
+.mat-column-delete {
+  flex: 0 0 100px;
+
+}
+
+.container-fluid {
+  padding-top: 1em;
+  margin-bottom: 3em;
+  padding-left: 0.35em;
+  padding-right: 0.35em;
+}
+
+.heading {
+  font-family: Exo;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.mat-column-selection {
+  flex: 0 0 40px;
+}
+
+.mat-column-preview {
+  flex: 0 0 60px;
+}
+
+:host ::ng-deep .mat-sort-header-sorted {
+  color: #40dc7e;
+}
+
+.filter-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+:host ::ng-deep .mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+::ng-deep .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+  opacity: 0;
+}
+
+::ng-deep .mat-sort-header-pointer-left.ng-trigger.ng-trigger-leftPointer {
+  transform: rotate(-45deg);
+}
+
+::ng-deep .mat-sort-header-pointer-right.ng-trigger.ng-trigger-rightPointer {
+  transform: rotate(45deg);
+}
+
+.entity-cell {
+  max-width: fit-content;
+}
+
+.mat-cell, .mat-header-cell {
+  width: 15%;
+}
+
+.mat-column-selection {
+  flex: 0 0 100px;
+  padding-left: 5.5rem;
+}
+
+.mat-column-hierarchyLevel{
+  padding-left: 2.5rem;
+}
+
+tablee {
+  justify-content: space-between;
+}
+
+.closee {
+  border: 2px solid white;
+  padding-bottom: 40px;
+  display: none;
+}
+
+.modal-title {
+  font-family: Exo;
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+h5, .size-name, .size-viewer {
+  font-family: Exo;
+  font-weight: 500;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #ff657f;
+  border-color: transparent;
+}
+
+.btn {
+  box-shadow: none;
+  padding: 0.625rem 1.5rem;
+  font-size: .875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+
+}
+
+.btn-default {
+  background-color: #F0F0F0;
+  border-color: transparent;
+}

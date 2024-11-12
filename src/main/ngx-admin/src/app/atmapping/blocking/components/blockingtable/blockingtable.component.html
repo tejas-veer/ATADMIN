@@ -1,0 +1,53 @@
+<div style="position: relative;">
+    <ngx-loader *ngIf="blockingLoader"></ngx-loader>
+    <div class="filter-header" *ngIf="leng > 0" >
+        <div class="row">
+            <div class="col-sm-8 col-md-9 col-lg-10" style="position: relative">
+                <mat-form-field>
+                    <input matInput #search (keyup)="onSearch(search.value)" >
+                    <mat-placeholder>
+                        <mat-icon>search</mat-icon>
+                        <i>Filter Contents</i>
+                    </mat-placeholder>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4 col-md-3 col-lg-2 text-right">
+                <button *ngIf="!blockingLoader && rawData.length > 0" class="btn btn-success btn-tn"
+                        type="button" placement="bottom"
+                        matTooltip="Preview all {{type}}s" matTooltipPosition="below"
+                        (click)="preview()" style="background-color:#5de191; border:none;">
+                    Preview
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <ng2-smart-table  *ngIf="!blockingLoader" [settings]="settings" [source]="blockingData"></ng2-smart-table>
+
+    <ng-template #previewModal let-c="close" let-d="dismiss">
+      {{setCloser(c)}}
+      <div class="modal-header">
+        <h4 class="modal-title">{{type}}s Preview</h4>
+          <button class="closee" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let size of displayList">
+          <h5>{{size.name}}</h5>
+          <div *ngFor="let creative of size.creatives" class="text-center" style="display: inline-block;margin:0.5em">
+            <button class="btn btn-sm" [ngClass]='creative.Status === "W" ? "btn-danger" : "btn-default" '
+                    (click)='modalUpdates(creative,creative.Status === "W" ? "B" : "W" )' style="margin-bottom: 0.5em"><i
+              class="ion ion-ios-trash"></i>{{creative[type]}}
+            </button>
+            <creative-viewer [size]="size.name" [creative]="creative[type]" [type]="type"></creative-viewer>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  

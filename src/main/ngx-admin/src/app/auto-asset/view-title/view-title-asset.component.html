@@ -1,0 +1,278 @@
+<nb-card>
+    <nb-card-header> View Title Assets
+        <div>
+            <button (click)="toggleSidePanel()"> <span
+                >{{ "Show Request Details" }}
+                <mat-icon> {{ "list" }}</mat-icon></span
+              ></button>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="container">
+            <div class="input-container">
+                <div class="row">
+                    <label>
+                        <span> Entity Name</span>
+                        <ng-select
+                                placeholder="Select Entity Level"
+                                appendTo="body"
+                                [items]="entityName.options"
+                                dropdownPosition="bottom"
+                                [clearable]="false"
+                                (change)="resetDimensionData('EntityValue');
+                                clearTableData();
+                                resetDimensionData('Demand basis');"
+                                [(ngModel)]="entityName.selectedValue"
+                                required
+                        >
+                        </ng-select>
+                    </label>
+
+                    <label>
+                        <span> {{ getSelectedEntityNamePlaceholderValue() }} </span>
+                        <ng-select
+                                placeholder="Select {{ getSelectedEntityNamePlaceholderValue() }}"
+                                [multiple]="true"
+                                appendTo="body"
+                                [items]="entityValue.options"
+                                [addTag]="true"
+                                addTagText="Press 'Enter' to add "
+                                [clearable]="false"
+                                dropdownPosition="bottom"
+                                (click)="getDropdownOptionSuggestion($event, 'EntityValue')"
+                                (input)="getDropdownOptionSuggestion($event, 'EntityValue')"
+                                [loading]="entityValue.showLoader"
+                                loadingText="loading..."
+                                notFoundText=""
+                                [hideSelected]="true"
+                                [clearable]="true"
+                                (keydown.enter)="handleCommaSeparatedQueryValue($event)"
+                                [(ngModel)]="entityValue.selectedValue"
+                                (change)="clearTableData()"
+                                [style.box-shadow]="isEntityValueNotSet() ? '0 0 0 0.07rem red' : 'none'"
+                                [style.border-radius]="isEntityValueNotSet() ? '0.375rem' : '0'"
+                                matTooltip="Mandatory field for Fetching and Mapping Title Assets"
+                                required
+                        >
+                        </ng-select>
+                    </label>
+
+                    <label *ngIf="titleAssetService.isMultipleEntityValueInputBox(getSelectedEntityNameValue())">
+                        <span> Demand Basis </span>
+                        <ng-select
+                                placeholder="Select Demand Basis"
+                                appendTo="body"
+                                [multiple]="false"
+                                [items]="demandBasisValue.options"
+                                [addTag]="true"
+                                dropdownPosition="bottom"
+                                (click)="getDropdownOptionSuggestion($event, 'Demand basis')"
+                                (input)="getDropdownOptionSuggestion($event, 'Demand basis')"
+                                [loading]="demandBasisValue.showLoader"
+                                loadingText="loading..."
+                                [hideSelected]="true"
+                                [(ngModel)]="demandBasisValue.selectedValue"
+                                (change)="clearTableData()"
+                                [style.box-shadow]="isEntityValueNotSet() ? '0 0 0 0.07rem red' : 'none'"
+                                [style.border-radius]="isEntityValueNotSet() ? '0.375rem' : '0'"
+                                matTooltip="Mandatory field for Fetching and Mapping Title Assets"
+                                required
+                        >
+                        </ng-select>
+                    </label>
+                    <button class="button-grp"
+                            matRipple
+                            [class.disabled-button]="isEntityValueNotSet()"
+                            (click)="resetFilters(); fetchTitleAsset()"
+                    >
+                        <span> Fetch Assets <mat-icon> call_received </mat-icon></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+    <ngx-loader *ngIf="showLoader"></ngx-loader>
+</nb-card>
+
+<nb-card *ngIf="!showLoader">
+    <nb-card-header>
+        <span>Map Title Assets</span>
+        <div class="map-asset-header-btn-grp">
+            <button style="margin-right: 10px;" (click)="openBulkTitleMappingModal();">
+                <span>Bulk Mapping<mat-icon>attach_file</mat-icon></span>
+            </button>
+            <button class="collapse-btn" (click)="toggleCollapse();">
+                <mat-icon>{{ isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+            </button>
+        </div>
+
+    </nb-card-header>
+    <div *ngIf="!isCollapsed">
+        <div class="asset-container">
+            <span style="font-weight: bold">Generate Title Assets</span>
+            <div class="flex-container">
+                <div class="demand-basis-container" style="flex-direction: row">
+                    <ng-select
+                            placeholder="Select Demand Keyword"
+                            appendTo="body"
+                            [items]="demandKwd.options"
+                            [multiple]="true"
+                            [addTag]="true"
+                            dropdownPosition="bottom"
+                            (click)="getDropdownOptionSuggestion($event, 'Demand Kwd')"
+                            (input)="getDropdownOptionSuggestion($event, 'Demand Kwd')"
+                            [loading]="demandKwd.showLoader"
+                            loadingText="loading..."
+                            [hideSelected]="true"
+                            [(ngModel)]="demandKwd.selectedValue"
+                            [style.box-shadow]="!isDemandKwdSet() ? '0 0 0 0.07rem red' : 'none'"
+                            [style.border-radius]="!isDemandKwdSet() ? '0.375rem' : '0'"
+                            matTooltip="Mandatory field: Carries highest weight while generating titles"
+                            required
+                    >
+                    </ng-select>
+                    <ng-select
+                            placeholder="Enter Url"
+                            appendTo="body"
+                            [addTag]="true"
+                            notFoundText="Please enter Url & press Enter"
+                            [(ngModel)]="publisherUrl.selectedValue"
+                            matTooltip="Optional field: Enter the URL so that crawling can be performed
+                            to fetch the publisher page title and description, providing additional context"
+                    >
+                    </ng-select>
+                    <ng-select
+                            placeholder="Enter Publisher Page Title"
+                            appendTo="body"
+                            [addTag]="true"
+                            notFoundText="Please enter Publisher Page Title & press Enter"
+                            [(ngModel)]="publisherPageTitle.selectedValue"
+                            matTooltip="Optional field: Enter the Publisher Page Title to provide additional context"
+                    >
+                    </ng-select>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="form-group demand-basis-container" style="flex-direction: row">
+                    <textarea style="width: 80%; height: auto; margin-top: 0.5rem;"
+                          class="form-control shadow-none"
+                          type="text"
+                          placeholder="Enter Prompt"
+                          [(ngModel)]="promptForOzil"
+                          [matTooltip]="'Optional field: You may edit the default prompt to provide custom prompt. Don\'t forget to include {{DEMAND_KEYWORD}}'"
+                          required
+                    ></textarea>
+                   
+                </div>
+            </div>
+            <div class="btn-grp-container">
+                <div class="button-grp" style="align-self: flex-end;">
+                    <button (click)="generateTitleAssetFromOzil()"
+                            [class.disabled-button]="generateTitleButtonDisabled()" matRipple>
+                    <span>
+                        {{ loaderForButtons['generateTitleFromOzilButton'] ? "Please Wait" : "Generate"}}
+                        <mat-icon [class.spin-animation]="loaderForButtons['generateTitleFromOzilButton']">
+                            {{loaderForButtons['generateTitleFromOzilButton'] ? "hourglass_bottom" : "sync"}}
+                        </mat-icon>
+                    </span>
+                    </button>
+                    <button (click)="queueTitleGeneration()"
+                            [class.disabled-button]="queueTitleGenerationButtonDisabled()" matRipple>
+                    <span>
+                        {{ loaderForButtons['queueLoader'] ? "Please Wait" : "Queue"}}
+                        <mat-icon [class.spin-animation]="loaderForButtons['queueLoader']">
+                            {{loaderForButtons['queueLoader'] ? "hourglass_bottom" : "queue"}}
+                        </mat-icon>
+                    </span>
+                    </button>
+                    <button (click)="openBulkUploadModal()"
+                             matRipple>
+                    <span>
+                        {{ loaderForButtons['bulkUploadLoader'] ? "Please Wait" : "Bulk Upload"}}
+                        <mat-icon [class.spin-animation]="loaderForButtons['bulkUploadLoader']">
+                            {{loaderForButtons['bulkUploadLoader'] ? "hourglass_bottom" : "attach_file"}}
+                        </mat-icon>
+                    </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <div *ngIf="loader.mapTitleLoader" class="loader-with-message">
+        <ngx-loader></ngx-loader>
+        <span
+            *ngIf="waitingMessage.length > 0 && (loader.mapTitleLoader)"
+            >{{waitingMessage}}</span
+        >
+    </div>
+        
+    <div *ngIf="dataForGeneratedOrManualMappedTitles.length > 0" class="table-container"
+        style="margin: var(--card-padding);">
+        <ng2-smart-table
+        [settings]="settingForGeneratedOrManualMappedTitles"
+        [source]="dataForGeneratedOrManualMappedTitles">
+        </ng2-smart-table>
+    </div>
+
+        <div class="asset-container">
+            <div class="flex-container">
+                <div class="demand-basis-container">
+                    <span style="font-weight: bold">Enter Manual Title Assets</span>
+                    <ng-select
+                            placeholder="Select Title Values for Mapping"
+                            appendTo="body"
+                            [multiple]="true"
+                            [items]="manualTitleMappings.options"
+                            [addTag]="true"
+                            dropdownPosition="bottom"
+                            (click)="getDropdownOptionSuggestion($event, 'Manual Title Mappings')"
+                            (input)="getDropdownOptionSuggestion($event, 'Manual Title Mappings')"
+                            [loading]="manualTitleMappings.showLoader"
+                            loadingText="loading..."
+                            [hideSelected]="true"
+                            [(ngModel)]="manualTitleMappings.selectedValue"
+                            (add)="addManualTitle($event)"
+                            (remove)="removeManualTitle($event)"
+                            style="width: 93%"
+                            required
+                    >
+                    </ng-select>
+                </div>
+                <div class="button-grp tm-button">
+                    <button (click)="previewAndMapTitles()" [class.disabled-button]="isEntityValueNotSet() ||
+                dataForGeneratedOrManualMappedTitles.length === 0 || toggledRows.length" matRipple>
+                    <span>
+                        {{ loaderForButtons['previewAndMapButton'] ? "Please Wait" : "Preview & Map Title Asset"}}
+                        <mat-icon [class.spin-animation]="loaderForButtons['previewAndMapButton']">
+                            {{loaderForButtons['previewAndMapButton'] ? "hourglass_bottom" : "playlist_add_check"}}
+                        </mat-icon>
+                    </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nb-card>
+
+<nb-card *ngIf="assetData.length && !showLoader">
+    <nb-card-header>Fetched Assets</nb-card-header>
+    <nb-card-body>
+        <div class="header-row">
+            <h6 class="table-util-row total-assets">Total assets : {{ assetData.length }}</h6>
+            <button matRipple class="save-changes-btn" [class.disabled-button]="!toggledRows.length"
+                    (click)="previewModal()">
+                Preview & Save
+            </button>
+        </div>
+        <h6 class="table-util-row">
+            Unmap all :
+            <input class="input" type="checkbox" (change)="unMapAll($event)"/>
+        </h6>
+        <div class="table-container">
+            <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+
+<side-panel [showSidePanel]="showSidePanel" (closeSidePanel)="closeSidePanel()" (viewAsset)="viewAsset($event)"></side-panel>

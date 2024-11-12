@@ -1,0 +1,53 @@
+<nb-card>
+    <nb-card-header>
+        Template {{ sector }}
+
+        <button (click)="openUnmappingModal()" style="float:right;"
+                class="btn btn-lg btn-success">
+            Bulk Unmapping
+        </button>
+        <button (click)="openModal()" style="float:right; margin-right:10px;" class="btn btn-lg btn-success">
+            Bulk {{ sector }}
+        </button>
+
+        <modal-page #bulkModalPage [sector]="sector"></modal-page>
+        <modal-page #unmapBulkModalPage sector="Unmapping"></modal-page>
+    </nb-card-header>
+    <nb-card-footer>
+        <ngx-loader *ngIf="inputLoader"></ngx-loader>
+
+        <div *ngIf="!inputLoader">
+            <div class="row">
+                <div class="col">
+                    <nb-checkbox
+                            status="success"
+                            [(ngModel)]="enableDemandSide" *ngIf="toShowMaxCheckBox">Show Demand Hierarchy
+                    </nb-checkbox>
+                </div>
+                <div class="w-100"></div>
+
+                <div class="row mt-3 ml-0 mr-0 w-100">
+                    <ng-container *ngIf="enableDemandSide; else elseBlock">
+                        <div class="col col-sm-6 border-right">
+                            <supply-side></supply-side>
+                        </div>
+                        <div class="col col-sm-6">
+                            <ngx-demand-side></ngx-demand-side>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #elseBlock>
+                        <div class="col">
+                            <supply-side [onSameColumn]="true"></supply-side>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="text-center">
+                <button style="margin-top: 1.3em;" class="btn btn-lg btn-success" (click)="redir()">
+                    Search
+                </button>
+            </div>
+        </div>
+    </nb-card-footer>
+</nb-card>

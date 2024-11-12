@@ -1,0 +1,581 @@
+<nb-card>
+  <nb-card-header>
+    <div class="map-asset-header">
+      <span>Map Manual Image Assets </span>
+      <div class="header-btn-grp">
+        <button
+            matRipple
+            type="button"
+            (click)="viewRequestDetails()"
+          >
+            <span
+              >{{ "Show Request Details" }}
+              <mat-icon> {{ "list" }}</mat-icon></span
+            >
+          </button>
+      </div>
+    </div>
+    <div class="header-btn-grp">
+      <button matRipple (click)="openHostedUrlUploadModal()" style="margin-left: 0">
+        <span>Map Hosted Image <mat-icon> insert_link</mat-icon></span>
+      </button>
+      <button matRipple (click)="openLocalImageUploadModal()" style="margin-left: 1rem">
+        <span> Map Local Image <mat-icon> image</mat-icon></span>
+      </button>
+    </div>
+  </nb-card-header>
+</nb-card>
+<nb-card>
+  <nb-card-header>Generate Image Asset</nb-card-header>
+  <nb-card-body>
+    <div>
+      <div class="source-col-container">
+        <div class="custom-chip-list">
+          <div
+            matRipple
+            class="custom-chip"
+            [class.active-chip]="assetSource.selectedValue == source"
+            (click)="handleSourceSelection(source)"
+            *ngFor="let source of assetSource.options"
+          >
+            {{ source }}
+          </div>
+        </div>
+        <div class="source-col-btn-grp">
+          
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="asset-col-container">
+          <div *ngIf="isSelectedSource(STABLE_DIFFUSION)">
+            <div class="input-container">
+              <label class="version-input">
+                <span>Version</span>
+                <ng-select
+                  placeholder="Select Version"
+                  appendTo="body"
+                  [addTag]="false"
+                  [clearable]="false"
+                  [searchable]="false"
+                  [items]="stableDiffusionMap.versionList"
+                  dropdownPosition="bottom"
+                  [(ngModel)]="stableDiffusionMap.version"
+                >
+                </ng-select>
+              </label>
+
+              <label class="keyword-input">
+                <span>Keyword</span>
+                <ng-select
+                  placeholder="Enter Keyword"
+                  appendTo="body"
+                  [items]="sdKeyword.options"
+                  [multiple]="true"
+                  [addTag]="true"
+                  [hideSelected]="true"
+                  [loading]="sdKeyword.showLoader"
+                  loadingText="loading..."
+                  (input)="getDropdownOptionSuggestion($event, 'sdKeyword')"
+                  (click)="getDropdownOptionSuggestion($event, 'sdKeyword')"
+                  dropdownPosition="bottom"
+                  notFoundText=""
+                  [clearOnBackspace]="true"
+                  (keydown.enter)="handleCommaSeparatedStableDiffusionKeywordValue($event)"
+                  [(ngModel)]="sdKeyword.selectedValue"
+                >
+                </ng-select>
+              </label>
+            </div>
+
+            <label *ngIf="isPromptVisible()">
+              <span>Prompt</span>
+              <div class="form-group">
+                <textarea
+                  class="form-control shadow-none"
+                  type="text"
+                  placeholder="Enter Prompt"
+                  [(ngModel)]="stableDiffusionMap.prompt"
+                  required
+                ></textarea>
+              </div>
+            </label>
+
+            <label *ngIf="isPromptVisible()">
+              <span>Negative Prompt</span>
+              <div class="form-group">
+                <textarea
+                  class="form-control shadow-none"
+                  type="text"
+                  placeholder="Enter Negative Prompt"
+                  [(ngModel)]="stableDiffusionMap.negativePrompt"
+                  required
+                ></textarea>
+              </div>
+            </label>
+          </div>
+
+          <div *ngIf="isSelectedSource(KBB)">
+            <label>
+              <span>Keyword</span>
+              <ng-select
+                placeholder="Select Keyword"
+                appendTo="body"
+                [items]="keyword.options"
+                [multiple]="true"
+                [addTag]="true"
+                [hideSelected]="true"
+                [loading]="keyword.showLoader"
+                loadingText="loading..."
+                (input)="getDropdownOptionSuggestion($event, 'Keyword')"
+                (click)="getDropdownOptionSuggestion($event, 'Keyword')"
+                dropdownPosition="bottom"
+                notFoundText=""
+                [clearOnBackspace]="false"
+                (keydown.enter)="handleCommaSeparatedKeywordValue($event)"
+                [(ngModel)]="keyword.selectedValue"
+              >
+              </ng-select>
+            </label>
+
+            <label>
+              <span>Image Size</span>
+              <ng-select
+                placeholder="Select Image Size"
+                appendTo="body"
+                [addTag]="true"
+                [items]="keywordAssetSize.options"
+                dropdownPosition="bottom"
+                notFoundText=""
+                [clearSearchOnAdd]="true"
+                [(ngModel)]="keywordAssetSize.selectedValue"
+              >
+              </ng-select>
+            </label>
+          </div>
+
+          <div class="btn-grp">
+            <button
+              matRipple
+              *ngIf="isSelectedSource(KBB)"
+              class="input-container-btn"
+              [class.disabled-button]="isFetchImagesButtonDisabled()"
+              (click)="getKBBImages()"
+            >
+              <span> Fetch Images <mat-icon> call_received</mat-icon></span>
+            </button>
+            <button
+              matRipple
+              *ngIf="isSelectedSource(STABLE_DIFFUSION)"
+              class="input-container-btn"
+              [class.disabled-button]="
+                !isGenerateSDButtonVisible() ||
+                isGenerateSDButtonDisabled() ||
+                showLoader
+              "
+              (click)="generateStableDiffusionImages()"
+            >
+              <span>Generate<mat-icon>sync</mat-icon></span>
+            </button>
+            <button
+              matRipple
+              *ngIf="isSelectedSource(STABLE_DIFFUSION)"
+              class="input-container-btn"
+              [class.disabled-button]="
+                !isGenerateSDButtonVisible() || showLoader
+              "
+              (click)="queueStableDiffusionImagesGeneration()"
+            >
+              <span>Queue<mat-icon>queue</mat-icon></span>
+            </button>
+            <button
+              matRipple
+              *ngIf="isSelectedSource(STABLE_DIFFUSION)"
+              id="fileButton"
+              class="input-container-btn"
+              (click)="openStableDiffusionBulkUploadModal()"
+            >
+              <span>Bulk Upload<mat-icon>attach_file</mat-icon></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+  <div *ngIf="showLoader || isMappedShowLoader" class="loader-with-message">
+    <ngx-loader></ngx-loader>
+    <span
+      *ngIf="waitingMessage.length > 0 && (showLoader || isMappedShowLoader)"
+      >{{ waitingMessage }}</span
+    >
+  </div>
+</nb-card>
+
+<nb-card *ngIf="assetData.length && !showLoader" class="sticky">
+  <nb-card-header>Map Generated Assets</nb-card-header>
+  <div class="entity-row">
+    <div class="entity-input">
+      <label>
+        <span>Entity Name</span>
+        <ng-select
+          placeholder="Select Entity Level"
+          [items]="entityName.options"
+          appendTo="body"
+          dropdownPosition="bottom"
+          notFoundText=""
+          [clearable]="false"
+          (change)="resetDimensionData('EntityValue')"
+          [(ngModel)]="entityName.selectedValue"
+        >
+        </ng-select>
+      </label>
+      <label>
+        <span>Entity Value</span>
+        <ng-select
+          placeholder="Select {{ getSelectedEntityNamePlaceholderValue() }}"
+          appendTo="body"
+          [multiple]="true"
+          [hideSelected]="true"
+          [items]="entityValue.options"
+          [addTag]="true"
+          dropdownPosition="bottom"
+          [loading]="entityValue.showLoader"
+          (click)="getDropdownOptionSuggestion($event, 'EntityValue')"
+          (input)="getDropdownOptionSuggestion($event, 'EntityValue')"
+          notFoundText=""
+          [(ngModel)]="entityValue.selectedValue"
+        >
+        </ng-select>
+      </label>
+      <label
+        *ngIf="
+          imageAssetService.isSizeSelectVisible(getSelectedEntityNameValue())
+        "
+      >
+        <span>Asset Size</span>
+        <ng-select
+          placeholder="Select size"
+          appendTo="body"
+          [items]="entityAssetSize.options"
+          [addTag]="true"
+          dropdownPosition="bottom"
+          (click)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+          (input)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+          [loading]="entityAssetSize.showLoader"
+          loadingText="loading..."
+          [hideSelected]="true"
+          [(ngModel)]="entityAssetSize.selectedValue"
+          required
+        >
+        </ng-select>
+      </label>
+      <label>
+        <span>Image source - [Set Id]</span>
+        <ng-select
+          placeholder="Select Image Source"
+          appendTo="div"
+          [isOpen]="false"
+          [searchable]="false"
+          [items]="imageSource.options"
+          dropdownPosition="bottom"
+          [clearable]="false"
+          [(ngModel)]="imageSource.selectedValue"
+          required
+        >
+        </ng-select>
+      </label>
+      <div>
+        <span>&nbsp;</span>
+        <button
+          matRipple
+          class="entity-button"
+          [class.disabled-button]="
+            isPreviewButtonDisabled() || showPreviewButtonLoader
+          "
+          (click)="openPreviewModal()"
+        >
+          <span>
+            {{ showPreviewButtonLoader ? "Please Wait" : "Preview & Map Images"
+            }}<mat-icon
+              >{{
+                showPreviewButtonLoader
+                  ? "hourglass_bottom"
+                  : "playlist_add_check"
+              }}
+            </mat-icon></span
+          >
+        </button>
+      </div>
+    </div>
+  </div>
+</nb-card>
+
+<nb-card
+  *ngIf="
+    (assetData.length && !showLoader) ||
+    (!showLoader &&
+      isSelectedSource(STABLE_DIFFUSION) &&
+      !isEmptyObject(requestTaskInfo))
+  "
+>
+  <nb-card-header>Generated Results</nb-card-header>
+  <div class="table-details">
+    <div *ngIf="!isRequestDetailsTextVisible()"></div>
+    <div *ngIf="isRequestDetailsTextVisible()" class="request-details-div">
+      <span class="view-request-id-detail">
+        Assets Generated For Request : {{ this.requestId }}
+      </span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span
+        >Info : Success :
+        {{ requestTaskInfo["success_count"] }}&nbsp;&nbsp;Failed :
+        {{ requestTaskInfo["error_count"] }}</span
+      >
+    </div>
+    <div>
+      <h6 class="table-util-row">Total assets : {{ assetData.length }}</h6>
+
+      <h6 class="table-util-row">
+        Select all : &nbsp;
+        <input class="input" type="checkbox" (change)="selectAll($event)" />
+      </h6>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="isSelectedSource(STABLE_DIFFUSION)" class="filter-by">
+      <h5>Search Content</h5>
+      <div class="filter-input">
+        <ng-select
+          placeholder="Select Keyword"
+          appendTo="body"
+          [items]="getFilterOptions('keyword')"
+          (change)="loadFilterData(this.stableDiffusionFilterKeys)"
+          [(ngModel)]="enteredKeyword"
+        ></ng-select>
+        <ng-select
+          placeholder="Search Prompt"
+          appendTo="body"
+          [items]="getFilterOptions('prompt')"
+          (change)="loadFilterData(this.stableDiffusionFilterKeys)"
+          [(ngModel)]="enteredPrompt"
+        ></ng-select>
+        <ng-select
+          placeholder="Search Negative Prompt"
+          appendTo="body"
+          [items]="getFilterOptions('negativePrompt')"
+          (change)="loadFilterData(this.stableDiffusionFilterKeys)"
+          [(ngModel)]="enteredNegativePrompt"
+        ></ng-select>
+        <ng-select
+          placeholder="Select Version"
+          appendTo="body"
+          [items]="getFilterOptions('version')"
+          (change)="loadFilterData(this.stableDiffusionFilterKeys)"
+          [(ngModel)]="selectedVersion"
+        ></ng-select>
+      </div>
+    </div>
+    <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+  </div>
+</nb-card>
+
+<p-sidebar
+  [style]="{
+    background: 'white',
+    width: '48rem',
+    top: '60px',
+    padding: '10px',
+    'border-left': '1px solid lightgray'
+  }"
+  [(visible)]="visibleSidebar"
+  position="right"
+  [baseZIndex]="999"
+>
+  <div class="custom-sidebar-header">
+    <span>Request Details</span>
+    <div class="sidebar-header-icon-grp">
+      <mat-icon matRipple (click)="refreshRequestDetails()">refresh</mat-icon>
+      <mat-icon (click)="toggleSideBar()">close</mat-icon>
+    </div>
+  </div>
+  <div class="custom-sidebar-body">
+    <div class="request-id-input-container">
+      <label class="request-id-input">
+        <span>Request Id</span>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Request Id"
+            [(ngModel)]="requestIdInput"
+          />
+        </div>
+      </label>
+      <div class="request-id-input-button-grp">
+        <button
+          class="request-id-input-btn"
+          (click)="viewStableDiffusionGeneratedImagesForRequestId(requestIdInput)"
+        >
+          View
+        </button>
+        <button
+          matTooltip="Two separate files will be downloaded if generation fails for certain keywords or prompts."
+          class="request-id-input-btn request-save-btn"
+          (click)="
+            downloadStableDiffusionAssetDataCsvFromRequestId(requestIdInput)
+          "
+        >
+          <span *ngIf="!downloadLoader">Save</span>
+          <span *ngIf="downloadLoader">
+            <mat-spinner [diameter]="18" [style.stroke]="white"></mat-spinner>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="sidebarSpinnerLoader || initialLoader == 0"
+      class="sidebar-body-blank-div"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+    <div
+      *ngIf="
+        requestDetailsList.length <= 0 &&
+        !sidebarSpinnerLoader &&
+        initialLoader != 0
+      "
+      class="sidebar-body-blank-div"
+    >
+      <span> Nothing to show </span>
+    </div>
+
+    <div *ngIf="requestDetailsList.length > 0 && !sidebarSpinnerLoader">
+      <div class="requests-table-container">
+        <table class="requests-table">
+          <colgroup>
+            <col class="request-id-col" />
+            <col class="progress-col" />
+            <col class="action-col" />
+            <col class="download-col" />
+            <col class="share-col" />
+            <col class="cancel-col" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Request ID</th>
+              <th>Progress</th>
+              <th>Type</th>
+              <th>Action</th>
+              <th>Save</th>
+              <th>Share</th>
+              <th>Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="request-table-row"
+              *ngFor="let request of requestDetailsList"
+            >
+              <td>{{ request.requestId }}</td>
+              <td class="progress-data">
+                <span class="progress-percentage-span">{{
+                  calculateProgressPercentageText(request)
+                }}</span>
+                <ngb-progressbar
+                  [value]="calculateProgressPercentageValue(request)"
+                  [striped]="isRequestProcessing(request)"
+                  [animated]="isRequestProcessing(request)"
+                  [ngStyle]="{
+                    'background-color':
+                      request.isActive === -1 ? '#ff0000' : '',
+                    'border-radius': '50px'
+                  }"
+                ></ngb-progressbar>
+              </td>
+              <td>{{request.requestType}}</td>
+              <td>
+                <ng-container *ngIf="request.requestType == 'STABLE_DIFFUSION' && request.isActive == 0">
+                  <button
+                    matRipple
+                    (click)="
+                      viewStableDiffusionGeneratedImagesForRequestId(
+                        request.requestId
+                      )
+                    "
+                  >
+                    View
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="request.requestType == 'ASSET_MAPPING' && request.isActive == 0">
+                    Completed
+                </ng-container>
+                <ng-container *ngIf="request.isActive == 1">
+                  Processing
+                </ng-container>
+                <ng-container *ngIf="request.isActive == -1">
+                  Cancelled
+                </ng-container>
+              </td>
+              <td>
+                <div
+                  matTooltip="Two separate files will be downloaded if generation fails for certain keywords or prompts."
+                  [class.disabled-icon]="
+                    request.isActive == 1 || request.isActive == -1 || request.requestType == 'ASSET_MAPPING'
+                  "
+                  class="mat-icon-cell-div"
+                >
+                  <mat-icon
+                    *ngIf="!request.downloadLoader"
+                    (click)="downloadStableDiffusionAssetDataCsv(request)"
+                    >get_app</mat-icon
+                  >
+                  <mat-spinner
+                    *ngIf="request.downloadLoader"
+                    [diameter]="25"
+                  ></mat-spinner>
+                </div>
+              </td>
+              <td>
+                <mat-icon
+                  [class.disabled-icon]="
+                    request.isActive == 1 || request.isActive == -1 || request.requestType == 'ASSET_MAPPING'
+                  "
+                  (click)="
+                    generateAndCopySidebarRequestDetailsUrl(request.requestId)
+                  "
+                  >share</mat-icon
+                >
+              </td>
+              <td>
+                <div
+                  [class.disabled-icon]="
+                    request.isActive == 0 || request.isActive == -1 || request.requestType == 'ASSET_MAPPING'
+                  "
+                  class="mat-icon-cell-div"
+                >
+                  <mat-icon
+                    *ngIf="!request.suspendLoader"
+                    (click)="suspendStableDiffusionRequest(request)"
+                    >cancel</mat-icon
+                  >
+                  <mat-spinner
+                    *ngIf="request.suspendLoader"
+                    [diameter]="25"
+                  ></mat-spinner>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <mat-paginator
+      [length]="totalPaginationItems"
+      [pageSize]="pageSize"
+      aria-label="Select page"
+      (page)="onPageChange($event)"
+    ></mat-paginator>
+  </div>
+</p-sidebar>

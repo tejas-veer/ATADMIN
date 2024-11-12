@@ -1,0 +1,43 @@
+<div *ngIf="ruleList.length">
+    <table style="width: 100%" class="table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th>Ids</th>
+        <th>Type</th>
+        <th style="width: 60%">Sizes</th>
+        <th>Delete</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let rule of ruleList;let i = index">
+        <td class="text" style="padding-top: 1.5em">{{rule.idsToBlock}}</td>
+        <td class="text-center" style="padding-top: 1.5em">{{rule.type}}</td>
+        <td>
+          <ng-select
+            placeholder="Click here for Size Dropdown"
+            [items]="sizeList[rule.type]"
+            [(ngModel)]="ruleList[i].sizes"
+            [bindValue]="ruleList[i].sizes"
+            [multiple]="true"
+            >
+          </ng-select>
+          <ng-template let-item="item" let-index="index">
+            {{item.value}}
+          </ng-template>
+        </td>
+        <td>
+          <button class="btn btn-tn btn-danger" (click)="deleteRule(rule)"><i class="fa fa-trash"></i></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="text-right">
+      <button class="btn btn-warning" (click)="reset()" style="display: inline-block; margin-right: 10px;">Clear</button>
+      <button class="btn btn-success btn-tn"  placement="top" (click)="save()" style="display: inline-block; width:50px;background-color:#5de191; border:none;">            
+        <mat-icon><i class="fa fa-save"></i></mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <confirm-modal #confirmModal></confirm-modal>
+  

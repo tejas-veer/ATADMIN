@@ -1,0 +1,95 @@
+<div class="container-fluid top-bottom-margin" [style.display]="inputDisplay">
+    <ngx-loader *ngIf="configLoader"></ngx-loader>
+    <div *ngIf="!configLoader" style="margin-top: 1em">
+        <div class="row">
+            <div class="col-sm-2">
+                Template Customizations
+            </div>
+
+            <div class="col-sm-10">
+                <mat-chip-list>
+                    <mat-chip *ngFor="let config of configs" [ngbTooltip]="config.description" placement="bottom">
+                        {{config.alias}} : &nbsp; <strong> {{config.value}}</strong>&nbsp; for &nbsp;
+                        <span class="badge badge-info badge-pill">{{config.level}} : {{config.entity}}</span>
+                    </mat-chip>
+                </mat-chip-list>
+            </div>
+        </div>
+        <div class="top-bottom-margin">
+            <label>
+                <span>Select Frameworks to Generate:</span>
+            </label>
+            <div class="text-center">
+                <div *ngFor="let frameworkId of frameworkList" style="display: inline-block;margin: 1em"
+                     class="text-center">
+                    <button class="btn btn-sm"
+                            style="margin-bottom: 1em"
+                            [ngClass]="frameworkStatus[frameworkId] ? 'btn-success' : 'btn-default'"
+                            (click)=" frameworkStatus[frameworkId] = !frameworkStatus[frameworkId] ">
+                        {{frameworkId}}
+                    </button>
+                    <creative-viewer type="FRAMEWORK" [creative]="frameworkId"></creative-viewer>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-10">
+                    <label>
+                        <span>Sizes:</span>
+                        <tag-input [(ngModel)]="selectedSizes"
+                                   [onlyFromAutocomplete]="true"
+                                   placeholder="Insert more sizes as required"
+                                   secondaryPlaceholder="Click here for Size Dropdown"
+                                   #tagsInput
+                        >
+                            <tag-input-dropdown [showDropdownIfEmpty]="true"
+                                                [focusFirstElement]="true"
+                                                displayBy="value"
+                                                identifyBy="value"
+                                                [autocompleteItems]="sizeList" placeholder="Insert a new item">
+                                <ng-template let-item="item" let-index="index">
+                                    {{item.value}}
+                                </ng-template>
+                            </tag-input-dropdown>
+                        </tag-input>
+                    </label>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-warning top-bottom-margin btn-tn" (click)="getTemplates()">
+                        <mat-icon ngbTooltip="Generate Templates for the provided properties">web_asset
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+            <ngx-error-stack-viewer #errorViewer></ngx-error-stack-viewer>
+        </div>
+    </div>
+</div>
+
+<ngx-loader *ngIf="templateLoader"></ngx-loader>
+
+<div class="container-fluid top-bottom-margin" [style.display]="previewDisplay">
+    <div *ngFor="let size of previewIterable">
+        <h5>{{size.sizeName}}</h5>
+        <div class="text-center margin-top-bottom">
+            <div *ngFor="let template of size.templates" style="display: inline-block;margin:1em">
+                <button class="btn btn-sm"
+                        style="margin-bottom: 0.4em"
+                        [ngClass]="insertionStatus[template.framework][template.hash][template.size] ? 'btn-success' : 'btn-default'"
+                        (click)=" insertionStatus[template.framework][template.hash][template.size] = !insertionStatus[template.framework][template.hash][template.size] ">
+                    {{template.framework}}
+                </button>
+                <creative-viewer [size]="template.size"
+                                 [creative]="template.templateId"
+                                 [customization]="template.customization"></creative-viewer>
+            </div>
+        </div>
+    </div>
+    <div class="text-right">
+        <button class="btn btn-success" (click)="insertTemplates()">
+            <mat-icon>assignment_turned_in</mat-icon>
+        </button>
+    </div>
+</div>
+

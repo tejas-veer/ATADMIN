@@ -1,0 +1,76 @@
+<div>
+    <h5 class="filter-heading">Add Filters</h5>
+    <mat-card>
+        <mat-card-content class="select-mode">
+            <div class="entity-row">
+                <ng-select nbInput status="success" placeholder="Select Filter"
+                           [items]="filterDropdownList"
+                           appendTo="body"
+                           [clearable]="false"
+                           dropdownPosition="bottom"
+                           [(ngModel)]="selectedFilterDropdown"
+                           (change)="clearValues()"
+                           tabIndex="-1"
+                ></ng-select>
+            </div>
+            <div class="input-grp">
+                <ng-select class="select-type" nbInput status="success" placeholder="Select Mode"
+                           [items]="selectTypeList"
+                           appendTo="body"
+                           [clearable]="false"
+                           dropdownPosition="bottom"
+                           [(ngModel)]="selectedSelectType"
+                           tabIndex="-1"
+                ></ng-select>
+                <ng-select class="entity-input" nbInput status="success" placeholder="Enter Value"
+                           [multiple]="true"
+                           (input)="getDropdownOptionSuggestion($event, selectedFilterDropdown)"
+                           (click)="getDropdownOptionSuggestion($event, selectedFilterDropdown)"
+                           (keydown.enter)="handleEnterKeyForFilters($event)"
+                           [(ngModel)]="value"
+                           appendTo="body"
+                           [loading]="entityLoader"
+                           dropdownPosition="bottom"
+                           notFoundText=""
+                           #mySelect
+                ></ng-select>
+            </div>
+            <div class="list-container">
+                <div class="suggestion-list">
+                    <h6>Suggestions</h6>
+                    <mat-list  role="list">
+                        <mat-list-item (click)="addItem(item)"
+                                       role="listitem"
+                                       *ngFor="let item of dropdownSuggestionOptions"
+                        >
+                            {{ item }}
+                        </mat-list-item>
+                    </mat-list>
+
+                </div>
+                <div class="selected-list">
+                    <h6>Selected Value</h6>
+                    <mat-list role="list">
+                        <mat-list-item role="listitem"
+                                       [ngClass]="getSelectTypeClass(item.selectType)"
+                                       *ngFor="let item of selectedFilterList">
+                            {{ item.value }}
+                                <nb-icon (click)="removeItem(item)" class="cancel-button" icon="close-outline">
+                                </nb-icon>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+
+            </div>
+            <div class="select-mode-add">
+                <button class="btn btn-lg btn-success" (click)="addFilter(selectedFilterDropdown)" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+                    Add
+                </button>
+                <button class="btn btn-lg btn-success close-button" type="button" (click)="this.dialogRef.close()" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+                    Cancel
+                </button>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>

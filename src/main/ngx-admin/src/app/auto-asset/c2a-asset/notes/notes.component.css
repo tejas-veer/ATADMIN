@@ -1,0 +1,18 @@
+.config-header-btn-grp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .collapse-btn {
+    color: #40dc7e;
+    float: right;
+    background-color: white;
+    border: 1px solid #40dc7e;
+    padding: 0;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

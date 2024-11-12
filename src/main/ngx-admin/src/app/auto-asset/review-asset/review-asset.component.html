@@ -1,0 +1,143 @@
+<nb-card class="sticky">
+  <nb-card-header>
+    <div class="review-asset-header">
+      <span>Review Assets </span>
+      <div class="header-btn-grp">
+        <button
+          matRipple
+          class="save-changes-btn"
+          [class.disabled-button]="!reviewedData.length || this.showPreviewButtonLoader"
+          (click)="previewModal()"
+        >
+        <span>
+          {{ showPreviewButtonLoader ? "Please Wait" : "Preview & Save"
+          }}<mat-icon
+            >{{
+              showPreviewButtonLoader
+                ? "hourglass_bottom"
+                : "playlist_add_check"
+            }}
+          </mat-icon></span
+        >
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div>
+      <div class="table-utils-container">
+        <div class="source-col-container">
+          <div class="custom-chip-list">
+            <div
+                    matRipple
+                    class="custom-chip"
+                    *ngFor="let source of ['TITLE', 'IMAGE']"
+                    (click)="changeAssetTypeToReview(source)"
+                    [class.active-chip]="selectedAssetType == source"
+            >
+              {{ source }}
+            </div>
+          </div>
+          <h6 class="table-util-row">
+            Total assets : {{ reviewAssetData.length }}
+          </h6>
+        </div>
+        <h6 *ngIf="reviewAssetData.length && !showLoader" class="table-util-row">
+          <span>Accept all : &nbsp;</span>
+          <input
+            class="bulk-select"
+            type="checkbox"
+            (change)="acceptAll($event)"
+            [(ngModel)]="acceptAllIsChecked"
+          />
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span>Reject all : &nbsp;</span>
+          <input
+            class="bulk-select"
+            type="checkbox"
+            (change)="rejectAll($event)"
+            [(ngModel)]="rejectAllIsChecked"
+          />
+        </h6>
+        <div class="asset-container" *ngIf="utilService.isSet(selectedAssetType)">
+          <div class="filter-by">
+            <h5>Search Content</h5>
+            <div class="filter-input">
+              <ng-select
+                placeholder="Search Entity Name"
+                appendTo="body"
+                [items]="entityNameMap"
+                [(ngModel)]="selectedEntityName"
+                [bindValue]="'label'"
+                [bindLabel]="'label'"
+                (change)="resetData()"
+              ></ng-select>
+              <ng-select
+                placeholder="Search Entity Value"
+                appendTo="body"
+                [addTag]="true"
+                [(ngModel)]="selectedEntityValue"
+                [bindValue]="'label'"
+                [bindLabel]="'label'"
+                (change)="resetData()"
+                notFoundText="Enter your value"
+              ></ng-select>
+              <ng-select
+                      placeholder="Select Asset Value"
+                      appendTo="body"
+                      addTag="true"
+                      [(ngModel)]="selectedAssetValue"
+                      [bindValue]="'label'"
+                      [bindLabel]="'label'"
+                      (change)="resetData()"
+                      notFoundText="Enter your value"
+              ></ng-select>
+              <ng-select
+                placeholder="Select Set Id"
+                appendTo="body"
+                addTag="true"
+                [(ngModel)]="selectedSetId"
+                [bindValue]="'label'"
+                [bindLabel]="'label'"
+                (change)="resetData()"
+                notFoundText="Enter your value"
+              ></ng-select>
+              <ng-select
+                placeholder="Select Admin Name"
+                appendTo="body"
+                addTag="true"
+                [(ngModel)]="selectedAdminName"
+                [bindValue]="'label'"
+                [bindLabel]="'label'"
+                (change)="resetData()"
+                notFoundText="Enter your value"
+              ></ng-select>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+      <ngx-loader *ngIf="showLoader"></ngx-loader>
+      <div class="table-container review-table">
+        <div *ngIf="!reviewAssetData.length && !showLoader" class="nothing-message">Please select Asset Type & click on
+          'Fetch {{itemsPerPage}} Records' Button to review</div>
+        <ng2-smart-table *ngIf="reviewAssetData.length && !showLoader"
+          [settings]="settings"
+          [source]="source"
+        ></ng2-smart-table>
+        <button *ngIf="utilService.isSet(selectedAssetType)" (click)="getReviewAsset()" style="margin: 1rem 0 0.5rem 1rem;position: sticky;left: 20%;">
+          Fetch {{itemsPerPage}} Records
+        </button>
+        <nb-select [placeholder]="itemsPerPage.toString()" [(ngModel)]="itemsPerPage" style="float: right; margin: 1rem 0.5rem 0.5rem 1rem;position: sticky;left: 60%">
+          <nb-option (click)="setPager()" value="10">10</nb-option>
+          <nb-option (click)="setPager()" value="20">20</nb-option>
+          <nb-option (click)="setPager()" value="50">50</nb-option>
+          <nb-option (click)="setPager()" value="100">100</nb-option>
+        </nb-select>
+        <p style="padding-top: 0.45rem; margin: 1rem 0 0.5rem 1rem; display: inline-block; float: right;position: sticky;left: 56%; ">Rows: </p>
+      </div>
+      <div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

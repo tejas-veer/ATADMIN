@@ -1,0 +1,39 @@
+.custom-padding {
+    padding-left: 26px;
+}
+
+.drilldown-button {
+    background-color: #fff !important;
+    border-color: #40dc7e !important;
+    color: #40dc7e !important;
+    width: 0px;
+    height: 0;
+    margin-right: 10px;
+    font-size: 24px;
+    padding-bottom: 16px !important;
+}
+
+.button-html-container {
+    display: flex;
+    align-items: center;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: red;
+    align-items: center;
+    display: flex;
+    height: auto;
+    width: auto;
+    margin: 0 0.1rem;
+    padding: 0 0.15rem;
+    margin-top: 0.1rem;
+    border: 1px solid red;
+    background-color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+

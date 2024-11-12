@@ -1,0 +1,5 @@
+<div class="image-with-toggle-button">
+    <asset-image [value]="imageSrc" [rowData]="rowData"></asset-image>
+    <div style="width: 20px;"></div>
+    <asset-block-unblock [rowData]="rowData" (toggledEvent)="onToggle($event)"></asset-block-unblock>
+</div>

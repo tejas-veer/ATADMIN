@@ -1,0 +1,66 @@
+<ng-template #childComponentTemplate>
+    <div class="col">
+      <ngx-level-selector
+              [querySide]=querySide
+              [levels]=getLevelsLabel()
+              [selectedLevel]="selectedLevel"
+              (selectedLevelEvent)="toggleLevel($event)">
+      </ngx-level-selector>
+    </div>
+  
+    <div class="col" *ngIf="selectedLevel != 'Entity'">
+      <div *ngIf="selectedLevel != 'Global'">
+        <label><span>{{selectedLevel}}</span>
+          <input class="form-control"
+                 placeholder="Enter {{selectedLevel}}"
+                 [(ngModel)]="selectedValue"
+                 ngui-auto-complete
+                 id="AutoCompleteDrop"
+                 [source]="getSearchUrl()"
+                 (keyup)="idKeyup($event)"
+                 no-match-found-text="No Match Found"
+                 [list-formatter]="formatterForInputBoxes"
+                 [value-formatter]="formatterForInputBoxes"
+                 loading-text="Loading..."
+                 min-chars="0"
+          /></label>
+      </div>
+    </div>
+  
+  
+    <div class="col" *ngIf="selectedLevel == 'Entity'">
+      <label><span>Domain</span>
+        <input class="form-control"
+               placeholder="Enter Domain"
+               [(ngModel)]="domain"
+               ngui-auto-complete
+               id="DomainDrop"
+               [source]="getDomainSearchUrl()"
+               (keyup)="idKeyup($event)"
+               no-match-found-text="No Match Found"
+               [list-formatter]="getDomainListFormatter()"
+               [value-formatter]="getDomainListFormatter()"
+               loading-text="Loading..."
+               min-chars="0"
+        /></label>
+    </div>
+    <div class="col" *ngIf="selectedLevel == 'Entity'">
+      <label><span>Ad Tag</span>
+        <input class="form-control"
+               placeholder="Enter Ad Tag"
+               [(ngModel)]="adTag"
+               ngui-auto-complete
+               id="AdtagDrop"
+               [source]="getAdTagSearchUrl()"
+               (keyup)="idKeyup($event)"
+               no-match-found-text="No Match Found"
+               list-formatter="AdTag"
+               value-formatter="AdTag"
+               loading-text="Loading..."
+               min-chars="0"
+        /></label>
+    </div>
+  </ng-template>
+
+<!--removed following while migrating to newer angular version from all this 3 input tags-->
+<!--(valueChanged)="changeDomain($event)"-->

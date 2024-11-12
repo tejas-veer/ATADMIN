@@ -1,0 +1,339 @@
+<nb-card>
+  <nb-card-header>
+    <span>Auto Asset Config </span>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="input-container">
+      <div class="row">
+        <label>
+          <span> Entity Name</span>
+          <ng-select
+            placeholder="Select Entity Level"
+            appendTo="body"
+            [items]="entityName.options"
+            dropdownPosition="bottom"
+            [clearable]="false"
+            (change)="resetDimensionData()"
+            [(ngModel)]="entityName.selectedValue"
+            required
+          >
+          </ng-select>
+        </label>
+
+        <label *ngIf="isEntityNameIsMulti(entityName.selectedValue)">
+          <span> Domain </span>
+          <ng-select
+            placeholder="Select Domain"
+            appendTo="body"
+            [items]="domain.options"
+            [addTag]="true"
+            addTagText="Press 'Enter' to add "
+            dropdownPosition="bottom"
+            (click)="
+              getDropdownOptionSuggestion(
+                $event,
+                'Domain',
+                entityNameMap['Domain + All Demand'].dropDownValue
+              )
+            "
+            (input)="
+              getDropdownOptionSuggestion(
+                $event,
+                'Domain',
+                entityNameMap['Domain + All Demand'].dropDownValue
+              )
+            "
+            [loading]="domain.showLoader"
+            loadingText="loading..."
+            [(ngModel)]="domain.selectedValue"
+          >
+          </ng-select>
+        </label>
+
+        <label>
+          <span>
+            {{ entityNameMap[entityName.selectedValue].placeholder }}
+          </span>
+          <ng-select
+            placeholder="Select {{
+              entityNameMap[entityName.selectedValue].placeholder
+            }}"
+            appendTo="body"
+            [items]="entityValue.options"
+            [addTag]="true"
+            addTagText="Press 'Enter' to add "
+            [clearable]="true"
+            dropdownPosition="bottom"
+            (click)="
+              getDropdownOptionSuggestion(
+                $event,
+                'EntityValue',
+                entityNameMap[entityName.selectedValue].dropDownValue
+              )
+            "
+            (input)="
+              getDropdownOptionSuggestion(
+                $event,
+                'EntityValue',
+                entityNameMap[entityName.selectedValue].dropDownValue
+              )
+            "
+            [loading]="entityValue.showLoader"
+            loadingText="loading..."
+            notFoundText=""
+            [hideSelected]="true"
+            [disabled]="isEntityValueDisabled()"
+            [class.disabled]="isEntityValueDisabled()"
+            [(ngModel)]="entityValue.selectedValue"
+          >
+          </ng-select>
+        </label>
+
+        <button
+          class="button-grp"
+          style="margin-top: '10px'"
+          matRipple
+          [class.disabled-button]="!isFetchConfigEnabled()"
+          (click)="fetchConfig()"
+        >
+          <span> Fetch <mat-icon> call_received </mat-icon></span>
+        </button>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-header>
+    <span> Notes </span>
+    <div class="config-header-btn-grp">
+      <button class="collapse-btn" (click)="toggleNotesCollapse()">
+        <mat-icon
+          >{{ isNotesCollapsed ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+        </mat-icon>
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body *ngIf="!isNotesCollapsed">
+    <div class="notes-container">
+      <h6>Entities Priority Order :</h6>
+      <ol class="entity-list">
+        <li>Domain + Ad ID</li>
+        <li>Domain + Ad Group ID</li>
+        <li>Domain + Campaign ID</li>
+        <li>Domain + Advertiser ID</li>
+        <li>Domain + All Demand</li>
+        <li>Ad ID</li>
+        <li>Ad Group ID</li>
+        <li>Campaign ID</li>
+        <li>Advertiser ID</li>
+        <li>Global</li>
+      </ol>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!showLoader && showAddConfig">
+  <nb-card-header>
+    <span>Add/Update Config</span>
+  </nb-card-header>
+  <nb-card-body>
+    <div
+      class="input-container mg-b"
+      [class.disabled-action]="isGlobal()"
+      [matTooltip]="isGlobal() ? 'Unavailable for Global Config' : ''"
+    >
+      <div class="row">
+        <label>
+          <span> Property Name</span>
+          <ng-select
+            placeholder="Select Property Name"
+            appendTo="body"
+            [items]="autoAssetService.autoAssetConfigProperties"
+            (change)="setPropertyValueOptions()"
+            [(ngModel)]="newConfigDetails.property"
+            [disabled]="isNewConfigsPropertyNameDisabled()"
+          >
+          </ng-select>
+        </label>
+
+        <label>
+          <span> Entity Name</span>
+          <ng-select
+            placeholder="Select Entity Level"
+            appendTo="body"
+            [items]="newConfigDetails.entity_name_options"
+            dropdownPosition="bottom"
+            [clearable]="false"
+            (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)"
+            [(ngModel)]="newConfigDetails.entity_name"
+            [disabled]="isNewConfigsEntityNameDisabled()"
+            required
+          >
+          </ng-select>
+        </label>
+
+        <label *ngIf="showDomainInput()">
+          <span>Domain</span>
+          <ng-select
+            placeholder="Select Domain"
+            [items]="domain.options"
+            [loading]="domain.showLoader"
+            [addTag]="true"
+            appendTo="body"
+            (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)"
+            (click)="
+              getDropdownOptionSuggestion($event, 'Domain', 'Publisher Domain')
+            "
+            (input)="
+              getDropdownOptionSuggestion($event, 'Domain', 'Publisher Domain')
+            "
+            (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)"
+            [(ngModel)]="newConfigDetails.domain"
+            [disabled]="isNewConfigsDomainDisabled()"
+          >
+          </ng-select>
+        </label>
+
+        <label>
+          <span> Entity Value</span>
+          <ng-select
+            placeholder="Select Entity Level"
+            appendTo="body"
+            [(ngModel)]="newConfigDetails.entity_value"
+            [disabled]="isNewConfigsEntityValueDisabled()"
+          >
+          </ng-select>
+        </label>
+
+        <label>
+          <span> Property Value</span>
+          <ng-select
+            placeholder="Enter Value"
+            appendTo="body"
+            dropdownPosition="bottom"
+            [items]="newConfigDetails.valueOptions"
+            [addTag]="true"
+            [editableSearchTerm]="true"
+            [(ngModel)]="newConfigDetails.value"
+            [disabled]="isNewConfigsPropertyValueDisabled()"
+          >
+          </ng-select>
+        </label>
+
+        <button
+          class="button-grp"
+          style="margin-top: '10px'"
+          matRipple
+          [class.disabled-button]="!isUpsertConfigButtonEnabled()"
+          (click)="addToUpsertedConfigs(newConfigDetails)"
+        >
+          <span> Add/Update <mat-icon> add_box </mat-icon></span>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="upsertedConfigs.size" class="upserted-data">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Entity Name</th>
+            <th>Entity Value</th>
+            <th>Property</th>
+            <th>Site Name</th>
+            <th>Value</th>
+            <th>Is Active</th>
+            <th>Action</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of upsertedConfigs">
+            <td>{{ item.entity_name }}</td>
+            <td>{{ item.entity_value }}</td>
+            <td>{{ item.property }}</td>
+            <td>{{ item.site_name }}</td>
+            <td>{{ item.value }}</td>
+            <td>{{ item.is_active }}</td>
+            <td>{{ item.type }}</td>
+            <td
+              style="cursor: pointer; text-align: center"
+              (click)="removeItemFromUpsertedConfigs(item)"
+            >
+              <mat-icon>delete</mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="configData.length" class="flex-row">
+        <button matRipple class="save-changes-btn" (click)="updateConfig()">
+          <span>Save <mat-icon>save</mat-icon></span>
+        </button>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="showLoader || configData.length">
+  <nb-card-header>
+    <span>Config Summary</span>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="loader-with-message">
+      <ngx-loader *ngIf="showLoader"></ngx-loader>
+      <span *ngIf="waitingMessage.length > 0 && showLoader">{{
+        waitingMessage
+      }}</span>
+    </div>
+    <div *ngFor="let config of configData" class="level-container">
+      <div class="entity-header">
+        <span>
+          <mat-icon (click)="toggleCollapse(config)">{{
+            config.isCollapsed ? "keyboard_arrow_up" : "keyboard_arrow_down"
+          }}</mat-icon>
+          {{ config.property }}
+        </span>
+      </div>
+      <div *ngIf="config.isCollapsed">
+        <table class="custom-table">
+          <colgroup>
+            <col class="entity-name-col" />
+            <col class="entity-value-col" />
+            <col class="site-name-col" />
+            <col class="value-col" />
+            <col class="is-active-col" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Entity Name</th>
+              <th>Entity Value</th>
+              <th>Site Name</th>
+              <th>Value</th>
+              <th>Is Active</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of config['properties']"
+              [class.edited-row]="item.type == 'UPDATED'"
+              [class.added-row]="item.type == 'ADDED'"
+            >
+              <td>{{ item.entity_name }}</td>
+              <td>{{ item.entity_value }}</td>
+              <td>{{ item.site_name }}</td>
+              <td>{{ item.value }}</td>
+              <td>
+                <mat-slide-toggle
+                  (change)="upsertData(item)"
+                  [(ngModel)]="item.is_active"
+                  [disabled]="configRowIsActiveDisabled(item)"
+                >
+                  {{ item.is_active ? "On" : "Off" }}
+                </mat-slide-toggle>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

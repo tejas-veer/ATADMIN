@@ -1,0 +1,36 @@
+label {
+  width: 100%;
+}
+
+span.title {}
+
+.disableDiv {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+nb-card-header {
+  font-size: 1.125rem;
+  font-family: Exo;
+  font-weight: 600px;
+}
+
+button {
+  background-color: #40dc7e;
+  text-transform: uppercase;
+  padding: 0.625rem 1.5rem;
+  font-size: .875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  letter-spacing: .4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+}
+
+button:hover {
+  background-color: #5de191;
+  border: 2px solid transparent;
+
+}
+

@@ -1,0 +1,46 @@
+<ng-template #content let-c="close" let-d="dismiss" #mappingConfirmModal>
+    <div class="modal-header">
+        <h4 class="modal-title">Confirm Additions</h4>
+        <button class="closee" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center" *ngIf="data.length <= 0">
+            <i> Nothing to show</i>
+        </div>
+        <div *ngFor="let sizeItem of data">
+            <h4 class="sizee">{{sizeItem.size}}</h4>
+
+            <div class="templates-wrapper text-center">
+                <div class="template text-center" *ngFor="let templateItem of sizeItem.templates"
+                     style="display: inline-block;margin: 1em">
+                    <button class="btn btn-sm" [ngClass]="templateItem.status ? 'btn-success' : 'btn-default'"
+                            style="margin-bottom: 0.5em"
+                            (click)="templateItem.status = !templateItem.status"
+                    >
+                        <i class="fa" [ngClass]="templateItem.status ? 'fa-check' : 'fa-times'"></i>
+                        {{ templateItem.template }}
+                    </button>
+                    <creative-viewer [size]="sizeItem.size" [creative]="templateItem.template"></creative-viewer>
+                    <p *ngIf="mappingType == 'SEASONAL'">
+                        <strong>Start&nbsp; Date : </strong>{{templateItem.startDate}}
+                        &nbsp;
+                        <strong>Expiry Date : </strong>{{templateItem.endDate}}
+                    </p>
+
+                </div>
+            </div>
+            <hr>
+        </div>
+        <ngx-loader *ngIf="loader"></ngx-loader>
+    </div>
+    <div class="modal-footer" *ngIf="!loader">
+        <button type="button" class="btn btn-success" (click)="confirm()">Confirm</button>
+    </div>
+</ng-template>
+
+

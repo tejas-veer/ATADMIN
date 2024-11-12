@@ -1,0 +1,976 @@
+<div class="asset_container">
+    <!-- Top Input Container Start -->
+    <div class="top_input_container">
+        <div class="input-container">
+            <!-- Entity Selection -->
+            <label class="entityInputContainer">
+                <span> Entity </span>
+                <ng-select placeholder="Select Entity Level" appendTo="body" [items]="entityName.options"
+                           dropdownPosition="bottom" [clearable]="false"
+                           (change)="setEntityNameParam();resetDimensionData('EntityValue')"
+                           [(ngModel)]="entityName.selectedValue" class="topSelect" required>
+                </ng-select>
+            </label>
+            <!-- Entity Value Selection -->
+            <label *ngIf="this.c2aAssetService.isAdditionAlInputRequired(dropDownService.getSelectedEntityNameValue(entityName)) || isEntityNameIsMulti(entityName.selectedValue)">
+                        <span>
+                          Domain
+                        </span>
+                <ng-select
+                        placeholder="Select Domain"
+                        appendTo="body"
+                        [items]="domain.options"
+                        [addTag]="true"
+                        addTagText="Press 'Enter' to add "
+                        dropdownPosition="bottom"
+                        (click)="getDropdownOptionSuggestion($event, 'domain')"
+                        (input)="getDropdownOptionSuggestion($event, 'domain')"
+                        (change)="setDomainParam()"
+                        [loading]="domain.showLoader"
+                        loadingText="loading..."
+                        [(ngModel)]="domain.selectedValue"
+                >
+                </ng-select>
+            </label>
+
+            <label>
+                <span> {{ getSelectedEntityNamePlaceholderValue() }} </span>
+                <ng-select placeholder="Select {{ getSelectedEntityNamePlaceholderValue() }}" [multiple]="true"
+                           appendTo="body" [items]="entityValue.options" [addTag]="true"
+                           addTagText="Press 'Enter' to add "
+                           [clearable]="false" dropdownPosition="bottom"
+                           (click)="getDropdownOptionSuggestion($event, 'EntityValue')"
+                           (input)="getDropdownOptionSuggestion($event, 'EntityValue')"
+                           [loading]="entityValue.showLoader"
+                           loadingText="loading..." notFoundText="" [hideSelected]="true" [clearable]="true"
+                           (keydown.enter)="handleCommaSeparatedQueryValue($event)"
+                           [disabled]="isEntityValueDisabled()"
+                           (change)="setEntityValueParam()"
+                           [(ngModel)]="entityValue.selectedValue"
+                           required>
+                </ng-select>
+            </label>
+
+            <label *ngIf="titleAssetService.isMultipleEntityValueInputBox(getSelectedEntityNameValue())">
+                <span> Demand Basis </span>
+                <ng-select
+                        placeholder="Select Demand Basis"
+                        appendTo="body"
+                        [multiple]="false"
+                        [items]="demandBasis.options"
+                        [addTag]="true"
+                        dropdownPosition="bottom"
+                        (click)="getDropdownOptionSuggestion($event, 'Demand basis')"
+                        (input)="getDropdownOptionSuggestion($event, 'Demand basis')"
+                        [loading]="demandBasis.showLoader"
+                        loadingText="loading..."
+                        [hideSelected]="true"
+                        (change)="setDemandBasisParam()"
+                        [(ngModel)]="demandBasis.selectedValue"
+                >
+                </ng-select>
+            </label>
+
+            <!-- Asset Size Selection -->
+            <label *ngIf="
+          this.imageAssetService.isSizeSelectVisible(
+            getSelectedEntityNameValue()
+          )
+        ">
+                <span> Asset Size </span>
+                <ng-select placeholder="Select size" appendTo="body" [items]="entityAssetSize.options" [addTag]="true"
+                           dropdownPosition="bottom" (click)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+                           (input)="getDropdownOptionSuggestion($event, 'EntityAssetSize')"
+                           [loading]="entityAssetSize.showLoader" loadingText="loading..." [hideSelected]="true"
+                           (change)="setAssetSizeParam()"
+                           [(ngModel)]="entityAssetSize.selectedValue" required>
+                </ng-select>
+            </label>
+        </div>
+        <!-- Button Group -->
+        <button matRipple [class.disabled-button]="isFetchAssetButtonDisabled()" (click)="getAsset()">
+            <span> Fetch Assets <mat-icon> call_received</mat-icon></span>
+        </button>
+    </div>
+    <!-- Top Input Container End -->
+    <!-- Image Assets Section Start -->
+    <nb-card class="image-assets-container add-shadow">
+        <nb-card-header class="mainHeaderToggle">
+            <span (click)="toggleCardBody('image')"> Image Assets
+                <div matRipple class="toggleButton">
+                    <mat-icon class="toggleButtonIcon" [class.rotate]="!isCardBodyVisibleImage">arrow_drop_up</mat-icon>
+                </div>
+            </span>
+            <div *ngIf="configData.length > 0" class="cardHeaderButton">
+                <button matRipple (click)="showConfigDialogData(this.constant.ASSET_TYPE_IMAGE)">
+                    <span><mat-icon> edit</mat-icon>  Image Test <p
+                            class="config-asset-divider"></p> {{ getAutoAssetConfigPercentage(this.constant.IMAGE_TEST_PERCENTAGE) }} </span>
+                </button>
+            </div>
+        </nb-card-header>
+        <nb-card-body *ngIf="isCardBodyVisibleImage">
+            <div class="image-asset-wrapper">
+
+                <ng-container *ngIf="imageLoader; else assetContent">
+                    <!-- Placeholder Loader for 4 Cards -->
+                    <div class="imageLoaderCard" *ngFor="let i of [1, 2, 3, 4]">
+                        <div class="image-asset-card-left">
+                            <div class="image-placeholder skeleton"></div>
+                        </div>
+                        <div class="image-asset-card-right">
+                            <div class="image-asset-card-top">
+                                <div class="text-placeholder skeleton"></div>
+                                <div class="text-placeholder short skeleton"></div>
+                            </div>
+                            <div class="image-asset-card-bottom">
+                                <div class="toggle-placeholder skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Asset Content -->
+                <ng-template #assetContent>
+                    <ng-container *ngIf="imageAssetData.length > 0; else noDataContent">
+                        <div class="image-asset-card" *ngFor="let asset of imageAssetData">
+                            <div class="image-asset-card-left">
+                                <img [src]="asset.assetValue" alt="Image Asset"/>
+                            </div>
+                            <div class="image-asset-card-right">
+                                <div class="image-asset-card-top">
+                                    <h4>{{ asset.basis }}</h4>
+                                    <p class="image-asset-set-id">
+                                        {{ imageAssetService.SetIdToImageSourceMap[asset.setId] }}
+                                    </p>
+                                </div>
+                                <div class="image-asset-card-bottom">
+                                    <mat-slide-toggle
+                                            color="primary"
+                                            class="asset-slider"
+                                            (change)="asset.isChanged = !asset.isChanged"
+                                            [disabled]="isEntityValueDisabled()"
+                                            [(ngModel)]="asset.isActive">
+                                    </mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-template>
+
+                <!-- No Data Fallback -->
+                <ng-template #noDataContent>
+                    <ngx-no-data></ngx-no-data>
+                </ng-template>
+
+            </div>
+        </nb-card-body>
+        <nb-card-footer *ngIf="(isCardBodyVisibleImage && isValidEntityForImage())" class="cardBottomContain">
+            <button *ngIf="isAssetChanged(imageAssetData) && !imageLoader"
+                    (click)="filterChangedAsset(this.constant.ASSET_TYPE_IMAGE);showPreviewDialog(this.constant.ASSET_TYPE_IMAGE)"
+                    icon="pi pi-external-link" label="Show">
+                <span> Preview <mat-icon> visibility </mat-icon></span>
+            </button>
+            <button matRipple [class.disabled-button]="isFetchAssetButtonDisabled()"
+                    (click)="showSidebar(this.constant.ASSET_TYPE_IMAGE)">
+                <span> Add Assets <mat-icon> add</mat-icon></span>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+    <!-- Image Assets Section End -->
+    <!-- Title Assets Section Start -->
+    <nb-card class="title-assets-container add-shadow">
+        <nb-card-header class="mainHeaderToggle">
+            <span (click)="toggleCardBody('title')"> Title Assets
+                <div matRipple class="toggleButton">
+                    <mat-icon class="toggleButtonIcon" [class.rotate]="!isCardBodyVisibleTitle">arrow_drop_up</mat-icon>
+                </div>
+            </span>
+            <div *ngIf="configData.length > 0" class="cardHeaderButton">
+                <button matRipple (click)="showConfigDialogData(this.constant.ASSET_TYPE_TITLE)">
+                    <span>
+                        <mat-icon>edit</mat-icon> Title Test
+                        <p class="config-asset-divider"></p>
+                        {{ getAutoAssetConfigPercentage(this.constant.TITLE_TEST_PERCENTAGE) }}
+                    </span>
+                </button>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body *ngIf="isCardBodyVisibleTitle">
+            <div class="title-asset-wrapper">
+
+                <ng-container *ngIf="titleLoader; else titleContent">
+                    <div class="titleLoaderCard" *ngFor="let i of [1, 2, 3, 4]">
+                        <div class="title-asset-card-left asset-toggle">
+                            <div class="toggle-placeholder skeleton"></div>
+                        </div>
+                        <div class="title-asset-divider"></div>
+                        <div class="title-asset-card-right">
+                            <div class="title-asset-card-top">
+                                <div class="text-placeholder skeleton"></div>
+                            </div>
+                            <div class="title-asset-card-bottom">
+                                <div class="text-placeholder short skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Actual Data Display -->
+                <ng-template #titleContent>
+                    <ng-container *ngIf="titleAssetData.length > 0; else noDataContent">
+                        <div class="title-asset-card"
+                             *ngFor="let asset of titleAssetData">
+                            <!-- Title Asset Left -->
+                            <div class="title-asset-card-left asset-toggle">
+                                <mat-slide-toggle
+                                        color="primary"
+                                        class="asset-slider"
+                                        (change)="asset.isChanged = !asset.isChanged"
+                                        [disabled]="isEntityValueDisabled()"
+                                        [(ngModel)]="asset.isActive"
+                                ></mat-slide-toggle>
+                            </div>
+                            <div class="title-asset-divider"></div>
+                            <!-- Title Asset Right -->
+                            <div class="title-asset-card-right">
+                                <div class="title-asset-card-top">
+                                    <h4>{{ asset.assetValue }}</h4>
+                                </div>
+                                <div class="title-asset-card-bottom">
+                                    <p class="title-asset-set-id">Set Id: {{ asset.setId }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-template>
+
+                <!-- No Data Fallback -->
+                <ng-template #noDataContent>
+                    <ngx-no-data></ngx-no-data>
+                </ng-template>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer class="cardBottomContain" *ngIf="isCardBodyVisibleTitle && isValidEntityForTitle()">
+            <button icon="pi pi-external-link" label="Show"
+                    *ngIf="isAssetChanged(titleAssetData) && !titleLoader"
+                    (click)="filterChangedAsset(this.constant.ASSET_TYPE_TITLE);showPreviewDialog(this.constant.ASSET_TYPE_TITLE)">
+                <span> Preview <mat-icon> visibility </mat-icon></span>
+            </button>
+            <button matRipple [class.disabled-button]="isFetchAssetButtonDisabled()"
+                    (click)="showSidebar(this.constant.ASSET_TYPE_TITLE)">
+                <span> Add Assets <mat-icon> add</mat-icon></span>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+    <!-- Title Assets Section End -->
+    <!-- CTA Assets Section Start -->
+    <nb-card class="cta-assets-container add-shadow">
+        <nb-card-header class="mainHeaderToggle">
+            <span (click)="toggleCardBody('cta')"> CTA Assets
+                <div matRipple class="toggleButton">
+                    <mat-icon class="toggleButtonIcon" [class.rotate]="!isCardBodyVisibleCta">arrow_drop_up</mat-icon>
+                </div>
+            </span>
+            <div *ngIf="configData.length > 0" class="cardHeaderButton">
+                <button matRipple (click)="showConfigDialogData(this.constant.ASSET_TYPE_C2A)">
+                    <span>
+                        <mat-icon>edit</mat-icon> CTA Test
+                        <p class="config-asset-divider"></p>
+                        {{ getAutoAssetConfigPercentage(this.constant.C2A_TEST_PERCENTAGE) }}
+                    </span>
+                </button>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body *ngIf="isCardBodyVisibleCta">
+            <div class="cta-asset-wrapper">
+                <ng-container *ngIf="c2aLoader; else c2aContent;">
+                    <div class="ctaLoaderCard" *ngFor="let i of [1, 2, 3, 4, 5]">
+                        <div class="cta-asset-card-left asset-toggle">
+                            <div class="toggle-placeholder skeleton"></div>
+                        </div>
+                        <div class="cta-asset-divider"></div>
+                        <div class="cta-asset-card-right">
+                            <div class="cta-asset-card-top">
+                                <div class="text-placeholder skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #c2aContent>
+                    <ng-container *ngIf="c2aAssetData.length > 0; else noDataContent">
+                        <div class="cta-asset-card"
+
+                             *ngFor="let asset of c2aAssetData">
+                            <!-- CTA Asset Left -->
+                            <div class="cta-asset-card-left asset-toggle">
+                                <mat-slide-toggle
+                                        color="primary"
+                                        class="asset-slider"
+                                        color="primary"
+                                        (change)="asset.isChanged = !asset.isChanged"
+                                        [disabled]="isEntityValueDisabled()"
+                                        [(ngModel)]="asset.isActive"
+                                ></mat-slide-toggle>
+                            </div>
+                            <div class="cta-asset-divider"></div>
+                            <!-- CTA Asset Right -->
+                            <div class="cta-asset-card-right">
+                                <div class="cta-asset-card-top">
+                                    <h4>{{ asset.assetValue }}</h4>
+                                </div>
+                                <!-- <div class="cta-asset-card-bottom">
+                                                <p class="cta-asset-set-id">Set Id: 1</p>
+                                            </div> -->
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template #noDataContent>
+                    <ngx-no-data></ngx-no-data>
+                </ng-template>
+            </div>
+        </nb-card-body>
+        <nb-card-footer class="cardBottomContain" *ngIf="isCardBodyVisibleCta && isValidEntityForC2a()">
+            <button icon="pi pi-external-link" label="Show"
+                    *ngIf="isAssetChanged(c2aAssetData) && !c2aLoader"
+                    (click)="filterChangedAsset(this.constant.ASSET_TYPE_C2A);showPreviewDialog(this.constant.ASSET_TYPE_C2A)">
+                <span> Preview <mat-icon> visibility </mat-icon></span>
+            </button>
+            <button matRipple [class.disabled-button]="isFetchAssetButtonDisabled()"
+                    (click)="showSidebar(this.constant.ASSET_TYPE_C2A)">
+                <span> Add Assets <mat-icon> add</mat-icon></span>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+    <!-- CTA Assets Section End -->
+</div>
+<!-- Add Assest Sidebar -->
+<p-sidebar [style]="{width: '50rem'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" [modal]="true"
+           [dismissible]="true" (onHide)="hideSidebar()" class="addingAssestSlider">
+    <div *ngIf="activeSidebar === this.constant.ASSET_TYPE_IMAGE" class="assetSidebarContainer imageAssestSlidebar">
+
+        <h4 class="assetSidebarTitle">Add Image Assets</h4>
+        <div class="assetSidebarForm">
+            <nb-card class="addAssetCard manualAssets">
+                <nb-card-header class="addAssestCardTitle" (click)="toggleCardBody('manualAsset')"> Create Asset
+                    Manually
+                    <div class="cardHeaderButton">
+                        <div class="cardHeaderButton">
+                            <div matRipple class="toggleButton">
+                                <!-- Rotate icon based on section visibility -->
+                                <mat-icon class="toggleButtonIcon" [class.rotate]="!isManualAssetVisible">
+                                    arrow_drop_up
+                                </mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-header>
+                <nb-card-body class="assetInputFlex" *ngIf="isManualAssetVisible">
+                    <label>
+                        <ng-select class="custom-ng-select" [items]="imageSource.options"
+                                   placeholder="Select Image Source [Set ID]" dropdownPosition="bottom"
+                                   [clearable]="false"
+                                   [(ngModel)]="imageSource.selectedValue">
+                        </ng-select>
+                    </label>
+                    <label>
+                        <input class="form-control addAssetForm" type="text" placeholder="Enter image URL"
+                               [(ngModel)]="imageUrl.selectedValue" [disabled]="uploadedFiles.length > 0"/>
+                    </label>
+                    <p-divider align="center">
+                        <b>Or</b>
+                    </p-divider>
+                    <div class="mb-3">
+                        <input class="form-control imageSelectInput" type="file" id="formFileMultiple"
+                               accept="image/*,.gif" (change)="handleFileInput($event)"
+                               [disabled]="imageUrl.selectedValue?.length > 0" #fileInput multiple>
+                    </div>
+                </nb-card-body>
+                <nb-card-footer class="cardBottomContain" *ngIf="isManualAssetVisible">
+                    <button *ngIf="imageUrl.selectedValue?.length > 0" (click)="mapHostedImages()" matRipple> Map Url
+                        Image
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button *ngIf="uploadedFiles.length > 0" (click)="mapLocalImage()" matRipple> Map Local Image
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+            <nb-card class="addAssetCard GenerateAssets">
+                <nb-card-header class="addAssestCardTitle" (click)="toggleCardBody('generateImageAsset')"> Generate
+                    Image Asset
+                    <div matRipple class="toggleButton">
+                        <mat-icon class="toggleButtonIcon" [class.rotate]="!isGenerateImageAssetVisible">
+                            arrow_drop_up
+                        </mat-icon>
+                    </div>
+                </nb-card-header>
+                <nb-card-body *ngIf="isGenerateImageAssetVisible">
+                    <div class="assetToggleSwitch">
+                        <p matRipple class="switchChip" [class.active]="imageSources.selectedValue == source"
+                           (click)="setImageSource(source);resetImageSourceInput();" *ngFor="let source of imageSources.options">{{
+                                source.name
+                            }}</p>
+                    </div>
+                    <div class="createImageAssetForm">
+                        <div *ngIf="isSelectedSource('KBB')" class="assetInputFlex kbbAssest">
+                            <label>
+                                <span>Keyword</span>
+                                <ng-select placeholder="Select Keyword" appendTo="div" [items]="keyword.options"
+                                           [multiple]="true" [addTag]="true" [hideSelected]="true"
+                                           [loading]="keyword.showLoader" loadingText="loading..."
+                                           (input)="getDropdownOptionSuggestion($event, 'keyword')"
+                                           (click)="getDropdownOptionSuggestion($event, 'keyword')"
+                                           dropdownPosition="bottom"
+                                           notFoundText="" [clearOnBackspace]="false"
+                                           [(ngModel)]="keyword.selectedValue" class="kbbKeyword">
+                                </ng-select>
+                            </label>
+                            <label class="imageSizeSelect">
+                                <span>Image Size</span>
+                                <ng-select placeholder="Select Image Size" appendTo=".kbbAssest" [addTag]="true"
+                                           [items]="kbbImageSize.options" dropdownPosition="top" notFoundText=""
+                                           [clearSearchOnAdd]="true" [(ngModel)]="kbbImageSize.selectedValue">
+                                </ng-select>
+                            </label>
+                        </div>
+                        <div *ngIf="isSelectedSource('STABLE DIFFUSION')" class="assetInputFlex">
+                            <label class="version-input">
+                                <span>Prompt Type</span>
+                                <ng-select placeholder="Select Prompt Type" [items]="version.options" appendTo="div"
+                                           [addTag]="false" [clearable]="false" [searchable]="false"
+                                           dropdownPosition="bottom"
+                                           [(ngModel)]="version.selectedValue"></ng-select>
+                            </label>
+                            <label class="keyword-input">
+                                <span>Keyword</span>
+                                <ng-select placeholder="Enter Keyword" appendTo="div" [items]="keyword.options"
+                                           [multiple]="true" [addTag]="true" [hideSelected]="true"
+                                           [loading]="keyword.showLoader" loadingText="loading..."
+                                           (input)="getDropdownOptionSuggestion($event, 'keyword')"
+                                           (click)="getDropdownOptionSuggestion($event, 'keyword')"
+                                           dropdownPosition="bottom"
+                                           notFoundText="" [clearOnBackspace]="true"
+                                           [(ngModel)]="keyword.selectedValue">
+                                </ng-select>
+                            </label>
+                            <label *ngIf="isPromptVisible()">
+                                <span>Prompt</span>
+                                <div class="form-group">
+                                    <textarea class="form-control shadow-none" type="text" placeholder="Enter Prompt"
+                                              rows="5"
+                                              [(ngModel)]="prompt.selectedValue" required></textarea>
+                                </div>
+                            </label>
+                            <label *ngIf="isPromptVisible()">
+                                <span>Negative Prompt</span>
+                                <div class="form-group">
+                                    <textarea class="form-control shadow-none" type="text"
+                                              placeholder="Enter Negative Prompt"
+                                              rows="5"
+                                              [(ngModel)]="negativePrompt.selectedValue"
+                                              required></textarea>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </nb-card-body>
+                <nb-card-footer class="cardBottomContain" *ngIf="isGenerateImageAssetVisible">
+                    <button *ngIf="isSelectedSource('KBB')" (click)="getKBBImages()" matRipple> FETCH
+                        <mat-icon>call_received</mat-icon>
+                    </button>
+                    <button *ngIf="isSelectedSource('STABLE DIFFUSION')" (click)="generateStableDiffusionImages()"
+                            matRipple> GENERATE
+                        <mat-icon>sync</mat-icon>
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+            <nb-card *ngIf="fetchedAsset?.length > 0" class="addAssetCard">
+                <nb-card-header><span>Select & Map Assets</span>
+                    <button (click)="mapAsset(this.constant.ASSET_TYPE_IMAGE);" matRipple> Map Selected Image
+                        <mat-icon>sync</mat-icon>
+                    </button>
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="viewImageAssetWrapper">
+                        <div *ngIf="!fetchedAsset || fetchedAsset.length === 0">
+                            <div class="skeletonLoader" *ngFor="let i of [1, 2, 3, 4]">
+                                <div class="viewAssestImageCard skeleton"></div>
+                                <div class="activeCheckIcon skeleton-icon"></div>
+                            </div>
+                        </div>
+                        <div class="viewImageAssets" [class.cardActive]="asset.isSelected"
+                             (click)="asset.isSelected = !asset.isSelected" *ngFor="let asset of fetchedAsset">
+                            <!-- Image Asset Left -->
+                            <div class="viewAssestImageCard ">
+                                <img src="{{asset.assetValue}}" alt="Image Asset"/>
+                            </div>
+                            <div class="activeCheckIcon">
+                                <mat-icon>check</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+        <div class="assetSidebarResult"></div>
+    </div>
+
+    <!--    Title side bar content-->
+    <div *ngIf="activeSidebar === this.constant.ASSET_TYPE_TITLE" class="assetSidebarContainer titleAssestSlidebar">
+        <h4 class="assetSidebarTitle">Add Title Assets</h4>
+        <div class="assetSidebarForm">
+            <nb-card class="addAssetCard manualAssets">
+                <nb-card-header class="addAssestCardTitle" (click)="toggleCardBody('manualTitleAsset')"> Create Title
+                    Asset Manually
+                    <div matRipple class="toggleButton">
+                        <mat-icon class="toggleButtonIcon" [class.rotate]="!isManualTitleAssetVisible">
+                            arrow_drop_up
+                        </mat-icon>
+                    </div>
+                </nb-card-header>
+                <nb-card-body class="assetInputFlex" *ngIf="isManualTitleAssetVisible">
+                    <label>
+                        <span>Manual Title</span>
+                        <ng-select class="custom-ng-select" placeholder="Select Title Values for Mapping"
+                                   placeholder="Enter Title"
+                                   appendTo="div"
+                                   [multiple]="true"
+                                   [items]="manualTitle.options"
+                                   [addTag]="true"
+                                   addTagText="Press 'Enter' to add "
+                                   dropdownPosition="bottom"
+                                   (click)="getDropdownOptionSuggestion($event, 'manualTitle')"
+                                   (input)="getDropdownOptionSuggestion($event, 'manualTitle')"
+                                   [loading]="manualTitle.showLoader"
+                                   loadingText="loading..."
+                                   [hideSelected]="true"
+                                   (change)="addManualTitleAsset()"
+                                   [clearable]="true"
+                                   [(ngModel)]="manualTitle.selectedValue"
+                        >
+                        </ng-select>
+                    </label>
+                </nb-card-body>
+            </nb-card>
+            <nb-card class="addAssetCard GenerateAssets">
+                <nb-card-header class="addAssestCardTitle" (click)="toggleCardBody('generateTitleAsset')"> Generate Title Assets
+                    <div matRipple class="toggleButton">
+                        <mat-icon class="toggleButtonIcon" [class.rotate]="!isGenerateTitleAssetVisible">
+                            arrow_drop_up
+                        </mat-icon>
+                    </div>
+                </nb-card-header>
+                <nb-card-body *ngIf="isGenerateTitleAssetVisible">
+                    <div class="createImageAssetForm">
+                        <div class="assetInputFlex">
+                            <label class="version-input">
+                                <span>Demand Keyword</span>
+                                <ng-select
+                                        placeholder="Select Demand Keyword"
+                                        [items]="demandKeyword.options"
+                                        [multiple]="false" [addTag]="true" [hideSelected]="true"
+                                        [loading]="demandKeyword.showLoader" loadingText="loading..."
+                                        (input)="getDropdownOptionSuggestion($event, 'demandKeyword')"
+                                        (click)="getDropdownOptionSuggestion($event, 'demandKeyword')"
+                                        dropdownPosition="bottom"
+                                        notFoundText="" [clearOnBackspace]="false"
+                                        [(ngModel)]="demandKeyword.selectedValue"
+                                ></ng-select>
+                            </label>
+                            <label class="keyword-input">
+                                <span>Publisher Page Url</span>
+                                <ng-select placeholder="Enter Url"
+                                           dropdownPosition="bottom"
+                                           [addTag]="true"
+                                           [hideSelected]="true"
+                                           [(ngModel)]="publisherUrl.selectedValue"
+                                ></ng-select>
+                            </label>
+                            <label>
+                                <span>Publisher Page Title</span>
+                                <ng-select placeholder="Enter Publisher Page Title"
+                                           [multiple]="false" [addTag]="true" [hideSelected]="true"
+                                           dropdownPosition="bottom"
+                                           [clearOnBackspace]="false"
+                                           [(ngModel)]="publisherPageTitle.selectedValue"
+                                ></ng-select>
+                            </label>
+                            <label>
+                                <span>Prompt</span>
+                                <textarea class="form-control shadow-none" type="text" placeholder="Enter Prompt"
+                                          [(ngModel)]="titlePrompt.selectedValue"
+                                          required></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </nb-card-body>
+                <nb-card-footer class="cardBottomContain" *ngIf="isGenerateTitleAssetVisible">
+                    <button (click)="generateTitle()" matRipple> Generate
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+            <nb-card *ngIf="fetchedAsset?.length > 0" class="addAssetCard">
+                <nb-card-header>Select and Map Assets
+                    <button (click)="mapAsset(this.constant.ASSET_TYPE_TITLE)" matRipple> Map Selected
+                        Title
+                        <mat-icon>sync</mat-icon>
+                    </button>
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="viewTitleAssets">
+                        <div class="viewTitleCard" [class.activeTitleAsset]="asset.isSelected"
+                             (click)="asset.isSelected = !asset.isSelected" *ngFor="let asset of fetchedAsset">
+                            <div class="titleAssetContainer">
+                                <h4>{{ asset.assetValue }}</h4>
+                            </div>
+                            <div class="activeCheckIcon">
+                                <mat-icon>check</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+    <div *ngIf="activeSidebar === this.constant.ASSET_TYPE_C2A" class="assetSidebarContainer ctaAssestSlidebar">
+        <h4 class="assetSidebarTitle">Add CTA Assets
+
+        </h4>
+        <div class="assetSidebarForm">
+            <nb-card class="addAssetCard GenerateAssets ctaAddAssetCard">
+                <nb-card-header class="addAssestCardTitle"> Generate CTA Assets
+
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="createImageAssetForm">
+                        <div class="assetInputFlex">
+                            <label>
+                                <input
+                                        type="text"
+                                        placeholder="Enter CTA Text and Press Enter"
+                                        id="ctaText"
+                                        class="form-control ctaAddInput"
+                                        (input)="handleC2aInput($event)"
+                                        (keyup.enter)="addManualCta()"
+                                        [(ngModel)]="c2a.selectedValue"
+                                />
+                            </label>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+            <nb-card *ngIf="fetchedAsset?.length > 0" class="addAssetCard">
+                <nb-card-header>Select & Map Assets
+                    <button (click)="mapAsset(this.constant.ASSET_TYPE_C2A)" matRipple> Map Selected C2A
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="ctaResultWrapper">
+                        <div class="ctaResultCard" [class.activeCtaCard]="asset.isSelected"
+                             (click)="asset.isSelected = !asset.isSelected" *ngFor="let asset of fetchedAsset">
+                            <div class="ctaResultCardContainer">
+                                <h4>{{ asset.assetValue }}</h4>
+                            </div>
+                            <div class="activeCheckIcon">
+                                <mat-icon> check</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+        <div class="assetSidebarResult"></div>
+    </div>
+    <div class="loaderContainer" *ngIf="showLoader">
+        <div class="flex-center">
+            <div class="loaderCircle"></div>
+            <div class="waiting-message">{{ waitingMessage }}</div>
+        </div>
+    </div>
+</p-sidebar>
+
+<p-dialog [(visible)]="showDialog" class="previewDailog" [modal]="true" [style]="{width: '1140px'}"
+          [baseZIndex]="10000" [draggable]="false" [resizable]="false" [dismissableMask]="true" [blockScroll]="true">
+    <nb-card class=" add-shadow previewCard">
+        <nb-card-header>Preview Content</nb-card-header>
+        <nb-card-body>
+            <div *ngIf="isDialogActive(this.constant.ASSET_TYPE_IMAGE)" class="image-asset-wrapper">
+                <div class="image-asset-card" *ngFor="let asset of previewAssetData">
+                    <!-- Image Asset Left -->
+                    <div class="image-asset-card-left">
+                        <img src="{{asset.assetValue}}" alt="Image Asset"/>
+                    </div>
+                    <!-- Image Asset Right -->
+                    <div class="image-asset-card-right">
+                        <div class="image-asset-card-top">
+                            <h4>{{ asset.basis }}</h4>
+                            <p class="image-asset-set-id">{{
+                                    this.imageAssetService.SetIdToImageSourceMap[asset.setId]
+                                }}</p>
+                        </div>
+                        <div class="image-asset-card-bottom">
+                            <div class="image-asset-info">
+                                <!-- <p class="image-asset-set-id">Set Id: {{ this.imageAssetService.SetIdToImageSourceMap[asset.setId] }}</p> -->
+                            </div>
+                            <div class="toggle-parent">
+                                <mat-slide-toggle
+                                        color="primary"
+                                        class="asset-slider"
+                                        (change)="asset.isChanged = !asset.isChanged"
+                                        [(ngModel)]="asset.isActive"
+                                ></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isDialogActive(this.constant.ASSET_TYPE_TITLE)" class="title-asset-wrapper">
+                <div class="title-asset-card"
+
+                     *ngFor="let asset of previewAssetData">
+                    <!-- Title Asset Left -->
+                    <div class="title-asset-card-left asset-toggle">
+                        <mat-slide-toggle
+                                color="primary"
+                                class="asset-slider"
+                                (change)="asset.isChanged = !asset.isChanged"
+                                [(ngModel)]="asset.isActive"
+                        ></mat-slide-toggle>
+                    </div>
+                    <div class="title-asset-divider"></div>
+                    <!-- Title Asset Right -->
+                    <div class="title-asset-card-right">
+                        <div class="title-asset-card-top">
+                            <h4>{{ asset.assetValue }}</h4>
+                        </div>
+                        <div class="title-asset-card-bottom">
+                            <p class="title-asset-set-id">Set Id: {{ asset.setId }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isDialogActive(this.constant.ASSET_TYPE_C2A)" class="cta-asset-wrapper">
+                <div class="cta-asset-card"
+
+                     *ngFor="let asset of previewAssetData">
+                    <!-- CTA Asset Left -->
+                    <div class="cta-asset-card-left asset-toggle">
+                        <mat-slide-toggle
+                                color="primary"
+                                class="asset-slider"
+                                color="primary"
+                                (change)="asset.isChanged = !asset.isChanged"
+                                [(ngModel)]="asset.isActive"
+                        ></mat-slide-toggle>
+                    </div>
+                    <div class="cta-asset-divider"></div>
+                    <!-- CTA Asset Right -->
+                    <div class="cta-asset-card-right">
+                        <div class="cta-asset-card-top">
+                            <h4>{{ asset.assetValue }}</h4>
+                        </div>
+                        <!-- <div class="cta-asset-card-bottom">
+                                        <p class="cta-asset-set-id">Set Id: 1</p>
+                                    </div> -->
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer class="cardBottomContain">
+            <button (click)="updateAsset(this.activeDialog);hidePreviewDialog()" matRipple>
+                <span> Confirm <mat-icon> check</mat-icon></span>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+</p-dialog>
+<p-dialog *ngIf="showConfigInfo" [(visible)]="showConfigInfo" class="previewDailog" [modal]="true"
+          [style]="{width: '85%'}"
+          [baseZIndex]="10000" [draggable]="false" [resizable]="false" [dismissableMask]="true" [blockScroll]="true"
+          (onHide)="closeConfigDialogData()">
+    <nb-card class=" add-shadow previewCard">
+        <nb-card-header>Assest Configuration Details</nb-card-header>
+        <nb-card-body>
+
+            <nb-card class="addAssetCard configSummaryCard">
+                <nb-card-header>
+                    <span>Config Summary</span>
+
+                </nb-card-header>
+                <nb-card-body class="configSummary">
+                    <ng-container *ngIf="this.configData.length > 0; else noDataContent">
+                        <div *ngFor="let config of configData" class="level-container">
+                            <div *ngIf="isPropertyVisible(config.property)">
+                                <div class="entity-header">
+                            <span>
+                                 {{ config.property }} </span>
+                                    <mat-icon (click)="toggleCollapse(config)">{{
+                                            config.isCollapsed ? "keyboard_arrow_up" :
+                                                "keyboard_arrow_down"
+                                        }}
+                                    </mat-icon>
+                                </div>
+                                <div *ngIf="config.isCollapsed">
+                                    <p-table [value]="config.properties" class="p-datatable-sm upsert-config-table"
+                                             styleClass="p-datatable-striped">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Entity Name</th>
+                                                <th>Entity Value</th>
+                                                <th>Site Name</th>
+                                                <th>Value</th>
+                                                <th>Is Active</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-property>
+                                            <tr [class.edited-row]="config.properties.type == 'UPDATED'"
+                                                [class.added-row]="config.properties.type == 'ADDED'">
+                                                <td>{{ property.entity_name }}</td>
+
+                                                <td>{{ property.entity_value }}</td>
+                                                <td>{{ property.site_name }}</td>
+                                                <td>{{ property.value }}</td>
+                                                <td>
+                                                    <mat-slide-toggle (change)="upsertData(property)"
+                                                                      [(ngModel)]="property.is_active"
+                                                                      [disabled]="configRowIsActiveDisabled(property)">
+                                                        {{ property.is_active ? 'On' : 'Off' }}
+                                                    </mat-slide-toggle>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #noDataContent>
+                        <ngx-no-data></ngx-no-data>
+                    </ng-template>
+                </nb-card-body>
+            </nb-card>
+            <nb-card [style]="{'min-height' : '300px'}" class="addAssetCard">
+                <nb-card-header>
+                    <span>Add/Update Config</span>
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="input-container configContainer" [class.disabled-action]="isGlobal()"
+                         [matTooltip]="isGlobal() ? 'Unavailable for Global Config' : ''">
+                        <div class="configInputs">
+                            <label>
+                                <span> Property Name</span>
+                                <ng-select
+                                        placeholder="Select Property Name"
+                                        dropdownPosition="bottom"
+                                        [items]="getConfigPropertyOptions()"
+                                        (change)="setPropertyValueOptions()"
+                                        [(ngModel)]="newConfigDetails.property"
+                                        [disabled]="isNewConfigsPropertyNameDisabled()"
+                                >
+                                </ng-select>
+                            </label>
+                            <label>
+                                <span> Entity Name</span>
+                                <ng-select placeholder="Select Entity Level"
+                                           [items]="newConfigDetails.entity_name_options" dropdownPosition="bottom"
+                                           [clearable]="false"
+                                           (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)"
+                                           [(ngModel)]="newConfigDetails.entity_name"
+                                           [disabled]="isNewConfigsEntityNameDisabled()"
+                                           required>
+                                </ng-select>
+                            </label>
+                            <label *ngIf="showDomainInput()">
+                                <span>Domain</span>
+                                <ng-select placeholder="Select Domain" [items]="domain.options"
+                                           [loading]="domain.showLoader"
+                                           (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)" (click)="
+                                    getDropdownOptionSuggestion($event, 'Domain', 'Publisher Domain')
+                                  " (input)="
+                                    getDropdownOptionSuggestion($event, 'Domain', 'Publisher Domain')
+                                  " (change)="setNewConfigEntityDetails(newConfigDetails.entity_name)"
+                                           [(ngModel)]="newConfigDetails.domain"
+                                           >
+                                </ng-select>
+                            </label>
+                            <label>
+                                <span> Entity Value</span>
+                                <ng-select placeholder="Select Entity Level"
+                                           [addTag]="true"
+                                           (change)="setNewConfigEntityDetails(newConfigDetails.entity_name);"
+                                           [(ngModel)]="newConfigDetails.entity_value"
+                                >
+                                </ng-select>
+                            </label>
+                            <label>
+                                <span> Property Value</span>
+                                <ng-select placeholder="Enter Value" dropdownPosition="bottom"
+                                           [items]="newConfigDetails.valueOptions"
+                                           [addTag]="true"
+                                           [(ngModel)]="newConfigDetails.value"
+                                           [disabled]="isNewConfigsPropertyValueDisabled()">
+                                </ng-select>
+                            </label>
+                        </div>
+                        <button class="button-grp config-add-btn" style="margin-top: '10px'" matRipple
+                                [class.disabled-button]="!isUpsertConfigButtonEnabled()"
+                                (click)="addToUpsertedConfigs(newConfigDetails)">
+                            <span> Add/Update <mat-icon> add_box </mat-icon></span>
+                        </button>
+                    </div>
+                    <div *ngIf="upsertedConfigs.size" class="upserted-data">
+                        <p-table [value]="getUpsertedConfig()" class="p-datatable-sm"
+                                 styleClass="p-datatable-striped">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Entity Name</th>
+                                    <th>Entity Value</th>
+                                    <th>Property</th>
+                                    <th>Site Name</th>
+                                    <th>Value</th>
+                                    <th>Is Active</th>
+                                    <th>Action</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr>
+                                    <td>{{ item.entity_name }}</td>
+                                    <td>{{ item.entity_value }}</td>
+                                    <td>{{ item.property }}</td>
+                                    <td>{{ item.site_name }}</td>
+                                    <td>{{ item.value }}</td>
+                                    <td>{{ item.is_active }}</td>
+                                    <td>{{ item.type }}</td>
+                                    <td style="cursor: pointer; text-align: center"
+                                        (click)="removeItemFromUpsertedConfigs(item)">
+                                        <mat-icon>delete</mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div *ngIf="configData.length" class="flex-row flex-right">
+                            <button matRipple class="save-changes-btn" (click)="updateConfig()">
+                                <span>Save <mat-icon>save</mat-icon></span>
+                            </button>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </nb-card-body>
+    </nb-card>
+    <div class="loaderContainer config-loaderContainer" *ngIf="showLoader">
+        <div class="flex-center">
+            <div class="loaderCircle"></div>
+            <div class="waiting-message">{{ waitingMessage }}</div>
+        </div>
+    </div>
+</p-dialog>

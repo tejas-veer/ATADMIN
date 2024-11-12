@@ -1,0 +1,15 @@
+button:focus {
+    outline: 0;
+}
+
+::ng-deep ngb-tooltip-window {
+    opacity: 1 !important;
+}
+
+.tooltip {
+    opacity: 1 !important;
+}
+
+::ng-deep .tooltip {
+    opacity: 1 !important;
+}

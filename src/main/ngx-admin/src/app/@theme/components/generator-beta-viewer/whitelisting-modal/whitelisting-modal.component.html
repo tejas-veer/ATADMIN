@@ -1,0 +1,34 @@
+<ng-template #modalContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">White List Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h5>The selected Templates have been created. <span class="text text-warning">Templates will not be served on this entity unless whitelisted</span>
+        </h5>
+
+
+        <div class="text-center">
+            <div class="text-center" *ngIf="!hasTemplates()">
+                <h4> No Templates Selected </h4>
+            </div>
+            <div class="text-center" *ngFor="let template of templates" style="display:inline-block">
+
+                <button class='btn btn-hero-danger' *ngIf="template.selected" (click)="template.selected=false" ngbTooltip="Click to Remove"><i
+                        class="fa fa-times"></i> {{template.templateId}}
+                </button>
+                <loader-iframe *ngIf="template.selected"
+                               [frameurl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <ngx-loader *ngIf="loader"></ngx-loader>
+    </div>
+    <div class="modal-footer" *ngIf="!loader">
+        <button class="btn btn-sm btn-danger"  style="width: 12em" (click)="reportProblems()">Report Error</button>
+        <button class="btn btn-sm btn-warning" placement="top" style="width: 12em"
+                ngbTooltip="These templates can be white listed later from the reporting interface"
+                (click)="whitelistLater()">WhiteList Later
+        </button>
+        <button class="btn btn-sm btn-success" style="width: 12em" (click)="confirmWhitelist()">Whitelist</button>
+    </div>
+</ng-template>

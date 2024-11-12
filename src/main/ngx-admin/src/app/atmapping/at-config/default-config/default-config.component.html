@@ -1,0 +1,47 @@
+<config-input-box></config-input-box>
+<config-input #configInput [meta]="meta" [hide]="loader" [featureMapping]="featureMapping" [featureMappingModalMeta]="featureModalMeta" [isDisable]="disableConfigButton" ></config-input>
+<nb-card>
+  <nb-card-body>
+    <ngx-loader *ngIf="loader"></ngx-loader>
+    <div class="container-fluid" style="padding: 1em" *ngIf="!loader">
+      <div *ngIf="this.processedData.length">
+        <config-viewer #configViewer [data]="processedData"></config-viewer>
+        <div class="button-collection text-right">
+          <button [disabled]="disableConfigButton" class="btn btn-warning btn-sm btn-icon" (click)="resetViewer()"
+          matTooltip="Resets all the unsaved changes" matTooltipPosition="below" ><i class="fa fa-undo"></i></button>
+          <button [disabled]="disableConfigButton" class="btn btn-danger btn-sm " (click)="openModal(true)"
+          
+                  matTooltip="All affected templates will be deleted and new templates will be generated with new Configs"
+                  matTooltipPosition="below">
+            Save and Reset
+          </button>
+          <button [disabled]="disableConfigButton" class="btn btn-success btn-sm" (click)="openModal(false)" 
+          matTooltip="Save Changes and will be applied to all templates generated in the future."
+          matTooltipPosition="below">Save&nbsp;&nbsp;&nbsp;
+          </button>
+        </div>
+      </div>
+      <div class="text-center" *ngIf="!this.processedData.length">
+        <i>Nothing to show</i>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #modalContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm Update</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{affectedTemplates}} Templates will <strong *ngIf="!reset"> exist with old configs </strong><strong *ngIf="reset">
+    will be deleted and generated again</strong>
+  </div>
+  <ngx-loader *ngIf="modalLoader"></ngx-loader>
+  <div class="modal-footer">
+    <button class="btn btn-sm btn-success" (click)="save()">Save</button>
+  </div>
+</ng-template>
+

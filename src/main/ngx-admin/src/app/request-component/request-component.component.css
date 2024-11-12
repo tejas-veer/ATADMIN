@@ -1,0 +1,18 @@
+.mat-cell{
+    width: 1%;
+}
+
+table{
+    width: 100%;
+}
+
+nb-card-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #ebeef2;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+    color: #2a2a2a;
+    font-family: Exo;
+    font-size: 1.125rem;
+    font-weight: 600;
+}

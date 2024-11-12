@@ -1,0 +1,19 @@
+.button-tab {
+  height: 50px;
+  border: none;
+  width: 235px;
+  outline: none;
+  background: #40dc7e1a;
+  border-right: 1px solid white;
+  font-weight: 600;
+}
+
+.active {
+  border-bottom: 5px solid #40dc7e;
+  background: #40dc7e91;
+}
+
+.auto-asset-tab-container{
+  display: flex;
+  flex-wrap: wrap;
+}

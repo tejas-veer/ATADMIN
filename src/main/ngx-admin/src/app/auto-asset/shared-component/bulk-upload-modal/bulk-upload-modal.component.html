@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    {{modalHeader}}
+  </h4>
+  <button
+    matRipple
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modal.dismiss()"
+  >
+    X
+  </button>
+</div>
+<div class="modal-body">
+  <label>
+    <span> CSV Upload </span>
+    <div class="custom-file mb-3">
+      <input
+        type="file"
+        accept=".csv"
+        class="custom-file-input"
+        id="validatedCustomFile"
+        (change)="handleCsvUpload($event)"
+        onchange="file_changed(this)"
+        onclick="this.value=null;"
+        required
+      />
+      <label class="custom-file-label" for="validatedCustomFile">
+        {{ csvFile != null ? csvFile.name : "Choose file..." }}
+      </label>
+      <div class="invalid-feedback">Failed to load</div>
+    </div>
+  </label>
+  <div *ngIf="parsingMsg">
+    <div class="alert alert-danger" role="alert" [innerHTML]="parsingMsg"></div>
+  </div>
+  <div>
+    <div class="alert alert-success" role="alert">
+      <div>
+        <strong>Fields :</strong>
+        {{getFields()}}
+      </div>
+      <div><strong> Max Row Limit :</strong> {{ MAX_CSV_ROW }}</div>
+    </div>
+    <div class="download-sample-div">
+      <div (click)="downloadSampleCsv()">
+        <span class="download-sample-text">Sample CSV File</span
+        ><mat-icon>get_app</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    matRipple
+    class="btn"
+    [class.disabled-button]="!csvFile || parsingMsg"
+    (click)="generateBulk()"
+  >
+    <span>{{modalSaveButtonName}} <mat-icon>queue</mat-icon></span>
+  </button>
+</div>

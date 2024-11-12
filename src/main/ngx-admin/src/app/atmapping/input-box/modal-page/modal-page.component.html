@@ -1,0 +1,87 @@
+<ng-template let-d="dismiss" #bulkModal>
+    <div class="modal-header">
+
+        <h4 class="modal-title" style="font-family: Exo; font-weight: 470; padding-top: 20px;">Add Bulk {{sector}}</h4>
+        <button class="closee" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <button class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="text-center" >
+        <p *ngIf="sector.toUpperCase() == 'UNMAPPING'"><strong>Compulsory Column:</strong> <i>
+            supply_hierarchy_level, supply_entity_value, demand_hierarchy_level, demand_entity_value, template_id, mapping_type, template_size, system_page_type</i></p>
+        <p *ngIf="sector.toUpperCase() == 'MAPPING'"><strong>Compulsory Column:</strong> <i>supply_hierarchy_level,
+            supply_entity_value, demand_hierarchy_level,
+            demand_entity_value, template_id, mapping_type, template_size, system_page_type</i></p>
+        <p *ngIf="sector.toUpperCase() == 'BLOCKING'"><strong>Compulsory Column:</strong> <i>supply_hierarchy_level,
+            supply_entity_value, demand_hierarchy_level,
+            demand_entity_value, id, type, size, system_page_type</i></p>
+        <p *ngIf="sector.toUpperCase() == 'REPORTING'" style="text-align: left; padding-left: 1rem;">
+            <strong>Compulsory Columns:</strong> <i>Template, Template Size, Ad Id</i><br>
+            <strong>Optional Columns:</strong> <i>Multi-Kwd Strategy, AUTO ASSET IMAGE ID, AUTO ASSET C2A ID, Demand basis</i>
+        </p>
+    </div>
+
+    <div class="text-center text-link" style="margin-top: 0.5em;">
+        <div style="margin-bottom: 1em">
+            <span *ngIf="sector.toUpperCase()=='MAPPING'"
+                style="cursor: pointer; color:#40dc7e;"
+            (click)="mappingSampleCsv()" ><i
+                class="fa fa-download" ></i>&nbsp;&nbsp;Download Sample Csv File
+            </span>
+            <span *ngIf="sector.toUpperCase()=='BLOCKING'"
+                style="cursor: pointer; color:#40dc7e;"
+                (click)="blockingSampleCsv()" >
+                <i class="fa fa-download" ></i>Download Sample Csv File</span>
+            <span *ngIf="sector.toUpperCase()=='UNMAPPING'"
+                  style="cursor: pointer; color:#40dc7e;"
+                  (click)="unmappingSampleCsv()" ><i
+                    class="fa fa-download" ></i>&nbsp;&nbsp;Download Sample Csv File</span>
+            <span class="upload-btn-wrapper text text-success"
+                  style="display: inline-block;position: relative;cursor: pointer;margin-left: 2em;width: 9rem;height: 1.5em">
+            <span
+                style="cursor: pointer;position: absolute;top:0.5em;left: 0;z-index:1;color:#40dc7e;"
+                (click)="fileInput.click()">
+                <i class="fa fa-upload" style="cursor: pointer"></i> &nbsp;&nbsp;Upload Csv File
+            </span>
+            <input type="file"
+                   (change)="UploadCsv($event.target.files[0])"
+                   #fileInput
+                   style="position: absolute;width: 100%;height: 100%;opacity: 0;cursor: pointer;top:0.5em;left:0"/>
+        </span>
+        </div>
+        <p class="fName" *ngIf="fileSelected == true"> {{fileName}}</p>
+        <p [ngStyle]="{'color': themeColor}"  style=" font-size: 75%; font-weight: bold; font-style: italic; margin-bottom: -0.2em;" *ngIf="isProcessing == true">[ File is uploading, you can close this window. ]</p>
+        <span>
+            <button style="  border-radius: 0.375rem;height: 2.8em; width:70px;margin-bottom: 0.6em; " class="btn btn-warning btn-tn" (click)="clearData()"
+                    placement="top"
+                    matTooltip="Undo Changes">
+            <mat-icon >undo</mat-icon>
+        </button>
+      </span>
+        <span>
+             <button *ngIf="sector.toUpperCase()== 'MAPPING'"
+                [class.disabled]="isSumbitButtonDisabled()"
+                class="btn btn-sm btn-success"
+                (click)="AddMapping()">ADD MAPPING
+            </button>
+            <button *ngIf="sector.toUpperCase()== 'BLOCKING'"
+                [class.disabled]="isSumbitButtonDisabled()"
+                class="btn btn-sm btn-success"
+                (click)="AddBlocking()">ADD BLOCKING
+            </button>
+             <button *ngIf="sector.toUpperCase()== 'UNMAPPING'"
+                 [class.disabled]="isSumbitButtonDisabled()"
+                class="btn btn-sm btn-success"
+                (click)="AddUnmapping()">ADD UNMAPPING
+            </button>
+            <button *ngIf="sector.toUpperCase()== 'REPORTING'"
+                class="btn btn-sm btn-success"
+               (click)="showMetricsModal()">SUBMIT
+            </button>
+        </span>
+    </div> 
+</ng-template>
+
+

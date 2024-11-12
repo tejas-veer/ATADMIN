@@ -1,0 +1,198 @@
+nb-card-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #ebeef2;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+    color: #2a2a2a;
+    font-family: Exo;
+    font-size: 1.125rem;
+    font-weight: 600;
+    height: 81px;
+}
+
+.btn-success {
+    float: right;
+    background-color: #40dc7e;
+    text-transform: uppercase;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    border-radius: 0.375rem;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    font-family: Exo;
+    border: 2px solid transparent;
+    margin-left: 0.3rem;
+}
+
+.table-container {
+    max-width: 100% !important;
+    overflow: auto !important;
+    max-height: 900px;
+    overflow-y: auto !important;
+    border-collapse: separate;
+    max-height: 51rem;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.mat-form-field {
+    width: 25rem;
+}
+
+.reporting-filters-rows input {
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 30rem;
+}
+
+.uploadButton {
+    background-color: #8A7FFF;
+    color: white;
+    float: right;
+    margin-right: 10px;
+}
+
+.parentClassReporting {
+    display: flex;
+
+}
+
+.filter-by {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 1.2rem;
+}
+
+.metrics, .calendar, .group-by {
+    display: flex;
+    gap: 2rem;
+}
+
+.filter-by > h4, .metrics > h4, .calendar > h4, .group-by > h4 {
+    min-width: 18%;
+    font-family: Exo;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+ng-select {
+    margin-top: 10px;
+    margin-right: 10px;
+    right: auto;
+    display: inline-block;
+    border: none;
+}
+
+.date-range-container {
+    position: relative;
+}
+
+.modal-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.modal-content {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 41%;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.modal-card.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.button-container {
+    float: right;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.share-button {
+    margin-top: 10px;
+    margin-left: auto;
+    height: 45px;
+    background-color: #fff;
+    color: #8A7FFF;
+    border: 2px solid #8A7FFF;
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+.generateButton {
+    background-color: #8A7FFF;
+    color: white;
+    margin-top: 10px;
+    margin-left: auto;
+    height: 45px;
+}
+
+.btn-success.add-filter-button {
+    color: #8A7FFF;
+    border: 2px solid #8A7FFF;
+    display: flex;
+    align-items: center;
+    height: 1.7rem;
+    background-color: #fff;
+    padding-left: 3px;
+    padding-right: 1px;
+    margin-left: 20px;
+    margin-top: 0.5rem;
+    width: 1.8rem;
+}
+
+.btn-success.cancel-query-button {
+    margin-top: 10px;
+    margin-left: auto;
+    height: 45px;
+    background-color: #fff;
+    color: red;
+    border: 2px solid red;
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+
+
+
+
+

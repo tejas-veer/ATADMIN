@@ -1,0 +1,224 @@
+button {
+  color: white;
+  background-color: #40dc7e;
+  text-transform: uppercase;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  border-radius: 0.375rem;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  font-family: Exo;
+  border: 2px solid transparent;
+  margin-left: 0.3rem;
+}
+
+button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+p-sidebar ::-webkit-scrollbar {
+  width: 5px;
+}
+
+p-sidebar ::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+}
+
+p-sidebar ::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #40dc7e;
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #40dc7e;
+}
+
+.custom-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-right: 10px;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-right: 10px;
+}
+
+.custom-sidebar-header > span {
+  font-size: 24px;
+  font-weight: lighter;
+}
+
+.custom-sidebar-header mat-icon {
+  cursor: pointer;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-header-icon-grp {
+  display: flex;
+  width: 4.5rem;
+  justify-content: space-between;
+}
+
+.request-id-input-button-grp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.request-id-input-button-grp ::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: white;
+}
+
+.custom-sidebar-body {
+  overflow-y: auto;
+  height: 84vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-body-blank-div {
+  height: 75vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+}
+
+.request-id-col {
+  width: 10%;
+}
+
+.progress-col {
+  width: 40%;
+}
+
+.action-col {
+  width: 16%;
+}
+
+.download-col {
+  width: 12%;
+}
+
+.share-col {
+  width: 12%;
+}
+
+.cancel-col {
+  width: 10;
+}
+
+.requests-table-container {
+  max-height: 68.5vh;
+  overflow-y: auto;
+}
+
+.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.requests-table th,
+.requests-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.mat-icon-cell-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 5rem;
+}
+
+.request-table-row {
+  height: 5rem;
+}
+
+.requests-table button {
+  padding: 0.375rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.progress {
+  height: 12px;
+  width: 100%;
+  background-color: #40dc7e1a;
+}
+
+:host >>> .progress-bar {
+  background-color: #40dc7e !important;
+  border-radius: 50px;
+}
+
+.custom-sidebar-body mat-paginator {
+  font-size: medium;
+  margin-top: 1rem;
+}
+
+.disabled-icon {
+  color: grey !important;
+  cursor: wait !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+.source-col-btn-grp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.share-button {
+  height: 45px;
+  background-color: #fff;
+  color: #40dc7e;
+  border: 2px solid #40dc7e;
+  padding-left: 15px;
+  padding-right: 15px;
+  outline: none;
+}
+
+.request-id-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.request-save-btn {
+  width: 6rem;
+}
+
+.request-id-input-btn {
+  flex: 1;
+}
+
+.request-id-input-btn mat-icon {
+  font-size: 15px;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 16px;
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2017 Media.net Advertising FZ-LLC All Rights Reserved -->
+
+<!--todo check all properties '${}' if present in pom or not-->
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logging_pattern}"/>
+            <ThresholdFilter level="${use_console_appender}" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <RollingFile name="InfoAppender" fileName="${logging_folder}AutoTemplateAdmin.log"
+                     filePattern="${logging_folder}AutoTemplateAdmin.log.%d{yyyy-MM-dd-HH}">
+            <PatternLayout pattern="${logging_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logging_folder}">
+                    <IfLastModified age="P30D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="ErrorAppender" fileName="${logging_folder}Error.log"
+                     filePattern="${logging_folder}Error.log.%d{yyyy-MM-dd-HH}">
+            <PatternLayout pattern="${logging_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logging_folder}">
+                    <IfLastModified age="P30D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="FatalAppender" fileName="${logging_folder}Fatal.log"
+                     filePattern="${logging_folder}Fatal.log.%d{yyyy-MM-dd-HH}">
+            <PatternLayout pattern="${logging_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <ThresholdFilter level="FATAL" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logging_folder}">
+                    <IfLastModified age="P30D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="InfoAppender" includeLocation="false">
+            <AppenderRef ref="InfoAppender"/>
+        </Logger>
+        <Logger name="ErrorAppender" includeLocation="false">
+            <AppenderRef ref="ErrorAppender"/>
+        </Logger>
+        <Logger name="FatalAppender" includeLocation="false">
+            <AppenderRef ref="FatalAppender"/>
+        </Logger>
+
+        <Root level="DEBUG">
+            <AppenderRef ref="InfoAppender"/>
+            <AppenderRef ref="ErrorAppender"/>
+            <AppenderRef ref="FatalAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,124 @@
+<div style="padding-top: 1em">
+    <div *ngIf="state == displayStatus.FETCH_CUSTOMIZATION">
+        <ngx-loader></ngx-loader>
+    </div>
+    <div *ngIf="state == displayStatus.ALLOW_GENERATION">
+        <div class="row">
+            <div class="col-sm-3">
+                <label><span>Header Text:</span>
+                    <div class="input-group">
+                        <input class="form-control" [(ngModel)]="customisation.headerText"
+                               placeholder="E.g See Also" type="text"/>
+                        <button type="button" class="btn btn-success" placement="top"
+                                ngbTooltip="Set Blank"
+                                (click)="customisation.headerText='&amp;amp;nbsp;'"><i class="fa fa-map-o"
+                                                                                       aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </label>
+
+            </div>
+            <div class="col-sm-3">
+                <label><span>Ad Attribution Link:</span>
+                    <input class="form-control" [(ngModel)]="customisation.adAttribution.link"
+                           placeholder="E.g https://www.media.net/adchoices" type="text"/>
+                </label>
+            </div>
+            <div class="col-sm-3" style="padding-top: 1.26em">
+                <button class="btn btn-hero-primary " (click)="enqueue()"> Generate Template</button>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+
+    <div *ngIf="state == displayStatus.DISPLAY_PROGRESS_BAR">
+
+        <div *ngFor="let url of urlList">
+            <a href="{{url}}">{{url}}</a>
+            <hr>
+        </div>
+        <p>
+            <ngb-progressbar [animated]="true" [striped]="true" [max]="100" [value]="progressStatus" type="success">
+                {{progressText}}
+            </ngb-progressbar>
+        </p>
+    </div>
+
+    <div class="text-center" *ngIf="state == displayStatus.DISPLAY_TEMPLATES">
+        <div *ngIf="templateCollection.SUGGESTED.length">
+            <h3> Suggested Templates</h3>
+            <hr>
+            <div *ngFor="let template of templateCollection.SUGGESTED; let templateIdentifier = index"
+                 style="display:inline-block;margin:1em"
+                 class="text-center">
+                <!--<creative-viewer style="display:inline-block" *ngFor="let property of colorProperty.value" [size]="entity.size" [customization]="property.templateCustomizationJson" [creative]="property.defaultTemplateId"></creative-viewer>-->
+                <button class="btn btn-sm" [ngClass]="template.selected ? 'btn-success':'btn-danger'"
+                        style="margin-bottom:0.5em"
+                        (click)="template.selected = !template.selected"
+                        [ngbTooltip]="template.selected ? 'Click to deselect' : 'Click to select'"><i class='fa'
+                                                                                                      [ngClass]='template.selected ? "fa-toggle-on" : "fa-toggle-off"'> </i>
+                    {{template.framework.frameworkId}} |
+                    {{template.frameworkLevelRank}}
+                </button>
+                <report-issue templateId="None" [frameworkId]="template.framework.frameworkId" [size]="entity.size"
+                              [renderUrl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                              small="true"
+                              style="display: inline-block"></report-issue>
+                <loader-iframe [frameurl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <div *ngIf="templateCollection.INSERTED.length">
+            <h3> Inserted Templates</h3>
+            <hr>
+            <div *ngFor="let template of templateCollection.INSERTED; let templateIdentifier = index"
+                 style="display:inline-block;margin:1em"
+                 class="text-center">
+                <button class="btn btn-sm btn-hero-info" style="margin-bottom:0.5em">{{template.templateId}}</button>
+                <report-issue templateId="None" [frameworkId]="template.framework.frameworkId" [size]="entity.size"
+                              [renderUrl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                              small="true"
+                              style="display: inline-block"></report-issue>
+                <loader-iframe [frameurl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <div *ngIf="templateCollection.EXTRA.length">
+            <h3> Additional Templates</h3>
+            <hr>
+            <div *ngFor="let template of templateCollection.EXTRA; let templateIdentifier = index"
+                 style="display:inline-block;margin:1em"
+                 class="text-center">
+                <!--<creative-viewer style="display:inline-block" *ngFor="let property of colorProperty.value" [size]="entity.size" [customization]="property.templateCustomizationJson" [creative]="property.defaultTemplateId"></creative-viewer>-->
+                <button class="btn btn-sm" placement="top" [ngClass]="template.selected ? 'btn-success':'btn-danger'"
+                        style="margin-bottom:0.5em"
+                        (click)="template.selected = !template.selected"
+                        [ngbTooltip]="template.selected ? 'Click to deselect' : 'Click to select'"><i class='fa'
+                                                                                                      [ngClass]='template.selected ? "fa-toggle-on" : "fa-toggle-off"'> </i>
+                    {{template.framework.frameworkId}} |
+                    {{template.frameworkLevelRank}}
+                </button>
+                <report-issue templateId="None" [frameworkId]="template.framework.frameworkId" [size]="entity.size"
+                              [renderUrl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                              small="true"
+                              style="display: inline-block"></report-issue>
+                <loader-iframe [frameurl]="sanitizer.bypassSecurityTrustResourceUrl(template.templateRenderingUrl)"
+                               [size]="entity.size"></loader-iframe>
+            </div>
+        </div>
+        <confirmation-modal #confirmationModal [confirmation]="confirmation" [templates]="templates"
+                            [entity]="entity"></confirmation-modal>
+        <whitelisting-modal #whitelistingModal [reportProblems]="reportProblems" [confirmWhitelist]="confirmWhitelist"
+                            [whitelistLater]="whitelistLater"
+                            [templates]="templatesToWhitelist" [entity]="entity"></whitelisting-modal>
+        <report-issue-modal #reportIssueModal></report-issue-modal>
+    </div>
+    <div class="text-right" *ngIf="state == displayStatus.DISPLAY_TEMPLATES">
+        <a [href]="generatorUrl" class="" target="_blank">
+            <i class="fa fa-bug" aria-hidden="true"></i>Generator Debug Interface</a>
+    </div>
+    <div *ngIf="state == displayStatus.ERROR_STATUS">
+        <app-error-viewer [title]="errorHeader" [message]="errorText"></app-error-viewer>
+    </div>
+</div>

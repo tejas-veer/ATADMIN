@@ -1,0 +1,203 @@
+@import '../../styles/themes';
+@import '~bootstrap/scss/mixins/_breakpoints';
+// @import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
+@include nb-install-component() {
+  nb-layout-column.small {
+    flex: 0.15 !important;
+  }
+
+  nb-sidebar.settings-sidebar {
+    $sidebar-width: 7.5rem;
+
+    transition: width 0.3s ease;
+    width: $sidebar-width;
+    overflow: hidden;
+
+    &.collapsed {
+      width: 0;
+
+      .main-container {
+        width: 0;
+
+        .scrollable {
+          width: $sidebar-width;
+          padding: 1.25rem;
+        }
+      }
+    }
+
+    .main-container {
+      width: $sidebar-width;
+      background: nb-theme(color-bg);
+      transition: width 0.3s ease;
+      overflow: hidden;
+
+      .scrollable {
+        width: $sidebar-width;
+      }
+
+      @include nb-for-theme(cosmic) {
+        background: nb-theme(layout-bg);
+      }
+    }
+  }
+
+  nb-sidebar.menu-sidebar {
+
+    margin-top: nb-theme(sidebar-header-gap);
+
+    .main-container {
+      height: calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)} - #{nb-theme(sidebar-header-gap)}) !important;
+      border-top-right-radius: nb-theme(radius);
+    }
+
+    ::ng-deep nb-sidebar-header {
+      padding-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    background: transparent;
+
+    .main-btn {
+      padding: 0.75rem 2.5rem;
+      margin-top: -2rem;
+      font-weight: bold;
+      transition: padding 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.48);
+
+      i {
+        font-size: 2rem;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+
+      span {
+        padding-left: 0.25rem;
+      }
+
+      i,
+      span {
+        vertical-align: middle;
+      }
+    }
+
+    &.compacted {
+
+      ::ng-deep nb-sidebar-header {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .main-btn {
+        width: 46px;
+        height: 44px;
+        padding: 0.375rem;
+        border-radius: 5px;
+        transition: none;
+
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .main-content {
+      padding: 0.75rem !important;
+
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+
+    nb-sidebar.menu-sidebar {
+      
+      margin-top: 0;
+
+      .main-container {
+        height: calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)}) !important;
+        border-top-right-radius: 0;
+
+        .scrollable {
+          padding-top: 0;
+        }
+      }
+    }
+
+    .main-btn {
+      display: none;
+    }
+  }
+
+  @include media-breakpoint-down(is) {
+
+    .bu-header-container {
+      .bu-logo {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .bu-logo-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .bu-logo {
+    padding: 0 nb-theme(padding);
+    font-size: 1.75rem;
+    font-weight: nb-theme(font-weight-bolder);
+    border-left: 1px solid nb-theme(separator);
+    white-space: nowrap;
+    padding-left: 50%;
+
+    span {
+      font-weight: nb-theme(font-weight-normal);
+    }
+  }
+
+  .bu-left {
+    display: flex;
+    width: 100%;
+    order: 0;
+    flex-direction: row;
+  }
+
+  .bu-right {
+    order: 1;
+    flex-direction: row-reverse;
+  }
+
+
+  .bu-header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .navigation {
+      padding-right: nb-theme(padding);
+      font-size: 2.5rem;
+      text-decoration: none;
+
+      i {
+        display: block;
+      }
+
+    }
+
+    .bu-logo {
+      padding: 0 nb-theme(padding);
+      font-size: 1.75rem;
+      font-weight: nb-theme(font-weight-bolder);
+      border-left: 1px solid nb-theme(separator);
+      white-space: nowrap;
+
+      span {
+        font-weight: nb-theme(font-weight-normal);
+      }
+    }
+  }
+}

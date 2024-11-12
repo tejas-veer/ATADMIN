@@ -1,0 +1,440 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Auto Template Interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVK59FY0J5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-HVK59FY0J5');
+    </script>
+    <script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpVhQiwAllg1RAFaxMWSpQruuGARy0Y1k&libraries=places">
+    </script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <ngx-app>Loading...</ngx-app>
+
+    <style>
+        .table-container.review-table ng2-smart-table ng2-smart-table-pager {
+            display: inline-block;
+            position: sticky;
+            left: 0;
+        }
+
+        .table-container ng2-smart-table table tr td:nth-child(1),
+        .table-container ng2-smart-table table thead th:nth-child(1){
+            position: sticky;
+            left: 0;
+            background-color: white;
+            z-index: 1;
+            min-width: 10rem;
+        }
+
+        .table-container ng2-smart-table table tr.selected td:nth-child(1),
+        .table-container ng2-smart-table table tr:hover td:nth-child(1){
+            background: #d6e3f3 !important;
+        }
+
+        nb-layout-header.fixed {
+            z-index: 1040 !important;
+        }
+
+        .reporting-filters-rows .ng-select .ng-select-container {
+            border: 1px solid #40dc7e;
+            border-radius: 5px;
+            min-height: 2.53125rem;
+            min-width: 23rem;
+            background-color: #f7f9fc;
+        }
+
+        .drilldown-column .ng-dropdown-panel {
+            position: relative;
+        }
+
+        .reporting-filters-rows .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: #d6e3f3;
+        }
+
+        .reporting-filters-rows  .ng-select .ng-select-container:hover {
+            background-color: #edf1f7;
+        }
+
+        .reporting-filters-rows .ngui-auto-complete-wrapper{
+            display: inline !important;
+        }
+
+        .table-container ng2-smart-table table tr th, .table-container ng2-smart-table table tr td {
+            border: 1px solid #B1D4E0;
+        }
+
+        .table-container ng2-smart-table table tr td {
+            font-size: 1.1em;
+        }
+
+        .table-container ng2-smart-table table tr th ng2-st-column-title ng2-smart-table-title .ng2-smart-sort-link {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .table-container thead {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 3 !important;
+        }
+
+        .table-container ng2-smart-table table{
+            border-collapse: separate;
+        }
+
+        .table-container thead .ng2-smart-filters{
+            display: none;
+        }
+
+        .table-container ng2-smart-table table tr.ng2-smart-titles th{
+            padding: 0.438rem 0.438rem !important;
+        }
+
+        .table-container ng2-smart-table table tbody .ng2-smart-row.child-row td:first-child {
+            padding-left: 30px;
+        }
+
+        .table-container ng2-smart-table table tbody .level-0-row {
+            background-color: #fff;
+        }
+
+        .table-container ng2-smart-table table tbody .level-1-row {
+            background-color: #f7f7f7 !important;
+        }
+
+        .table-container ng2-smart-table table .level-1-row td:nth-child(1) {
+            background-color: #f7f7f7 !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-2-row {
+            background-color: #f0f0f0 !important;
+        }
+
+        .table-container ng2-smart-table table .level-2-row td:nth-child(1) {
+            background-color: #f0f0f0 !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-3-row {
+            background-color: #e0e0e0 !important;
+        }
+
+        .table-container ng2-smart-table table .level-3-row td:nth-child(1) {
+            background-color: #e0e0e0 !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-4-row {
+            background-color: #cfcfcf !important;
+        }
+
+        .table-container ng2-smart-table table .level-4-row td:nth-child(1) {
+            background-color: #cfcfcf !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-5-row {
+            background-color: #bfbfbf !important;
+        }
+
+        .table-container ng2-smart-table table .level-5-row td:nth-child(1) {
+            background-color: #bfbfbf !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-6-row {
+            background-color: #b0b0b0 !important;
+        }
+
+        .table-container ng2-smart-table table .level-6-row td:nth-child(1) {
+            background-color: #b0b0b0 !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-7-row {
+            background-color: #a6a6a6 !important;
+        }
+
+        .table-container ng2-smart-table table .level-7-row td:nth-child(1) {
+            background-color: #a6a6a6 !important;
+        }
+
+        .table-container ng2-smart-table table tbody .level-8-row {
+            background-color: #9e9e9e !important;
+        }
+
+        .table-container ng2-smart-table table .level-8-row td:nth-child(1) {
+            background-color: #9e9e9e !important;
+        }
+
+        .table-container ng2-smart-table tbody tr.selected,.table-container ng2-smart-table tbody tr:hover {
+            background: #d6e3f3 !important;
+        }
+
+        .select-mode .ng-select .ng-select-container {
+            border: 1px solid #40dc7e;
+            border-radius: 5px;
+            background-color: #f7f9fc;
+        }
+
+        nb-user .user-name {
+            color: var(--user-picture);
+        }
+
+        .user-picture.initials {
+            color: white;
+        }
+
+        nb-user.size-medium .user-name {
+            font-family: 'Exo';
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .toast-success {
+            background-color: #40dc7e !important;
+        }
+
+        .toast {
+            padding: 0.1875rem 0.375rem 0 0;
+        }
+
+        .toast-message {
+            word-wrap: break-word;
+            width:14rem;
+        }
+
+        .toast-close-button {
+            right: 0.2em;
+            top: -0.1em;
+        }
+
+        .mat-header-cell {
+            font-size: 0.875rem !important;
+        }
+
+        nb-tabset .tab.active .tab-link::before {
+            background-color: #40dc7e !important;
+        }
+
+        .nb-theme-default nb-tabset ul li a::before {
+            background: transparent !important;
+        }
+
+        .ng-select .ng-select-container {
+            color: #333;
+            background-color: #fff;
+            border-radius: 0.375rem;
+            border: 2px solid #dadfe6;
+            align-items: center;
+            box-shadow: none !important;
+        }
+
+        input,
+        select {
+            box-shadow: none !important;
+        }
+
+        input:active {
+            box-shadow: none !important;
+            border: 2px solid #40dc7e;
+        }
+
+        ngb-modal-backdrop {
+            z-index: 6 !important;
+        }
+
+        nb-layout-header {
+            z-index: 4 !important;
+        }
+
+        .multiselect-dropdown .dropdown-btn {
+            display: inline-block;
+            border: 1px solid #adadad;
+            width: 100%;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.1;
+            text-align: left;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border-radius: 4px;
+        }
+
+        .ng2-dropdown-menu {
+            position: absolute !important;
+            left: 2% !important;
+            top: 100% !important;
+        }
+
+        .top-bottom-margin {
+            margin-top: 1em;
+            margin-bottom: 1em
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        @-moz-keyframes spin {
+            0% {
+                -moz-transform: rotate(0)
+            }
+
+            100% {
+                -moz-transform: rotate(360deg)
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1003;
+            background: #000000;
+            overflow: hidden
+        }
+
+        .spinner div:first-child {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            box-shadow: none;
+            /*box-shadow: 0 3px 3px 0 rgba(255, 56, 106, 1);*/
+            transform: translate3d(0, 0, 0);
+            animation: spin 2s linear infinite
+        }
+
+        .spinner div:first-child:after,
+        .spinner div:first-child:before {
+            content: '';
+            position: absolute;
+            border-radius: 50%
+        }
+
+        .spinner div:first-child:before {
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            box-shadow: none;
+            /*box-shadow: 0 3px 3px 0 rgb(255, 228, 32);*/
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite
+        }
+
+        .spinner div:first-child:after {
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            box-shadow: none;
+            /*box-shadow: 0 3px 3px 0 rgba(61, 175, 255, 1);*/
+            animation: spin 1.5s linear infinite
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .modal-lg {
+            max-width: 95% !important;
+        }
+
+        label {
+            width: 100%;
+        }
+
+        label span {
+            font-weight: bold;
+        }
+    </style>
+    <div id="nb-global-spinner" class="spinner">
+        <div class="blob blob-0"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
+    </div>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127413525-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        window.gtag = function () {
+            dataLayer.push(arguments);
+        };
+
+        window.gtag('js', new Date());
+        window.gtag('config', 'UA-127413525-1', { 'send_page_view': false });
+
+    </script>
+
+    <script>
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            var key = "restorationUrl";
+            if (this.readyState == 4) {
+                if (this.status == 403 || this.status == 401) {
+                    sessionStorage.setItem(key, window.location.href);
+                    window.location.href = '/ATAdmin/login';
+                } else {
+                    if (sessionStorage.getItem(key)) {
+                        var url = sessionStorage.getItem(key);
+                        sessionStorage.removeItem(key);
+                        window.location.href = url;
+                    }
+                }
+            }
+        };
+        xhttp.open("GET", "/ATAdmin/api/session", true);
+        xhttp.send();
+
+
+    </script>
+
+</body>
+
+</html>

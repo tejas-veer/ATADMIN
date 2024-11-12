@@ -1,0 +1,43 @@
+::ng-deep input[type=date] {
+  padding-left: 0.5em !important;
+}
+
+nb-tab{
+  padding-left: 0px!important;
+  padding-right: 0px!important;
+}
+
+::ng-deep .nb-theme-default nb-tabset .tab-link {
+  font-weight: 600;
+  color: #2a2a2a;
+  font-family: Exo;
+  font-size: 0.8 rem;
+}
+
+::ng-deep .nb-theme-default nb-tabset .tab.active .tab-link
+{ color: #2a2a2a;
+}
+
+::ng-deep .nb-theme-default nb-tabset .tab .tab-link
+{ color: #a8aeb6;
+}
+
+::ng-deep .nb-theme-default nb-tabset .tab .tab-link:hover
+{ color: #2a2a2a;
+}
+
+.nb-theme-default nb-tabset ul li a::before {
+  background: pink !important;
+}
+
+h5 {
+  font-family: Exo;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+ng-select ::ng-deep .focus {
+  border-color: green;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 53, 145, 0.25);
+}

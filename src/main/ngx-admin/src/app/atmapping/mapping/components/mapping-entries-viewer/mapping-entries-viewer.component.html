@@ -1,0 +1,175 @@
+<div class="container-fluid"  #viewContainer>
+    <h5 class="heading">Select and Delete Mappings</h5>
+    <div class="mat-elevation-z8" *ngIf="data.length" > 
+        <div class="filter-header ">
+            <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-10" style="position: relative">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)">
+                        <mat-placeholder>
+                            <mat-icon>search</mat-icon>
+                            <i>Filter Contents</i>
+                        </mat-placeholder>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4 col-md-3 col-lg-2 text-right">
+                    <button class="btn btn-success btn-tn" 
+                    (click)="modal(true)" style="background-color:#5de191; border:none;">
+                        Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort class="tablee">
+
+            <ng-container matColumnDef="selection">
+                <th mat-header-cell [hidden]="disableMappingButton == true" *matHeaderCellDef>
+                    <i class="ion-ios-trash"
+                        (click)="selectionAll = !selectionAll;showReminder();selectAll(selectionAll)"
+                        [ngClass]="selectionAll ? 'text-danger' : 'text-default'"
+                        style="font-size: 2rem;cursor: pointer"></i>
+                </th>
+                <td mat-cell [hidden]="disableMappingButton == true" *matCellDef="let element">
+                    <i class="ion-ios-trash" (click)="element.selection = !element.selection;showReminder()"
+                        [ngClass]="element.selection ? 'text-danger' : 'text-muted'"
+                        style="font-size: 2rem;cursor:pointer;"></i>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="preview">
+                <th mat-header-cell *matHeaderCellDef>
+                    Preview
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <preview-element [creative]="element.templateId" [size]="element.templateSize"
+                        type='TEMPLATE'></preview-element>
+                </td>
+            </ng-container>
+
+            <!-- Templates Column -->
+            <ng-container matColumnDef="templateId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Template ID</th>
+                <td mat-cell *matCellDef="let element"> {{element.templateId}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="templateSize">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Size</th>
+                <td mat-cell *matCellDef="let element"> {{element.templateSize}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="admin_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Admin Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.admin_name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="hierarchyLevel">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Level&nbsp;&nbsp;</th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="badge badge-info"> {{valueBeforeSeparator(element.hierarchyLevel)}}</span>
+                    <span class="badge badge-info" *ngIf="isDualEntity(element.hierarchyLevel)">
+                        {{valueAfterSeparator(element.hierarchyLevel)}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="entity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Entity&nbsp;&nbsp;
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="row">
+                        <div class="col entity-cell"
+                            [ngClass]="{'border-right': isDualEntity(element.entity), 'border-secondary': isDualEntity(element.entity)}">
+                            {{valueBeforeSeparator(element.entity)}}
+                        </div>
+                        <div class="col entity-cell" *ngIf="isDualEntity(element.entity)">
+                            {{valueAfterSeparator(element.entity)}}
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_added">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Added</th>
+                <td mat-cell *matCellDef="let element"> {{element.date_added}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.startDate}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.endDate}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <mat-paginator #paginator [pageSize]="50" [pageSizeOptions]="[50,100,1000,5000]" [showFirstLastButtons]="true">
+        </mat-paginator>
+
+        <floating-button *ngIf="showFloat && !disableMappingButton" color="warn" icon="delete_forever"
+            message="Delete selected Entries" (click)="modal(false)"></floating-button>
+    </div>
+
+    <!--Empty data Placeholder-->
+    <div *ngIf="data.length === 0 && !loader" class="text-center">
+        <i>Nothing to show</i>
+    </div>
+    <!-- Loader-->
+    <ngx-loader *ngIf="loader"></ngx-loader>
+</div>
+
+
+<!-- Preview Modal-->
+<ng-template #deleteMappingsPreviewModal let-c="close" let-d="dismiss" style="z-index: 50;">
+    <div class="modal-header">
+        <h4 class="modal-title">Template Preview</h4>
+        <button class="closee" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <button class="close" aria-label="Close" (click)="d('Cross click')" style="border: none;background-color: white;padding-bottom: 40px;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="viewList.length == 0" class="text-center">
+            <i>Nothing to show</i>
+        </div>
+        <div class="size-viewer" *ngFor="let sizeObj of viewList">
+            <h5>{{sizeObj.name}}</h5>
+            <div class="templates-wrapper text-center">
+                <div class="template text-center" *ngFor="let templateItem of sizeObj.templates"
+                    style="display: inline-block;margin: 1em">
+                    <button class="btn btn-sm" 
+                    data-toggle="tooltip" data-placement="bottom" title="Click to toggle status" matTooltipPosition="top"
+                        [ngClass]="templateItem.selection ? 'btn-danger' : 'btn-default'"
+                        style="margin-bottom: 0.5em" 
+                        (click)="templateItem.selection = !templateItem.selection"
+                        >
+                        {{ templateItem.templateId }}
+                    </button>
+                    <creative-viewer [size]="templateItem.templateSize"
+                        [creative]="templateItem.templateId"></creative-viewer>
+                    <p *ngIf="mappingType == 'SEASONAL'">
+                        <strong>Start&nbsp; Date : </strong>{{templateItem.startDate}}
+                        &nbsp;
+                        <strong>Expiry Date : </strong>{{templateItem.endDate}}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <ngx-loader *ngIf="modalLoader"></ngx-loader>
+    </div>
+
+    <div class="modal-footer" *ngIf="!isFiltered && viewList.length !== 0 && !modalLoader">
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Confirm Delete
+        </button>
+    </div>
+
+</ng-template>

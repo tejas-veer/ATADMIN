@@ -1,0 +1,6 @@
+<label><span>{{ querySide }}</span>
+    <select class="form-control" [(ngModel)]="selectedLevel" (change)="toggleSelectedLevel()">
+      <option [disabled]="item.toUpperCase() === 'GLOBAL'" *ngFor="let item of levels"> {{item}}</option>
+    </select>
+  </label>
+  

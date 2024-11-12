@@ -1,0 +1,39 @@
+<div style="margin-bottom: 1em">
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="alias">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Property</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.alias}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="value">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <h4 class="text" [ngClass]="element.value == 'true' ? 'text-success' : ''"><i class="fa"
+                                                                                      [ngClass]="element.value == 'true' ? 'fa-toggle-on' : 'fa-toggle-off'"
+                                                                                      placement="right"
+                                                                                      [ngbTooltip]="element.value"
+                                                                                      *ngIf="element.type == 'checkbox'"></i>
+        </h4>
+        <span *ngIf="element.type != 'checkbox'">{{element.value}}</span></mat-cell>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="level">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Level</mat-header-cell>
+      <mat-cell *matCellDef="let element"><h5 class="badge badge-info" style="color:white" placement="right"
+                                              [ngbTooltip]="element.entity">{{element.level}}</h5></mat-cell>
+    </ng-container>
+
+    <!-- Last Updated Column -->
+    <ng-container matColumnDef="updation_date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.updation_date}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

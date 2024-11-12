@@ -1,0 +1,147 @@
+mat-card{
+    background: #fff;
+    width: 650px;
+}
+.ng-select{
+    margin: 5px;
+    border: 0;
+}
+
+.entity-row > .ng-select{
+    display:block;
+    height: 40px;
+}
+
+.input-grp{
+    display: flex;
+}
+
+.input-grp{
+    display: flex;
+}
+
+.select-type{
+    width: 28.5%;
+}
+
+.entity-input{
+    width: 68%;
+}
+
+.suggestion-list,.entered-list{
+    flex:1;
+}
+
+.list-container{
+    display: flex;
+    height: 350px;
+}
+
+.suggestion-list{
+    width: 30%;
+    overflow: scroll;
+    padding: 5px;
+    border: 1px solid #D3D3D3;
+}
+
+.suggestion-list > h6{
+    margin:5px;
+    font-weight:600;
+}
+
+.selected-list{
+    width: 70%;
+    overflow: scroll;
+    padding: 5px;
+    border: 1px solid #D3D3D3;
+}
+
+.selected-list > h6{
+    margin:5px;
+    font-weight:600;
+}
+
+mat-list-item{
+    cursor:pointer;
+    background: #f0f0f0;
+    font-size: small;
+    height: auto;
+    word-break: break-all;
+}
+
+mat-list-item-content{
+    width: 100%;
+}
+
+.select-mode-input{
+    padding-bottom: 10px;
+}
+
+.select-mode-add{
+    display: flex;
+    justify-content: center;
+}
+
+.add-filter-button{
+    margin-top: 10px;
+    background-color: #40dc7e;
+    line-height: 1.25;
+    border-radius: 0.375rem;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    font-family: Exo;
+    border: 2px solid transparent;
+}
+
+.selected-item {
+    color: green;
+}
+
+.not-selected-item {
+    color: red;
+}
+
+.contains-item {
+    color: #804674;
+}
+
+.mat-list-base .mat-list-item, .mat-list-base .mat-list-option {
+    height: auto !important;
+    border: 1px solid #40dc7e;
+    background-color: #f7f9fc;
+    padding: 3px;
+    font-size: 99%;
+}
+
+.cancel-button {
+    margin-left: auto;
+}
+
+.btn-success {
+    text-transform: uppercase;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    border-radius: 0.375rem;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    font-family: Exo;
+    border: 2px solid transparent;
+    background-color: #40dc7e;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.close-button {
+    margin-left: 1px;
+    border: 2px solid #d3d3d3;
+    color: black;
+    background-color: #fff;
+}
+
+.filter-heading {
+    font-weight: 500;
+    line-height: 0.3;
+    font-family: 'Exo';
+    padding-bottom: 6px;
+}

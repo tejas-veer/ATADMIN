@@ -1,0 +1,76 @@
+<nb-card>
+  <nb-card-header>
+    Template Config
+  </nb-card-header>
+  <nb-card-footer>
+    <ngx-loader *ngIf="inputLoader"></ngx-loader>
+    <div class="row" *ngIf="!inputLoader">
+      <div class="col col-sm-3">
+        <label><span>Level</span>
+          <select class="form-control" [(ngModel)]="selectedLevel" (change)="changedLevel($event)">
+            <option *ngFor="let item of levelList"> {{item}}</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-sm-6" *ngIf="selectedLevel != 'Entity'">
+        <div *ngIf="selectedLevel != 'Global'">
+          <label><span>{{selectedLevel}}</span>
+            <input class="form-control" (keyup.enter)="redir()"
+                   placeholder="Enter {{selectedLevel}}"
+                   [(ngModel)]="searchId"
+                   ngui-auto-complete
+                   id="AutoCompleteDrop"
+                   [source]="searchUrl"
+                   (keyup)="idKeyup($event)"
+                   no-match-found-text="No Match Found"
+                   list-formatter="{{selectedLevel}}"
+                   value-formatter="{{selectedLevel}}"
+                   loading-text="Loading..."
+                   min-chars="0"
+            /></label>
+        </div>
+      </div>
+      <div class="col-sm-3" *ngIf="selectedLevel == 'Entity'">
+        <label><span>Domain</span>
+          <input class="form-control" (keyup.enter)="redir()"
+                 placeholder="Enter Domain"
+                 [(ngModel)]="searchDomain"
+                 ngui-auto-complete
+                 id="DomainDrop"
+                 [source]="domainSearchUrl"
+                 (keyup)="domainKeyup($event)"
+                 (valueChanged)="changedDomain($event)"
+                 no-match-found-text="No Match Found"
+                 list-formatter="Domain"
+                 value-formatter="Domain"
+                 loading-text="Loading..."
+                 min-chars="0"
+          /></label>
+      </div>
+      <div class="col-sm-3" *ngIf="selectedLevel == 'Entity'">
+        <label><span>Ad Tag</span>
+          <input class="form-control" (keyup.enter)="redir()"
+                 placeholder="Enter Ad Tag"
+                 [(ngModel)]="searchAdtag"
+                 ngui-auto-complete
+                 id="AdtagDrop"
+                 [source]="adtagSearchUrl"
+                 (keyup)="adtagKeyup($event)"
+                 (valueChanged)="changedAdtag($event)"
+                 no-match-found-text="No Match Found"
+                 list-formatter="AdTag"
+                 value-formatter="AdTag"
+                 loading-text="Loading..."
+                 min-chars="0"
+          /></label>
+      </div>
+      <div class="col-sm-3">
+        <button style="margin-top: 1.3em" class="btn btn-success" (click)="redir()">Go
+        </button>
+      </div>
+    </div>
+  </nb-card-footer>
+</nb-card>
+
+<!--removed following while migrating to newer angular version from all this 3 input tags-->
+<!--(valueChanged)="changeDomain($event)"-->
